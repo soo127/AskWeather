@@ -8,15 +8,27 @@
 import SwiftUI
 
 struct ContentView: View {
+
+    @StateObject private var contentViewModel = ContentViewModel()
+
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+        TabView {
+            Text("관심 지역에 대한 날씨 지도 뷰")
+                .tabItem {
+                    Image(systemName: "map")
+                }
+            Text("현재 위치한 지역의 날씨 뷰")
+                .tabItem {
+                    Image(systemName: "paperplane")
+
+                }
+            Text("관심 지역 추가")
+                .tabItem {
+                    Image(systemName: "list.bullet")
+                }
         }
-        .padding()
     }
+    
 }
 
 #Preview {
