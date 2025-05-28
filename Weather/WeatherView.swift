@@ -19,6 +19,7 @@ struct WeatherView: View {
                 WindView()
                 HumidityView()
                 UVView()
+                FineDustView()
             }
             .padding(.horizontal)
 
