@@ -16,10 +16,7 @@ struct HumidityView: View {
             humidity
         }
         .padding()
-        .background(
-            RoundedRectangle(cornerRadius: 12)
-                .fill(.ultraThinMaterial)
-        )
+
     }
 
     private var title: some View {

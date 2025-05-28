@@ -22,10 +22,6 @@ struct FineDustView: View {
             dustLevel
         }
         .padding()
-        .background(
-            RoundedRectangle(cornerRadius: 12)
-                .fill(.ultraThinMaterial)
-        )
 
     }
 

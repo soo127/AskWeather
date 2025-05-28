@@ -22,10 +22,6 @@ struct UVView: View {
             UVLevel
         }
         .padding()
-        .background(
-            RoundedRectangle(cornerRadius: 12)
-                .fill(.ultraThinMaterial)
-        )
 
     }
 

@@ -17,10 +17,6 @@ struct WindView: View {
             windCompass
         }
         .padding()
-        .background(
-            RoundedRectangle(cornerRadius: 12)
-                .fill(.ultraThinMaterial)
-        )
     }
 
     private var title: some View {
@@ -40,38 +36,41 @@ struct WindView: View {
     private var compass: some View {
         Group {
             Circle()
-                .stroke(lineWidth: 5)
-                .frame(width: 180, height: 180)
+                .stroke(lineWidth: 4)
+                .frame(width: 135, height: 135)
                 .opacity(0.1)
 
-            Text("N").offset(y: -80)
-            Text("S").offset(y: 80)
-            Text("E").offset(x: 80)
-            Text("W").offset(x: -80)
+            Text("N").offset(y: -60)
+            Text("S").offset(y: 60)
+            Text("E").offset(x: 60)
+            Text("W").offset(x: -60)
         }
     }
 
     private var arrow: some View {
         Group {
-            Text("----------------")
+            Text("------------------")
+                .font(.caption)
                 .rotationEffect(.degrees(rotateAngle))
 
             let angle = Angle(degrees: rotateAngle).radians
 
             Image(systemName: "triangle.fill")
                 .resizable()
-                .frame(width: 20, height: 20)
+                .frame(width: 15, height: 15)
                 .rotationEffect(.degrees(90+rotateAngle))
-                .offset(x: 65 * cos(angle), y: 65 * sin(angle))
+                .offset(x: 48 * cos(angle), y: 48 * sin(angle))
         }
     }
 
     private var speed: some View {
         Group {
             Circle()
-                .frame(width: 60, height: 60)
+                .frame(width: 45, height: 45)
                 .foregroundStyle(.white)
-            Text("2 m/s")
+            Text("2 ")
+            + Text("m/s")
+                .font(.caption)
         }
     }
 

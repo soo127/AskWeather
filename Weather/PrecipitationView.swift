@@ -16,10 +16,6 @@ struct PrecipitationView: View {
             precipitation
         }
         .padding()
-        .background(
-            RoundedRectangle(cornerRadius: 12)
-                .fill(.ultraThinMaterial)
-        )
     }
 
     private var title: some View {

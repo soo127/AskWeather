@@ -17,10 +17,9 @@ struct ContentView: View {
                 .tabItem {
                     Image(systemName: "map")
                 }
-            Text("현재 위치한 지역의 날씨 뷰")
+            WeatherView()
                 .tabItem {
                     Image(systemName: "paperplane")
-
                 }
             Text("관심 지역 추가")
                 .tabItem {
