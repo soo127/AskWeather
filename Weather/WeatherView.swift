@@ -17,6 +17,8 @@ struct WeatherView: View {
                 HourlyForecastView()
                 PrecipitationView()
                 WindView()
+                HumidityView()
+                UVView()
             }
             .padding(.horizontal)
 
