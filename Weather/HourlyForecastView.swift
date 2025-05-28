@@ -12,21 +12,35 @@ struct HourlyForecastView: View {
     var body: some View {
 
         VStack(alignment: .leading) {
-
-            Text("시간별 일기예보")
-                .font(.caption)
-                .foregroundStyle(.gray)
-
-            ScrollView(.horizontal, showsIndicators: false){
-                HStack {
-                    ForEach(1...15, id: \.self) { index in
-                        HourlyWeatherItem(time: index, iconName: "sun.max", temperature: 30-index)
-                    }
-                }
-            }
-
+            title
+            hourlyForecasts
         }
+        .padding()
+        .background(
+            RoundedRectangle(cornerRadius: 12)
+                .fill(.ultraThinMaterial)
+        )
 
     }
 
+    private var title: some View {
+        Text("시간별 일기예보")
+            .font(.caption)
+            .foregroundStyle(.gray)
+    }
+
+    private var hourlyForecasts: some View {
+        ScrollView(.horizontal, showsIndicators: false){
+            HStack {
+                ForEach(1...15, id: \.self) { index in
+                    HourlyWeatherItem(time: index, iconName: "sun.max", temperature: 30-index)
+                }
+            }
+        }
+    }
+
+}
+
+#Preview {
+    HourlyForecastView()
 }
