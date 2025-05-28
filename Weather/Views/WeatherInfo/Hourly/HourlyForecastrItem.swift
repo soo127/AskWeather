@@ -1,5 +1,5 @@
 //
-//  HourlyWeatherItem.swift
+//  HourlyForecastItem.swift
 //  Weather
 //
 //  Created by 이상수 on 5/27/25.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct HourlyWeatherItem: View {
+struct HourlyForecastItem: View {
 
     let time: Int
     let iconName: String

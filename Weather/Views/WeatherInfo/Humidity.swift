@@ -1,36 +1,37 @@
 //
-//  PrecipitationView.swift
+//  Humidity.swift
 //  Weather
 //
-//  Created by 이상수 on 5/27/25.
+//  Created by 이상수 on 5/28/25.
 //
 
 import SwiftUI
 
-struct PrecipitationView: View {
+struct Humidity: View {
 
     var body: some View {
 
         VStack(alignment: .leading) {
             title
-            precipitation
+            humidity
         }
         .padding()
+
     }
 
     private var title: some View {
-        Text("강수량 (last 24h)")
+        Text("습도")
             .font(.caption)
             .foregroundStyle(.gray)
     }
 
-    private var precipitation: some View {
-        Text("0mm")
+    private var humidity: some View {
+        Text("42%")
             .font(.title2)
     }
 
 }
 
 #Preview {
-    PrecipitationView()
+    Humidity()
 }

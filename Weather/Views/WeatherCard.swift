@@ -1,5 +1,5 @@
 //
-//  WeatherSection.swift
+//  WeatherCard.swift
 //  Weather
 //
 //  Created by 이상수 on 5/28/25.
@@ -7,7 +7,8 @@
 
 import SwiftUI
 
-struct WeatherSection<Content: View>: View {
+struct WeatherCard<Content: View>: View {
+
     var content: () -> Content
 
     var body: some View {
@@ -19,5 +20,6 @@ struct WeatherSection<Content: View>: View {
         }
         .frame(height: 190)
     }
+
 }
 

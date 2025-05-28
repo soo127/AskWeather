@@ -1,5 +1,5 @@
 //
-//  HourlyForecastView.swift
+//  HourlyForecast.swift
 //  Weather
 //
 //  Created by 이상수 on 5/27/25.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct HourlyForecastView: View {
+struct HourlyForecast: View {
 
     var body: some View {
 
@@ -34,7 +34,7 @@ struct HourlyForecastView: View {
         ScrollView(.horizontal, showsIndicators: false){
             HStack {
                 ForEach(1...15, id: \.self) { index in
-                    HourlyWeatherItem(time: index, iconName: "sun.max", temperature: 30-index)
+                    HourlyForecastItem(time: index, iconName: "sun.max", temperature: 30-index)
                 }
             }
         }
@@ -43,5 +43,5 @@ struct HourlyForecastView: View {
 }
 
 #Preview {
-    HourlyForecastView()
+    HourlyForecast()
 }

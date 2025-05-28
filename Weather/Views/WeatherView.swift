@@ -13,16 +13,16 @@ struct WeatherView: View {
 
         NavigationStack {
             ScrollView {
-                HourlyForecastView()
+                HourlyForecast()
                 LazyVGrid(columns: [
                     GridItem(.flexible()),
                     GridItem(.flexible())
                 ]) {
-                    WeatherSection { WindView() }
-                    WeatherSection { PrecipitationView() }
-                    WeatherSection { HumidityView() }
-                    WeatherSection { UVView() }
-                    WeatherSection { FineDustView() }
+                    WeatherCard { Wind() }
+                    WeatherCard { Precipitation() }
+                    WeatherCard { Humidity() }
+                    WeatherCard { UltraViolet() }
+                    WeatherCard { FineDust() }
                 }
             }
             .padding(.horizontal)

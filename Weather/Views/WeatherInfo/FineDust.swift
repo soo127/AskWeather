@@ -1,5 +1,5 @@
 //
-//  UVView.swift
+//  FineDust.swift
 //  Weather
 //
 //  Created by 이상수 on 5/28/25.
@@ -7,33 +7,31 @@
 
 import SwiftUI
 
-struct UVView: View {
-
-    @State private var progress: CGFloat = 0.3
-
-    private let gradient = Gradient(colors: [
-        .green, .yellow, .orange, .red, .purple
-    ])
+struct FineDust: View {
 
     var body: some View {
 
         VStack(alignment: .leading) {
             title
-            UVLevel
+            dustLevel
         }
         .padding()
 
     }
 
+    private let gradient = Gradient(colors: [
+        .blue, .green, .yellow, .orange, .red, .brown
+    ])
+
     private var title: some View {
-        Text("자외선 지수")
+        Text("미세먼지 농도")
             .font(.caption)
             .foregroundStyle(.gray)
     }
 
-    private var UVLevel: some View {
+    private var dustLevel: some View {
         Group {
-            Text("4")
+            Text("73")
                 .font(.title)
             Text("보통")
                 .font(.title2)
@@ -52,5 +50,5 @@ struct UVView: View {
 }
 
 #Preview {
-    UVView()
+    FineDust()
 }

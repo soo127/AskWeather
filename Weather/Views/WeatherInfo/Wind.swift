@@ -1,5 +1,5 @@
 //
-//  WindView.swift
+//  Wind.swift
 //  Weather
 //
 //  Created by 이상수 on 5/28/25.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct WindView: View {
+struct Wind: View {
 
     let rotateAngle = 0.0
 
@@ -77,5 +77,5 @@ struct WindView: View {
 }
 
 #Preview {
-    WindView()
+    Wind()
 }
