@@ -16,7 +16,7 @@ struct WeatherView: View {
             ScrollView {
                 HourlyForecastView()
                 PrecipitationView()
-                //...
+                WindView()
             }
             .padding(.horizontal)
 
