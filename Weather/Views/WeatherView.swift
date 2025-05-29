@@ -13,21 +13,35 @@ struct WeatherView: View {
 
         NavigationStack {
             ScrollView {
+                title
                 HourlyForecast()
+                DailyForecast()
                 LazyVGrid(columns: [
                     GridItem(.flexible()),
                     GridItem(.flexible())
                 ]) {
+                    WeatherCard { FineDust() }
+                    WeatherCard { UltraViolet() }
                     WeatherCard { Wind() }
+                    WeatherCard { AirStagnation() }
                     WeatherCard { Precipitation() }
                     WeatherCard { Humidity() }
-                    WeatherCard { UltraViolet() }
-                    WeatherCard { FineDust() }
                 }
             }
             .padding(.horizontal)
         }
 
+    }
+
+    private var title: some View {
+        VStack(spacing: 5) {
+            Text("화성시")
+                .font(.title)
+            Text("23°")
+                .font(.largeTitle)
+            Text("최고: 25°, 최저: 21°")
+        }
+        .padding(.vertical)
     }
 
 }
