@@ -33,6 +33,7 @@ struct DailyForecastItem: View {
                 )
             Text("25°")
         }
+
     }
 
 }

@@ -13,7 +13,7 @@ struct ContentView: View {
 
     var body: some View {
         TabView {
-            Text("관심 지역에 대한 날씨 지도 뷰")
+            MapView()
                 .tabItem {
                     Image(systemName: "map")
                 }
