@@ -18,8 +18,8 @@ struct HourlyForecast: View {
         .padding()
         .background(
             RoundedRectangle(cornerRadius: 12)
-                .fill(.blue)
-                .opacity(0.2)
+                .fill(.white)
+                .opacity(0.8)
         )
 
     }

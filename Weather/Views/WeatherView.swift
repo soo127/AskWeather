@@ -12,6 +12,7 @@ struct WeatherView: View {
     var body: some View {
 
         NavigationStack {
+
             ScrollView {
                 title
                 HourlyForecast()
@@ -28,10 +29,11 @@ struct WeatherView: View {
                     WeatherCard { Humidity() }
                 }
             }
+            .background(Image("cloudy"))
             .padding(.horizontal)
         }
-
     }
+
 
     private var title: some View {
         VStack(spacing: 5) {

@@ -14,8 +14,8 @@ struct WeatherCard<Content: View>: View {
     var body: some View {
         ZStack(alignment: .topLeading) {
             RoundedRectangle(cornerRadius: 16)
-                .fill(.blue)
-                .opacity(0.2)
+                .fill(.white)
+                .opacity(0.8)
             content()
         }
         .frame(height: 190)
