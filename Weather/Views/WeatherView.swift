@@ -30,8 +30,11 @@ struct WeatherView: View {
                 }
             }
             .background(Image("cloudy"))
+            .scrollIndicators(.hidden)
             .padding(.horizontal)
         }
+        .toolbarBackground(.hidden)
+
     }
 
 

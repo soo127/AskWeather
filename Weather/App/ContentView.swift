@@ -21,7 +21,7 @@ struct ContentView: View {
                 .tabItem {
                     Image(systemName: "paperplane")
                 }
-            Text("관심 지역 추가")
+            CityContainer()
                 .tabItem {
                     Image(systemName: "list.bullet")
                 }
