@@ -21,6 +21,13 @@ struct MapView: View {
 
         ZStack(alignment: .topTrailing) {
             Map {
+
+                if let location = locationManager.userLocation {
+                    Annotation("내 위치", coordinate: location) {
+                        MapMarker(temperature: 22)
+                    }
+                }
+
                 Annotation("Seoul", coordinate: .seoul) {
                     MapMarker(temperature: 25)
                 }
@@ -37,4 +44,5 @@ struct MapView: View {
 
 #Preview {
     MapView()
+        .environmentObject(LocationManager())
 }

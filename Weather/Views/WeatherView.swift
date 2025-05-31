@@ -58,4 +58,5 @@ struct WeatherView: View {
 
 #Preview {
     WeatherView()
+        .environmentObject(LocationManager())
 }
