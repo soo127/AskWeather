@@ -10,6 +10,7 @@ import SwiftUI
 struct ContentView: View {
 
     @StateObject private var contentViewModel = ContentViewModel()
+    @StateObject private var locationManager = LocationManager()
 
     var body: some View {
         TabView {
@@ -26,6 +27,7 @@ struct ContentView: View {
                     Image(systemName: "list.bullet")
                 }
         }
+        .environmentObject(locationManager)
     }
     
 }

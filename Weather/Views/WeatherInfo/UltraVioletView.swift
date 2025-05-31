@@ -1,5 +1,5 @@
 //
-//  UltraViolet.swift
+//  UltraVioletView.swift
 //  Weather
 //
 //  Created by 이상수 on 5/28/25.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct UltraViolet: View {
+struct UltraVioletView: View {
 
     var body: some View {
 
@@ -50,5 +50,5 @@ struct UltraViolet: View {
 }
 
 #Preview {
-    UltraViolet()
+    UltraVioletView()
 }

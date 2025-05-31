@@ -9,24 +9,26 @@ import SwiftUI
 
 struct WeatherView: View {
 
+    @EnvironmentObject var locationManager: LocationManager
+
     var body: some View {
 
         NavigationStack {
 
             ScrollView {
                 title
-                HourlyForecast()
-                DailyForecast()
+                HourlyForecastView()
+                DailyForecastView()
                 LazyVGrid(columns: [
                     GridItem(.flexible()),
                     GridItem(.flexible())
                 ]) {
-                    WeatherCard { FineDust() }
-                    WeatherCard { UltraViolet() }
-                    WeatherCard { Wind() }
-                    WeatherCard { AirStagnation() }
-                    WeatherCard { Precipitation() }
-                    WeatherCard { Humidity() }
+                    WeatherCard { FineDustView() }
+                    WeatherCard { UltraVioletView() }
+                    WeatherCard { WindView() }
+                    WeatherCard { AirStagnationView() }
+                    WeatherCard { PrecipitationView() }
+                    WeatherCard { HumidityView() }
                 }
             }
             .background(Image("cloudy"))
@@ -40,6 +42,9 @@ struct WeatherView: View {
 
     private var title: some View {
         VStack(spacing: 5) {
+            if let userLocation = locationManager.userLocation {
+                Text("경도: \(userLocation.longitude), 위도: \(userLocation.latitude)")
+            }
             Text("화성시")
                 .font(.title)
             Text("23°")

@@ -1,19 +1,19 @@
 //
-//  AirStagnation.swift
+//  FineDustView.swift
 //  Weather
 //
-//  Created by 이상수 on 5/29/25.
+//  Created by 이상수 on 5/28/25.
 //
 
 import SwiftUI
 
-struct AirStagnation: View {
+struct FineDustView: View {
 
     var body: some View {
 
         VStack(alignment: .leading) {
             title
-            stagnationLevel
+            dustLevel
         }
         .padding()
 
@@ -24,14 +24,14 @@ struct AirStagnation: View {
     ])
 
     private var title: some View {
-        Text("대기 정체 지수")
+        Text("미세먼지 농도")
             .font(.caption)
             .foregroundStyle(.gray)
     }
 
-    private var stagnationLevel: some View {
+    private var dustLevel: some View {
         Group {
-            Text("10")
+            Text("73")
                 .font(.title)
             Text("보통")
                 .font(.title2)
@@ -50,5 +50,5 @@ struct AirStagnation: View {
 }
 
 #Preview {
-    AirStagnation()
+    FineDustView()
 }

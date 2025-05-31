@@ -15,6 +15,8 @@ extension CLLocationCoordinate2D {
 
 struct MapView: View {
 
+    @EnvironmentObject var locationManager: LocationManager
+
     var body: some View {
 
         ZStack(alignment: .topTrailing) {

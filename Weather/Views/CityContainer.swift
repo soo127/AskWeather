@@ -9,6 +9,8 @@ import SwiftUI
 
 struct CityContainer: View {
 
+    @EnvironmentObject var locationManager: LocationManager
+
     var body: some View {
 
         NavigationStack {

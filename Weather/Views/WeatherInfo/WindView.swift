@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct Wind: View {
+struct WindView: View {
 
     let rotateAngle = 0.0
 
@@ -77,5 +77,5 @@ struct Wind: View {
 }
 
 #Preview {
-    Wind()
+    WindView()
 }

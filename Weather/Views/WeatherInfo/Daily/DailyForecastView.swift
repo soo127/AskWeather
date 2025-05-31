@@ -1,5 +1,5 @@
 //
-//  DailyForecast.swift
+//  DailyForecastView.swift
 //  Weather
 //
 //  Created by 이상수 on 5/29/25.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct DailyForecast: View {
+struct DailyForecastView: View {
 
     var body: some View {
 
@@ -42,5 +42,5 @@ struct DailyForecast: View {
 }
 
 #Preview {
-    DailyForecast()
+    DailyForecastView()
 }
