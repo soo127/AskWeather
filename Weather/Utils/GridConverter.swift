@@ -8,6 +8,12 @@
 import SwiftUI
 import CoreLocation
 
+struct WeatherAPI {
+
+    let apiKey = Bundle.main.infoDictionary?["API_KEY"] as? String ?? ""
+    
+}
+
 struct GridConverter {
 
     static func toGrid(from coordinate: CLLocationCoordinate2D) -> (Int, Int)? {

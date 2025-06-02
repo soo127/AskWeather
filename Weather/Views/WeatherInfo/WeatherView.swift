@@ -39,7 +39,6 @@ struct WeatherView: View {
 
     }
 
-
     private var title: some View {
         VStack(spacing: 5) {
             if let userLocation = locationManager.userLocation {
