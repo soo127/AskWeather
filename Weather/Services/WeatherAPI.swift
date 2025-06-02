@@ -21,7 +21,7 @@ struct WeatherAPI {
         //let time = formatter.string(from: Date())
         let apiKey = Bundle.main.infoDictionary?["API_KEY"] as? String ?? ""
 
-        let urlString = "https://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getVilageFcst?serviceKey=\(apiKey)&pageNo=1&numOfRows=10&dataType=JSON&base_date=\(date)&base_time=1100&nx=\(nx)&ny=\(ny)"
+        let urlString = "https://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getVilageFcst?serviceKey=\(apiKey)&pageNo=1&numOfRows=1000&dataType=JSON&base_date=\(date)&base_time=1700&nx=\(nx)&ny=\(ny)"
 
         guard let url = URL(string: urlString) else {
             throw URLError(.badURL)
@@ -30,8 +30,8 @@ struct WeatherAPI {
         let (data, _) = try await URLSession.shared.data(from: url)
         let decoded = try JSONDecoder().decode(WeatherResponse.self, from: data)
 
-        return decoded.response.body.items
-        
+        return decoded.response.body.items.item
+
     }
 
 }

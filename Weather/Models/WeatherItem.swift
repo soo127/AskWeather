@@ -23,10 +23,14 @@ struct Header: Codable {
 
 struct Body: Codable {
     let dataType: String
-    let items: [WeatherItem]
+    let items: ItemWrapper
     let pageNo: Int
     let numOfRows: Int
     let totalCount: Int
+}
+
+struct ItemWrapper: Codable {
+    let item: [WeatherItem]
 }
 
 struct WeatherItem: Codable {

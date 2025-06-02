@@ -19,8 +19,8 @@ struct WeatherView: View {
             ScrollView {
                 title
                 HourlyForecastView()
-
                 DailyForecastView()
+
                 LazyVGrid(columns: [
                     GridItem(.flexible()),
                     GridItem(.flexible())
