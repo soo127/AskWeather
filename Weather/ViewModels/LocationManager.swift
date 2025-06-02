@@ -19,23 +19,21 @@ class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
         requestLocationPermission()
     }
 
-    func requestLocationPermission() {
+    private func requestLocationPermission() {
         manager.requestWhenInUseAuthorization()
         manager.startUpdatingLocation()
     }
 
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        if let location = locations.first {
-            Task { @MainActor in
-                self.userLocation = location.coordinate
-            }
-        }
+        guard let location = locations.last else { return }
+        self.userLocation = location.coordinate
     }
 
     func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
-        Task { @MainActor in
-            self.authorizationStatus = manager.authorizationStatus
-        }
+        self.authorizationStatus = manager.authorizationStatus
     }
 
+    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
+        print("위치 가져오기 실패: \(error.localizedDescription)")
+    }
 }

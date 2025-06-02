@@ -9,7 +9,8 @@ import SwiftUI
 
 struct WeatherView: View {
 
-    @EnvironmentObject var locationManager: LocationManager
+    @EnvironmentObject private var locationManager: LocationManager
+    @EnvironmentObject private var weatherManager: WeatherManager
 
     var body: some View {
 
@@ -18,6 +19,7 @@ struct WeatherView: View {
             ScrollView {
                 title
                 HourlyForecastView()
+
                 DailyForecastView()
                 LazyVGrid(columns: [
                     GridItem(.flexible()),
@@ -41,9 +43,6 @@ struct WeatherView: View {
 
     private var title: some View {
         VStack(spacing: 5) {
-            if let userLocation = locationManager.userLocation {
-                Text("경도: \(userLocation.longitude), 위도: \(userLocation.latitude)")
-            }
             Text("화성시")
                 .font(.title)
             Text("23°")

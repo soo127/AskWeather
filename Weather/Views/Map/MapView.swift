@@ -15,7 +15,7 @@ extension CLLocationCoordinate2D {
 
 struct MapView: View {
 
-    @EnvironmentObject var locationManager: LocationManager
+    @EnvironmentObject private var locationManager: LocationManager
 
     var body: some View {
 
