@@ -32,8 +32,8 @@ struct DailyForecastView: View {
 
     private var dailyForecasts: some View {
         Group {
-            ForEach(1...4, id: \.self) { _ in
-                DailyForecastItem()
+            ForEach(0...3, id: \.self) { day in
+                DailyForecastItem(later: day)
             }
             .padding(.vertical, 5)
         }
@@ -43,4 +43,6 @@ struct DailyForecastView: View {
 
 #Preview {
     DailyForecastView()
+        .environmentObject(LocationManager())
+        .environmentObject(WeatherManager())
 }

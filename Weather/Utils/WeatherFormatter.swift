@@ -7,15 +7,6 @@
 
 struct WeatherFormatter {
 
-    func skyDescription(code: String) -> String {
-        switch code {
-        case "1": return "맑음"
-        case "3": return "구름 많음"
-        case "4": return "흐림"
-        default: return "알 수 없음"
-        }
-    }
-
     func ptyDescription(code: String) -> String {
         switch code {
         case "0": return "없음"

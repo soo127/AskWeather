@@ -32,4 +32,6 @@ struct ContentView: View {
 
 #Preview {
     ContentView()
+        .environmentObject(LocationManager())
+        .environmentObject(WeatherManager())
 }

@@ -14,11 +14,15 @@ class WeatherManager: ObservableObject {
 
     @Published var parsedItems : [WeatherData] = []
 
-    var currentData: WeatherData {
+    private func formattedDate(later: Int = 0, format: String) -> String {
         let formatter = DateFormatter()
-        formatter.dateFormat = "yyyyMMdd HH00"
-        let date = formatter.string(from: Date())
-        //print(parsedItems.first(where: { $0["DATE"] == date }) ?? [:])
+        formatter.dateFormat = format
+        let targetDate = Calendar.current.date(byAdding: .day, value: later, to: Date())!
+        return formatter.string(from: targetDate)
+    }
+
+    var currentData: WeatherData {
+        let date = formattedDate(format: "yyyyMMdd HH00")
         return parsedItems.first(where: { $0["DATE"] == date }) ?? [:]
     }
 
@@ -27,7 +31,57 @@ class WeatherManager: ObservableObject {
               let vec = Double(vecString) else {
             return 0.0
         }
-        return vec - 90.0
+        return vec + 90.0
+    }
+
+    func getDailySky(_ later: Int) -> String {
+        let date = formattedDate(later: later, format: "yyyyMMdd")
+        let skyValues = parsedItems
+            .filter {
+                guard let fullDate = $0["DATE"], fullDate.contains(date) else {
+                    return false
+                }
+                return (fullDate.suffix(4) >= "0600") && (fullDate.suffix(4) <= "2100")
+            }
+            .compactMap { $0["SKY"] }
+        
+        return determineSky(skyValues: skyValues)
+    }
+
+    private func determineSky(skyValues: [String]) -> String {
+        let clear = skyValues.filter( {$0 == "1"}).count
+        let cloudy = skyValues.filter( {$0 == "3"}).count
+        let overcast = skyValues.filter( {$0 == "4"}).count
+        print(clear, cloudy, overcast)
+        let sum = clear + cloudy + overcast
+        if cloudy + overcast >= sum / 3 {
+            if overcast != 0 {
+                return "cloud"
+            }
+            return "cloud.sun"
+        }
+        return "sun.max"
+    }
+
+    func getLowestTemp(_ later: Int) -> Double {
+        let date = formattedDate(later: later, format: "yyyyMMdd 0600")
+
+        guard let item = parsedItems.first(where: { $0["DATE"] == date }),
+              let l = item["TMN"], let low = Double(l) else {
+
+            return 0
+        }
+        return low
+    }
+
+    func getHighestTemp(_ later: Int) -> Double {
+        let date = formattedDate(later: later, format: "yyyyMMdd 1500")
+
+        guard let item = parsedItems.first(where: { $0["DATE"] == date }),
+              let h = item["TMX"], let high = Double(h) else {
+            return 0
+        }
+        return high
     }
 
     var radian: Double {
@@ -41,7 +95,7 @@ class WeatherManager: ObservableObject {
         }
         return speed
     }
-
+    
     func fetchWeather(location: CLLocationCoordinate2D) async {
         do {
             let items = try await WeatherAPI.fetchWeather(from: location)

@@ -9,18 +9,18 @@ import SwiftUI
 
 struct DailyForecastItem: View {
 
-    private let gradient = Gradient(colors: [
-        .green, .yellow, .orange
-    ])
-    
+    @EnvironmentObject private var weatherManager: WeatherManager
+    let later: Int
+
     var body: some View {
 
         HStack {
-            Text("오늘")
+            Text("\(later == 0 ? "오늘" : "\(later)일 뒤")")
+                .frame(width: 50, alignment: .leading)
             Spacer()
-            Image(systemName: "sun.max")
+            Image(systemName: weatherManager.getDailySky(later))
             Spacer()
-            Text("13°")
+            Text(String(format: "%.0f", weatherManager.getLowestTemp(later)) + "°")
                 .foregroundStyle(.gray)
             Capsule()
                 .frame(width: 100, height: 5)
@@ -30,10 +30,15 @@ struct DailyForecastItem: View {
                         startPoint: .leading,
                         endPoint: .trailing
                     )
+                    
                 )
-            Text("25°")
+            Text(String(format: "%.0f", weatherManager.getHighestTemp(later)) + "°")
         }
 
     }
+
+    private let gradient = Gradient(colors: [
+        .green, .yellow, .orange
+    ])
 
 }
