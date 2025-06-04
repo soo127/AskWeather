@@ -9,7 +9,7 @@ import SwiftUI
 
 struct WindView: View {
 
-    let rotateAngle = 0.0
+    @EnvironmentObject private var weatherManager: WeatherManager
 
     var body: some View {
         VStack(alignment: .leading) {
@@ -49,17 +49,17 @@ struct WindView: View {
 
     private var arrow: some View {
         Group {
+            let rotateAngle = weatherManager.rotateAngle
             Text("------------------")
                 .font(.caption)
                 .rotationEffect(.degrees(rotateAngle))
 
-            let angle = Angle(degrees: rotateAngle).radians
-
+            let angleToRad = weatherManager.radian
             Image(systemName: "triangle.fill")
                 .resizable()
                 .frame(width: 15, height: 15)
                 .rotationEffect(.degrees(90+rotateAngle))
-                .offset(x: 48 * cos(angle), y: 48 * sin(angle))
+                .offset(x: 48 * cos(angleToRad), y: 48 * sin(angleToRad))
         }
     }
 
@@ -68,7 +68,7 @@ struct WindView: View {
             Circle()
                 .frame(width: 45, height: 45)
                 .foregroundStyle(.white)
-            Text("2 ")
+            Text(String(format: "%.1f", weatherManager.windSpeed))
             + Text("m/s")
                 .font(.caption)
         }
@@ -78,4 +78,5 @@ struct WindView: View {
 
 #Preview {
     WindView()
+        .environmentObject(WeatherManager())
 }

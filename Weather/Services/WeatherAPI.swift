@@ -10,18 +10,16 @@ import CoreLocation
 
 struct WeatherAPI {
 
-    static func fetchWeather(from coordinate: CLLocationCoordinate2D) async throws -> [WeatherItem] {
+    static func fetchWeather(from coordinate: CLLocationCoordinate2D) async throws -> [RawWeatherItem] {
 
         let (nx, ny) = GridConverter.toGrid(from: coordinate)
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyyMMdd"
-        let date = formatter.string(from: Date())
+        let yesterday =  Calendar.current.date(byAdding: .day, value: -1, to: Date())!
+        let date = formatter.string(from: yesterday)
 
-        formatter.dateFormat = "HH00"
-        //let time = formatter.string(from: Date())
         let apiKey = Bundle.main.infoDictionary?["API_KEY"] as? String ?? ""
-
-        let urlString = "https://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getVilageFcst?serviceKey=\(apiKey)&pageNo=1&numOfRows=1000&dataType=JSON&base_date=20250602&base_time=2300&nx=\(nx)&ny=\(ny)"
+        let urlString = "https://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getVilageFcst?serviceKey=\(apiKey)&pageNo=1&numOfRows=1000&dataType=JSON&base_date=\(date)&base_time=2300&nx=\(nx)&ny=\(ny)"
 
         guard let url = URL(string: urlString) else {
             throw URLError(.badURL)

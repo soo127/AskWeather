@@ -33,8 +33,8 @@ class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
         self.authorizationStatus = manager.authorizationStatus
     }
 
-    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
-        print("위치 가져오기 실패: \(error.localizedDescription)")
-    }
+//    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
+//        print("위치 가져오기 실패: \(error.localizedDescription)")
+//    }
     
 }
