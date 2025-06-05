@@ -20,7 +20,7 @@ struct DailyForecastItem: View {
             Spacer()
             Image(systemName: weatherManager.getDailySky(later))
             Spacer()
-            Text(String(format: "%.0f", weatherManager.getLowestTemp(later)) + "°")
+            Text(String(format: "%.0f", weatherManager.getLowestTemp(later: later)) + "°")
                 .foregroundStyle(.gray)
             Capsule()
                 .frame(width: 100, height: 5)
@@ -32,7 +32,7 @@ struct DailyForecastItem: View {
                     )
                     
                 )
-            Text(String(format: "%.0f", weatherManager.getHighestTemp(later)) + "°")
+            Text(String(format: "%.0f", weatherManager.getHighestTemp(later: later)) + "°")
         }
 
     }

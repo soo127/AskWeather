@@ -1,5 +1,5 @@
 //
-//  RawWeatherItem.swift
+//  WeatherItem.swift
 //  Weather
 //
 //  Created by 이상수 on 6/2/25.
@@ -30,10 +30,10 @@ struct Body: Codable {
 }
 
 struct ItemWrapper: Codable {
-    let item: [RawWeatherItem]
+    let item: [WeatherItem]
 }
 
-struct RawWeatherItem: Codable {
+struct WeatherItem: Codable {
     let baseDate: String
     let baseTime: String
     let category: String

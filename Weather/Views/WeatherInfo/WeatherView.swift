@@ -9,15 +9,16 @@ import SwiftUI
 
 struct WeatherView: View {
 
-    @EnvironmentObject private var locationManager: LocationManager
-    @EnvironmentObject private var weatherManager: WeatherManager
+//    @EnvironmentObject private var locationManager: LocationManager
+//    @EnvironmentObject private var weatherManager: WeatherManager
+//    @EnvironmentObject private var addressManager: AddressManager
 
     var body: some View {
 
         NavigationStack {
 
             ScrollView {
-                title
+                TitleView()
                 HourlyForecastView()
                 DailyForecastView()
 
@@ -41,21 +42,11 @@ struct WeatherView: View {
 
     }
 
-    private var title: some View {
-        VStack(spacing: 5) {
-            Text("화성시")
-                .font(.title)
-            Text("23°")
-                .font(.largeTitle)
-            Text("최고: 25°, 최저: 21°")
-        }
-        .padding(.vertical)
-    }
-
 }
 
 #Preview {
     WeatherView()
         .environmentObject(LocationManager())
         .environmentObject(WeatherManager())
+        .environmentObject(AddressManager())
 }

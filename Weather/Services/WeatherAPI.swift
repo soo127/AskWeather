@@ -10,7 +10,7 @@ import CoreLocation
 
 struct WeatherAPI {
 
-    static func fetchWeather(from coordinate: CLLocationCoordinate2D) async throws -> [RawWeatherItem] {
+    static func fetchWeather(from coordinate: CLLocationCoordinate2D) async throws -> [WeatherItem] {
 
         let (nx, ny) = GridConverter.toGrid(from: coordinate)
         let formatter = DateFormatter()

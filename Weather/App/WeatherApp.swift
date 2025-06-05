@@ -12,6 +12,7 @@ struct WeatherApp: App {
 
     @StateObject private var locationManager = LocationManager()
     @StateObject private var weatherManager = WeatherManager()
+    @StateObject private var addressManager = AddressManager()
 
     var body: some Scene {
 
@@ -19,9 +20,11 @@ struct WeatherApp: App {
             ContentView()
                 .environmentObject(locationManager)
                 .environmentObject(weatherManager)
+                .environmentObject(addressManager)
                 .task {
                     if let location = locationManager.userLocation {
                         await weatherManager.fetchWeather(location: location)
+                        await addressManager.fetchAddress(location: location)
                     }
                 }
         }

@@ -50,6 +50,7 @@ struct GridConverter {
         let y = Int(floor(ro - ra * cos(theta) + YO + 0.5))
 
         return (x, y)
+
     }
 
 }

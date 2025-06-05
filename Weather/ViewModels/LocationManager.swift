@@ -16,12 +16,7 @@ class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
     override init() {
         super.init()
         manager.delegate = self
-        requestLocationPermission()
-    }
-
-    private func requestLocationPermission() {
         manager.requestWhenInUseAuthorization()
-        manager.startUpdatingLocation()
     }
 
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
@@ -31,10 +26,16 @@ class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
 
     func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
         self.authorizationStatus = manager.authorizationStatus
+        switch authorizationStatus {
+        case .authorizedAlways, .authorizedWhenInUse:
+            manager.requestLocation()
+        default:
+            print("위치 권한 허용 되지 않음")
+        }
     }
 
-//    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
-//        print("위치 가져오기 실패: \(error.localizedDescription)")
-//    }
-    
+    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
+        print("위치 가져오기 실패: \(error.localizedDescription)")
+    }
+
 }
