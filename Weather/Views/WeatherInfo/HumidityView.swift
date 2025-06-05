@@ -9,6 +9,8 @@ import SwiftUI
 
 struct HumidityView: View {
 
+    @EnvironmentObject private var weatherManager: WeatherManager
+
     var body: some View {
 
         VStack(alignment: .leading) {
@@ -26,12 +28,8 @@ struct HumidityView: View {
     }
 
     private var humidity: some View {
-        Text("42%")
+        Text("\(weatherManager.humidity, specifier: "%.1f")%")
             .font(.title2)
     }
 
-}
-
-#Preview {
-    HumidityView()
 }

@@ -26,6 +26,45 @@ class WeatherManager: ObservableObject {
         return parsedItems.first(where: { $0["DATE"] == date }) ?? [:]
     }
 
+    var humidity: Double {
+        guard let humidityString = currentData["REH"],
+              let humidity = Double(humidityString) else {
+            return -1
+        }
+        return humidity
+    }
+
+    var averagePrecipitation: Double {
+
+        let date = formattedDate(format: "yyyyMMdd")
+        let values = parsedItems
+            .filter {
+                guard let fullDate = $0["DATE"], fullDate.contains(date) else {
+                    return false
+                }
+                return true
+            }
+            .compactMap { $0["PCP"] }
+
+        let totalPrecipitation = values.reduce(0.0) { sum, pcpString in
+                switch pcpString {
+                case "강수없음":
+                    return sum + 0
+                case "1mm 미만":
+                    return sum + 0.05
+                case "30":
+                    return sum + 40.0 // 30.0~50.0mm의 중간값
+                case "50":
+                    return sum + 60.0 // 50.0mm 이상을 대표하는 값
+                default:
+                    return sum + (Double(pcpString) ?? 0)
+                }
+            }
+
+        return totalPrecipitation / Double(values.count)
+
+    }
+
     var rotateAngle: Double {
         guard let vecString = currentData["VEC"],
               let vec = Double(vecString) else {
@@ -45,10 +84,10 @@ class WeatherManager: ObservableObject {
             }
             .compactMap { $0["SKY"] }
         
-        return determineSky(skyValues: skyValues)
+        return determineSky(from: skyValues)
     }
 
-    private func determineSky(skyValues: [String]) -> String {
+    private func determineSky(from skyValues: [String]) -> String {
         let clear = skyValues.filter( {$0 == "1"}).count
         let cloudy = skyValues.filter( {$0 == "3"}).count
         let overcast = skyValues.filter( {$0 == "4"}).count
