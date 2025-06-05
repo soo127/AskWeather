@@ -12,7 +12,7 @@ struct WeatherAPI {
 
     static func fetchWeather(from coordinate: CLLocationCoordinate2D) async throws -> [WeatherItem] {
 
-        let (nx, ny) = GridConverter.toGrid(from: coordinate)
+        let (nx, ny) = GridConverter.ToGrid(from: coordinate)
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyyMMdd"
         let yesterday =  Calendar.current.date(byAdding: .day, value: -1, to: Date())!

@@ -43,6 +43,5 @@ struct DailyForecastView: View {
 
 #Preview {
     DailyForecastView()
-        .environmentObject(LocationManager())
         .environmentObject(WeatherManager())
 }

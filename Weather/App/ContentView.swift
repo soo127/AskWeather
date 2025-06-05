@@ -34,4 +34,5 @@ struct ContentView: View {
     ContentView()
         .environmentObject(LocationManager())
         .environmentObject(WeatherManager())
+        .environmentObject(AddressManager())
 }

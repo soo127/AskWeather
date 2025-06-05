@@ -10,7 +10,7 @@ import CoreLocation
 
 struct GridConverter {
 
-    static func toGrid(from coordinate: CLLocationCoordinate2D) -> (Int, Int) {
+    static func ToGrid(from coordinate: CLLocationCoordinate2D) -> (Int, Int) {
 
         let lat = coordinate.latitude
         let lon = coordinate.longitude

@@ -14,10 +14,10 @@ class WeatherManager: ObservableObject {
 
     @Published var parsedItems: [ParsedWeatherData] = []
 
-    private func formattedDate(later: Int = 0, format: String) -> String {
+    private func formattedDate(later: Int = 0, format: String, byAdding: Calendar.Component = .day) -> String {
         let formatter = DateFormatter()
         formatter.dateFormat = format
-        let targetDate = Calendar.current.date(byAdding: .day, value: later, to: Date())!
+        let targetDate = Calendar.current.date(byAdding: byAdding, value: later, to: Date())!
         return formatter.string(from: targetDate)
     }
 
@@ -122,6 +122,54 @@ class WeatherManager: ObservableObject {
             return 0.0
         }
         return speed
+    }
+
+    // MARK: - Hourly Info Accessor
+    
+    func getHourlyInfo(during: Int) -> ([String], [String], [Double]) {
+        return (getHourlyTime(during), getHourlySky(during), getHourlyTemperature(during))
+    }
+
+    private func getHourlyTemperature(_ during: Int) -> [Double] {
+        let date = formattedDate(format: "yyyyMMdd HH00")
+        guard let index = parsedItems.firstIndex(where: { $0["DATE"] == date }) else {
+            return Array(repeating: 0, count: during)
+        }
+        var ans : [Double] = []
+        for offset in 0..<during {
+            let tempString = parsedItems[index + offset]["TMP"] ?? "0"
+            let temp = Double(tempString) ?? 0
+            ans.append(temp)
+        }
+        return ans
+    }
+
+    private func getHourlySky(_ during: Int) -> [String] {
+        let date = formattedDate(format: "yyyyMMdd HH00")
+        guard let index = parsedItems.firstIndex(where: { $0["DATE"] == date }) else {
+            return Array(repeating: "questionmark", count: during)
+        }
+        var ans: [String] = []
+        for offset in 0..<during {
+            let sky = parsedItems[index + offset]["SKY"] ?? "0"
+            switch sky {
+            case "1": ans.append("sun.max")
+            case "3": ans.append("cloud.sun")
+            case "4": ans.append("cloud")
+            default: ans.append("questionmark")
+            }
+        }
+        return ans
+    }
+
+    private func getHourlyTime(_ during: Int) -> [String] {
+        var ans : [String] = []
+        for time in 0..<during {
+            let targetDate = Calendar.current.date(byAdding: .hour, value: time, to: Date())!
+            let hour = Calendar.current.component(.hour, from: targetDate)
+            ans.append(hour >= 13 ? "오후 \(hour - 12)시" : "오전 \(hour)시")
+        }
+        return ans
     }
 
     // MARK: - Daily Info Accessors

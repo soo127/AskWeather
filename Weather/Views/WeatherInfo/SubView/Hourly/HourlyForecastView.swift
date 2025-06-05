@@ -9,6 +9,8 @@ import SwiftUI
 
 struct HourlyForecastView: View {
 
+    @EnvironmentObject private var weatherManager: WeatherManager
+
     var body: some View {
 
         VStack(alignment: .leading) {
@@ -33,8 +35,10 @@ struct HourlyForecastView: View {
     private var hourlyForecasts: some View {
         ScrollView(.horizontal, showsIndicators: false){
             HStack {
-                ForEach(1...15, id: \.self) { index in
-                    HourlyForecastItem(time: index, iconName: "sun.max", temperature: 30-index)
+                let (time,sky,temp) = weatherManager.getHourlyInfo(during: 24)
+
+                ForEach(0...23, id: \.self) { index in
+                    HourlyForecastItem(time: time[index], iconName: sky[index], temperature: temp[index])
                 }
             }
         }
@@ -44,4 +48,5 @@ struct HourlyForecastView: View {
 
 #Preview {
     HourlyForecastView()
+        .environmentObject(WeatherManager())
 }

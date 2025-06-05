@@ -9,10 +9,6 @@ import SwiftUI
 
 struct WeatherView: View {
 
-//    @EnvironmentObject private var locationManager: LocationManager
-//    @EnvironmentObject private var weatherManager: WeatherManager
-//    @EnvironmentObject private var addressManager: AddressManager
-
     var body: some View {
 
         NavigationStack {

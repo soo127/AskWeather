@@ -9,16 +9,18 @@ import SwiftUI
 
 struct HourlyForecastItem: View {
 
-    let time: Int
+    @EnvironmentObject private var weatherManager: WeatherManager
+
+    let time: String
     let iconName: String
-    let temperature: Int
+    let temperature: Double
 
     var body: some View {
 
         VStack(spacing: 5) {
-            Text("오전 \(time)시")
+            Text(time)
             Image(systemName: iconName)
-            Text("\(temperature)°")
+            Text("\(temperature, specifier: "%.0f")°")
         }
         .padding(.horizontal, 5)
 
