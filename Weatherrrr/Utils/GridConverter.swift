@@ -8,7 +8,7 @@
 import SwiftUI
 import CoreLocation
 
-struct GridConverter {
+enum GridConverter {
 
     static func ToGrid(from coordinate: CLLocationCoordinate2D) -> (Int, Int) {
         let lat = coordinate.latitude

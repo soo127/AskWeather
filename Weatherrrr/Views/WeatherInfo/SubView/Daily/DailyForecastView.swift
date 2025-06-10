@@ -12,7 +12,6 @@ struct DailyForecastView: View {
     let kmaViewModel: KMAViewModel
 
     var body: some View {
-
         VStack(alignment: .leading) {
             title
             dailyForecasts
@@ -23,7 +22,6 @@ struct DailyForecastView: View {
                 .fill(.white)
                 .opacity(0.8)
         )
-
     }
 
     private var title: some View {

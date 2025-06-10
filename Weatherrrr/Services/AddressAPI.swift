@@ -11,15 +11,24 @@ import CoreLocation
 struct AddressAPI {
 
     static func fetchAddress(from coordinate: CLLocationCoordinate2D) async throws -> String? {
-        let lat = coordinate.latitude
-        let lon = coordinate.longitude
-        let fetched: KakaoAddressResponse = try await APIHelper.fetch(request: Self.request(lat: lat, lon: lon))
-        return Self.address(fetched: fetched)
+        let fetched = try await fetchKakaoResponse(from: coordinate)
+        return Self.address(from: fetched)
+    }
+
+    static func fetchAreaCode(from coordinate: CLLocationCoordinate2D) async throws -> String? {
+        let fetched = try await fetchKakaoResponse(from: coordinate)
+        return fetched.documents.last?.code
     }
 
 }
 
 extension AddressAPI {
+
+    private static func fetchKakaoResponse(from coordinate: CLLocationCoordinate2D) async throws -> KakaoAddressResponse {
+        let lat = coordinate.latitude
+        let lon = coordinate.longitude
+        return try await APIHelper.fetch(request: request(lat: lat, lon: lon))
+    }
 
     private static func request(lat: Double, lon: Double) -> URLRequest? {
         guard let url = Self.url(lat: lat, lon: lon) else {
@@ -49,8 +58,8 @@ extension AddressAPI {
         "078c1b349c8cc258f38f2eb91d60e196"
     }
 
-    private static func address(fetched: KakaoAddressResponse) -> String? {
-        guard let address = fetched.documents.first?.address else {
+    private static func address(from fetched: KakaoAddressResponse) -> String? {
+        guard let address = fetched.documents.last else {
             return nil
         }
         return "\(address.region_1depth_name) \(address.region_2depth_name) \(address.region_3depth_name)"
@@ -61,7 +70,7 @@ extension AddressAPI {
 extension AddressAPI {
 
     fileprivate enum Constants {
-        static let baseURL = "https://dapi.kakao.com/v2/local/geo/coord2address.json"
+        static let baseURL = "https://dapi.kakao.com/v2/local/geo/coord2regioncode.json"
     }
 
 }

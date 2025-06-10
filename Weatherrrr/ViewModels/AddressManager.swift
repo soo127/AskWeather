@@ -11,12 +11,15 @@ import CoreLocation
 class AddressManager: ObservableObject {
 
     @Published var address: String?
+    @Published var areaCode: String?
 
-    func loadAddress(for coordinate: CLLocationCoordinate2D) async {
+    func load(for coordinate: CLLocationCoordinate2D) async {
         do {
             let address = try await AddressAPI.fetchAddress(from: coordinate)
+            let areaCode = try await AddressAPI.fetchAreaCode(from: coordinate)
             await MainActor.run {
                 self.address = address
+                self.areaCode = areaCode
             }
         } catch {
             print("AddressManager error: \(error)")

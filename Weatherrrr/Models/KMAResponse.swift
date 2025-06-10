@@ -1,5 +1,5 @@
 //
-//  KMAItem.swift
+//  KMAResponse.swift
 //  Weatherrrr
 //
 //  Created by 이상수 on 6/8/25.

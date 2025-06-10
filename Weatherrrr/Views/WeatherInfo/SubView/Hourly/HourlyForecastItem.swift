@@ -14,14 +14,12 @@ struct HourlyForecastItem: View {
     let temperature: String
 
     var body: some View {
-
         VStack(spacing: 5) {
             Text(time)
             Image(systemName: iconName)
             Text("\(Double(temperature) ?? .zero, specifier: "%.0f")°")
         }
         .padding(.horizontal, 5)
-
     }
 
 }

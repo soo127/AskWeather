@@ -12,7 +12,6 @@ struct PrecipitationView: View {
     let kmaViewModel: KMAViewModel
 
     var body: some View {
-
         VStack(alignment: .leading) {
             title
             precipitation

@@ -9,6 +9,8 @@ import SwiftUI
 
 struct UltraVioletView: View {
 
+    let lifeweatherViewModel: LifeWeatherViewModel
+    
     var body: some View {
 
         VStack(alignment: .leading) {
@@ -31,9 +33,9 @@ struct UltraVioletView: View {
 
     private var UVLevel: some View {
         Group {
-            Text("4")
+            Text(lifeweatherViewModel.currentUVIndexValue ?? "0")
                 .font(.title)
-            Text("보통")
+            Text(lifeweatherViewModel.currentUVIndexLevel ?? "0")
                 .font(.title2)
             Capsule()
                 .frame(width: 150, height: 5)
@@ -47,8 +49,4 @@ struct UltraVioletView: View {
         }
     }
 
-}
-
-#Preview {
-    UltraVioletView()
 }

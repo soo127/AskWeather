@@ -13,7 +13,6 @@ struct TitleView: View {
     let addressManager: AddressManager
 
     var body: some View {
-
         VStack(spacing: 5) {
             Text(addressManager.address ?? "주소 로딩 중...")
                 .font(.title2)
@@ -25,10 +24,6 @@ struct TitleView: View {
             }
         }
         .padding(.vertical)
-
     }
-}
 
-//#Preview {
-//    TitleView()
-//}
+}

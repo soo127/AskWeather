@@ -15,15 +15,17 @@ struct DailyForecastItem: View {
     let low: Double
 
     var body: some View {
-
         HStack {
             Text("\(afterDays == 0 ? "오늘" : "\(afterDays)일 뒤")")
                 .frame(width: 50, alignment: .leading)
             Spacer()
+
             Image(systemName: skyIcon)
             Spacer()
+
             Text(String(format: "%.0f", low) + "°")
                 .foregroundStyle(.gray)
+
             Capsule()
                 .frame(width: 100, height: 5)
                 .overlay(
@@ -34,9 +36,9 @@ struct DailyForecastItem: View {
                     )
                     
                 )
+
             Text(String(format: "%.0f", high) + "°")
         }
-
     }
 
     private let gradient = Gradient(colors: [

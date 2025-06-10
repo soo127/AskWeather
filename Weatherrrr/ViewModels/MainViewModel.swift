@@ -12,19 +12,25 @@ class MainViewModel: ObservableObject {
     let locationManager: LocationManager
     let kmaViewModel: KMAViewModel
     let addressManager: AddressManager
+    let lifeWeatherViewModel: LifeWeatherViewModel
 
     init() {
         locationManager = LocationManager()
         kmaViewModel = KMAViewModel()
         addressManager = AddressManager()
+        lifeWeatherViewModel = LifeWeatherViewModel()
         setupLocationCallback()
     }
 
     private func setupLocationCallback() {
         locationManager.onLocationUpdate = { [weak self] coordinate in
+            guard let self else {
+                return
+            }
             Task {
-                await self?.kmaViewModel.loadWeather(for: coordinate)
-                await self?.addressManager.loadAddress(for: coordinate)
+                await self.kmaViewModel.loadWeather(for: coordinate)
+                await self.addressManager.load(for: coordinate)
+                await self.lifeWeatherViewModel.loadUVIndex(using: self.addressManager.areaCode)
             }
         }
     }

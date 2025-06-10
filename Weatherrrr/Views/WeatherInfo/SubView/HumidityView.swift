@@ -12,13 +12,11 @@ struct HumidityView: View {
     let kmaViewModel: KMAViewModel
 
     var body: some View {
-
         VStack(alignment: .leading) {
             title
             humidity
         }
         .padding()
-
     }
 
     private var title: some View {

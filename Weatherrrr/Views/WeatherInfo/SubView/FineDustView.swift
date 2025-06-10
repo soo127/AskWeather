@@ -10,13 +10,11 @@ import SwiftUI
 struct FineDustView: View {
 
     var body: some View {
-
         VStack(alignment: .leading) {
             title
             dustLevel
         }
         .padding()
-
     }
 
     private let gradient = Gradient(colors: [

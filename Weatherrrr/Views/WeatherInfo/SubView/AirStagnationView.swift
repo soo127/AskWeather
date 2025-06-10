@@ -10,13 +10,11 @@ import SwiftUI
 struct AirStagnationView: View {
 
     var body: some View {
-
         VStack(alignment: .leading) {
             title
             stagnationLevel
         }
         .padding()
-
     }
 
     private let gradient = Gradient(colors: [
