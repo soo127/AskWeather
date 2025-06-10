@@ -10,9 +10,22 @@
 		8DD8585D2DF5C342007094B8 /* Weatherrrr.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Weatherrrr.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		8DD85A3E2DF6D378007094B8 /* Exceptions for "Weatherrrr" folder in "Weatherrrr" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 8DD8585C2DF5C342007094B8 /* Weatherrrr */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		8DD8585F2DF5C342007094B8 /* Weatherrrr */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				8DD85A3E2DF6D378007094B8 /* Exceptions for "Weatherrrr" folder in "Weatherrrr" target */,
+			);
 			path = Weatherrrr;
 			sourceTree = "<group>";
 		};
@@ -253,6 +266,8 @@
 				CURRENT_PROJECT_VERSION = 1;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Weatherrrr/Info.plist;
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "사용자 위치 정보에 접근합니다.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -280,6 +295,8 @@
 				CURRENT_PROJECT_VERSION = 1;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Weatherrrr/Info.plist;
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "사용자 위치 정보에 접근합니다.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
