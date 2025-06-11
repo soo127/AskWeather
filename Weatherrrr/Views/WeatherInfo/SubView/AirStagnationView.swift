@@ -9,6 +9,8 @@ import SwiftUI
 
 struct AirStagnationView: View {
 
+    let lifeweatherViewModel: LifeWeatherViewModel
+
     var body: some View {
         VStack(alignment: .leading) {
             title
@@ -29,9 +31,9 @@ struct AirStagnationView: View {
 
     private var stagnationLevel: some View {
         Group {
-            Text("10")
+            Text(lifeweatherViewModel.airDiffusionIndex ?? "0")
                 .font(.title)
-            Text("보통")
+            Text(lifeweatherViewModel.airIndexLevel ?? "0")
                 .font(.title2)
             Capsule()
                 .frame(width: 150, height: 5)
@@ -45,8 +47,4 @@ struct AirStagnationView: View {
         }
     }
 
-}
-
-#Preview {
-    AirStagnationView()
 }

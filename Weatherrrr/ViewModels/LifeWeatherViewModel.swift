@@ -9,44 +9,32 @@ import SwiftUI
 
 class LifeWeatherViewModel: ObservableObject {
 
-    @Published var uvIndex: [HourlyUVIndex] = []
+    @Published var uvIndex: String?
+    @Published var airDiffusionIndex: String?
 
     func loadUVIndex(using areaCode: String?) async {
         guard let areaCode else {
             return
         }
         do {
-            let data = try await LifeWeatherIndexAPI.fetchUVIndex(from: areaCode)
+            let uv = try await LifeWeatherIndexAPI.fetchUVIndex(from: areaCode)
+            let air = try await LifeWeatherIndexAPI.fetchAirDiffusionIndex(from: areaCode)
             await MainActor.run {
-                self.uvIndex = process(data: data)
+                process(uvByHour: uv, airByHour: air)
             }
         } catch {
-            print("UV Index Fetch Error: \(error)")
+            print("LifeWeather Fetch Error: \(error)")
         }
     }
 
-    private func process(data: UVIndexItem?) -> [HourlyUVIndex] {
-        guard let data = data else { return [] }
-        return [
-            HourlyUVIndex(hour: 0, value: data.h0),
-            HourlyUVIndex(hour: 3, value: data.h3),
-            HourlyUVIndex(hour: 6, value: data.h6),
-            HourlyUVIndex(hour: 9, value: data.h9),
-            HourlyUVIndex(hour: 12, value: data.h12),
-            HourlyUVIndex(hour: 15, value: data.h15),
-            HourlyUVIndex(hour: 18, value: data.h18),
-            HourlyUVIndex(hour: 21, value: data.h21)
-        ]
+    private func process(uvByHour: LifeWeatherItem?, airByHour: LifeWeatherItem?) {
+        uvIndex = uvByHour?.current
+        airDiffusionIndex = airByHour?.current
+        print(airDiffusionIndex)
     }
 
-    var currentUVIndexValue: String? {
-        let now = Calendar.current.component(.hour, from: Date())
-        let blockHour = (now / 3) * 3
-        return uvIndex.first(where: { $0.hour == blockHour })?.value
-    }
-
-    var currentUVIndexLevel: String? {
-        guard let value = currentUVIndexValue, let intValue = Int(value) else { return nil }
+    var uvIndexLevel: String? {
+        guard let value = uvIndex, let intValue = Int(value) else { return nil }
         switch intValue {
         case 0...2:
             return "낮음"
@@ -58,6 +46,20 @@ class LifeWeatherViewModel: ObservableObject {
             return "매우 높음"
         default:
             return "위험"
+        }
+    }
+
+    var airIndexLevel: String? {
+        guard let value = airDiffusionIndex, let intValue = Int(value) else { return nil }
+        switch intValue {
+        case 25:
+            return "낮음"
+        case 50:
+            return "보통"
+        case 75:
+            return "높음"
+        default:
+            return "매우 높음"
         }
     }
 

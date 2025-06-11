@@ -40,7 +40,7 @@ struct WeatherView: View {
             WeatherCard { FineDustView() }
             WeatherCard { UltraVioletView(lifeweatherViewModel: lifewthr) }
             WeatherCard { WindView(kmaViewModel: kma) }
-            WeatherCard { AirStagnationView() }
+            WeatherCard { AirStagnationView(lifeweatherViewModel: lifewthr) }
             WeatherCard { PrecipitationView(kmaViewModel: kma) }
             WeatherCard { HumidityView(kmaViewModel: kma) }
         }

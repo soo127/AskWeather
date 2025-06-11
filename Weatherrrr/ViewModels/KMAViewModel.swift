@@ -16,7 +16,6 @@ class KMAViewModel: ObservableObject {
         do {
             let items = try await KMAAPI.fetchWeather(from: coordinate)
             self.forecasts = process(items: items)
-            print(forecasts)
         } catch {
             print("날씨 가져오기 실패: \(error)")
         }
