@@ -28,6 +28,7 @@ struct WeatherView: View {
         let kma = mainViewModel.kmaViewModel
         let addr = mainViewModel.addressManager
         let lifewthr = mainViewModel.lifeWeatherViewModel
+        let air = mainViewModel.airPollutionManager
 
         TitleView(kmaViewModel: kma, addressManager: addr)
         HourlyForecastView(kmaViewModel: kma)
@@ -37,10 +38,10 @@ struct WeatherView: View {
             GridItem(.flexible()),
             GridItem(.flexible())
         ]) {
-            WeatherCard { FineDustView() }
+            WeatherCard { AirPollutionView(airPollutionManager: air) }
             WeatherCard { UltraVioletView(lifeweatherViewModel: lifewthr) }
             WeatherCard { WindView(kmaViewModel: kma) }
-            WeatherCard { AirStagnationView(lifeweatherViewModel: lifewthr) }
+            WeatherCard { AirDiffusionView(lifeweatherViewModel: lifewthr) }
             WeatherCard { PrecipitationView(kmaViewModel: kma) }
             WeatherCard { HumidityView(kmaViewModel: kma) }
         }

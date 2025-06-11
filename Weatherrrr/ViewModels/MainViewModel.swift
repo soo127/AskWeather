@@ -13,12 +13,14 @@ class MainViewModel: ObservableObject {
     let kmaViewModel: KMAViewModel
     let addressManager: AddressManager
     let lifeWeatherViewModel: LifeWeatherViewModel
+    let airPollutionManager: AirPollutionManager
 
     init() {
         locationManager = LocationManager()
         kmaViewModel = KMAViewModel()
         addressManager = AddressManager()
         lifeWeatherViewModel = LifeWeatherViewModel()
+        airPollutionManager = AirPollutionManager()
         setupLocationCallback()
     }
 
@@ -30,7 +32,8 @@ class MainViewModel: ObservableObject {
             Task {
                 await self.kmaViewModel.loadWeather(for: coordinate)
                 await self.addressManager.load(for: coordinate)
-                await self.lifeWeatherViewModel.loadUVIndex(using: self.addressManager.areaCode)
+                await self.lifeWeatherViewModel.load(using: self.addressManager.areaCode)
+                await self.airPollutionManager.loadAirPollution(administrativeArea: self.addressManager.address)
             }
         }
     }

@@ -12,7 +12,7 @@ class LifeWeatherViewModel: ObservableObject {
     @Published var uvIndex: String?
     @Published var airDiffusionIndex: String?
 
-    func loadUVIndex(using areaCode: String?) async {
+    func load(using areaCode: String?) async {
         guard let areaCode else {
             return
         }
@@ -29,8 +29,7 @@ class LifeWeatherViewModel: ObservableObject {
 
     private func process(uvByHour: LifeWeatherItem?, airByHour: LifeWeatherItem?) {
         uvIndex = uvByHour?.current
-        airDiffusionIndex = airByHour?.current
-        print(airDiffusionIndex)
+        airDiffusionIndex = airByHour?.after3Hours
     }
 
     var uvIndexLevel: String? {

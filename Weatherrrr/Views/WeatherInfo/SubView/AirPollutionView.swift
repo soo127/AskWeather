@@ -1,20 +1,20 @@
 //
-//  AirStagnationView.swift
+//  AirPollutionView.swift
 //  Weather
 //
-//  Created by 이상수 on 5/29/25.
+//  Created by 이상수 on 5/28/25.
 //
 
 import SwiftUI
 
-struct AirStagnationView: View {
+struct AirPollutionView: View {
 
-    let lifeweatherViewModel: LifeWeatherViewModel
+    let airPollutionManager: AirPollutionManager
 
     var body: some View {
         VStack(alignment: .leading) {
             title
-            stagnationLevel
+            dustLevel
         }
         .padding()
     }
@@ -24,16 +24,16 @@ struct AirStagnationView: View {
     ])
 
     private var title: some View {
-        Text("대기 정체 지수")
+        Text("미세먼지 농도 (㎍/㎥)")
             .font(.caption)
             .foregroundStyle(.gray)
     }
 
-    private var stagnationLevel: some View {
+    private var dustLevel: some View {
         Group {
-            Text(lifeweatherViewModel.airDiffusionIndex ?? "0")
+            Text(airPollutionManager.airPollution ?? "0")
                 .font(.title)
-            Text(lifeweatherViewModel.airIndexLevel ?? "0")
+            Text(airPollutionManager.pollutionLevel ?? "0")
                 .font(.title2)
             Capsule()
                 .frame(width: 150, height: 5)

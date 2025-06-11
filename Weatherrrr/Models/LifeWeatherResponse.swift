@@ -24,8 +24,10 @@ struct LifeWeatherItems: Codable {
 struct LifeWeatherItem: Codable {
 
     let current: String?
+    let after3Hours: String?
     enum CodingKeys: String, CodingKey {
         case current = "h0"
+        case after3Hours = "h3"
     }
     
 }
