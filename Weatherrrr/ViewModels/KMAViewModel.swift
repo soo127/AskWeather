@@ -12,6 +12,7 @@ class KMAViewModel: ObservableObject {
 
     @Published var forecasts: [Forecast] = []
 
+    @MainActor
     func loadWeather(for coordinate: CLLocationCoordinate2D) async {
         do {
             let items = try await KMAAPI.fetchWeather(from: coordinate)

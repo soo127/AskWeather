@@ -13,23 +13,17 @@ class LifeWeatherViewModel: ObservableObject {
     @Published var uvIndex: String?
     @Published var airDiffusionIndex: String?
 
+    @MainActor
     func load(for coordinate: CLLocationCoordinate2D) async {
         do {
             let areaCode = try await AddressAPI.fetchAreaCode(from: coordinate)
             let uv = try await LifeWeatherIndexAPI.fetch(for: .uv, areaCode: areaCode)
             let air = try await LifeWeatherIndexAPI.fetch(for: .airDiffusion, areaCode: areaCode)
-
-            await MainActor.run {
-                process(uvByHour: uv, airByHour: air)
-            }
+            uvIndex = uv?.current
+            airDiffusionIndex = air?.after3Hours
         } catch {
             print("LifeWeather Fetch Error: \(error)")
         }
-    }
-
-    private func process(uvByHour: LifeWeatherItem?, airByHour: LifeWeatherItem?) {
-        uvIndex = uvByHour?.current
-        airDiffusionIndex = airByHour?.after3Hours
     }
 
     var uvIndexLevel: String? {

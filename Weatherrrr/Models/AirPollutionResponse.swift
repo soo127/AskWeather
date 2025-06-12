@@ -18,23 +18,23 @@ struct AirPollutionResponse: Codable {
     }
 
     struct Item: Codable {
-        let seoul: String
-        let busan: String
-        let daegu: String
-        let incheon: String
-        let gwangju: String
-        let daejeon: String
-        let ulsan: String
-        let gyeonggi: String
-        let gangwon: String
-        let chungbuk: String
-        let chungnam: String
-        let jeonbuk: String
-        let jeonnam: String
-        let gyeongbuk: String
-        let gyeongnam: String
-        let jeju: String
-        let sejong: String
+        let seoul: String?
+        let busan: String?
+        let daegu: String?
+        let incheon: String?
+        let gwangju: String?
+        let daejeon: String?
+        let ulsan: String?
+        let gyeonggi: String?
+        let gangwon: String?
+        let chungbuk: String?
+        let chungnam: String?
+        let jeonbuk: String?
+        let jeonnam: String?
+        let gyeongbuk: String?
+        let gyeongnam: String?
+        let jeju: String?
+        let sejong: String?
     }
-
+    
 }

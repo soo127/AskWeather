@@ -11,15 +11,10 @@ class AirPollutionManager {
 
     @Published var airPollution: String?
 
+    @MainActor
     func loadAirPollution(administrativeArea area: String?) async {
-        guard let area = area else {
-            return
-        }
         do {
             let nationalAir = try await AirPollutionAPI.fetchAirPollution()
-            guard let nationalAir = nationalAir else {
-                return
-            }
             airPollution = AirPollutionMapper.value(area: area, in: nationalAir)
         } catch {
             print("AirPollution Fetch Error: \(error)")
