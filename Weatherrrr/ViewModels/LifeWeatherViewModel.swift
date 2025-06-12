@@ -6,19 +6,19 @@
 //
 
 import SwiftUI
+import CoreLocation
 
 class LifeWeatherViewModel: ObservableObject {
 
     @Published var uvIndex: String?
     @Published var airDiffusionIndex: String?
 
-    func load(using areaCode: String?) async {
-        guard let areaCode else {
-            return
-        }
+    func load(for coordinate: CLLocationCoordinate2D) async {
         do {
-            let uv = try await LifeWeatherIndexAPI.fetchUVIndex(from: areaCode)
-            let air = try await LifeWeatherIndexAPI.fetchAirDiffusionIndex(from: areaCode)
+            let areaCode = try await AddressAPI.fetchAreaCode(from: coordinate)
+            let uv = try await LifeWeatherIndexAPI.fetch(for: .uv, areaCode: areaCode)
+            let air = try await LifeWeatherIndexAPI.fetch(for: .airDiffusion, areaCode: areaCode)
+
             await MainActor.run {
                 process(uvByHour: uv, airByHour: air)
             }

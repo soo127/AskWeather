@@ -10,28 +10,34 @@ import CoreLocation
 
 struct LifeWeatherIndexAPI {
 
-    static func fetchUVIndex(from areaCode: String) async throws -> LifeWeatherItem? {
-        let fetched: LifeWeatherResponse = try await APIHelper.fetch(url: Self.url(type: "UV", areaCode: areaCode))
-        return fetched.response.body.items.item.first
-    }
+    static func fetch(for type: LifeWeatherIndexType, areaCode: String?) async throws -> LifeWeatherItem? {
+        guard let areaCode, let url = url(for: type, areaCode: areaCode) else {
+            return nil
+        }
 
-    static func fetchAirDiffusionIndex(from areaCode: String) async throws -> LifeWeatherItem? {
-        let fetched: LifeWeatherResponse = try await APIHelper.fetch(url: Self.url(type: "Air", areaCode: areaCode))
-        return fetched.response.body.items.item.first
+        let response: LifeWeatherResponse = try await APIHelper.fetch(url: url)
+        return response.response.body.items.item.first
     }
 
 }
 
 extension LifeWeatherIndexAPI {
 
-    private static func url(type: String, areaCode: String) -> URL? {
+    private static func url(for type: LifeWeatherIndexType, areaCode: String) -> URL? {
         let param = params(areaCode: areaCode)
             .map { "\($0.key)=\($0.value)" }
             .joined(separator: "&")
-        
-        let baseURL = type == "UV" ? Constants.baseUVURL : Constants.baseAirURL
-        let url = baseURL + "?" + param
-        return URL(string: url)
+
+        return URL(string: baseURL(for: type) + "?" + param)
+    }
+
+    private static func baseURL(for type: LifeWeatherIndexType) -> String {
+        switch type {
+        case .uv:
+            return Constants.baseUVURL
+        case .airDiffusion:
+            return Constants.baseAirURL
+        }
     }
 
     private static func params(areaCode: String) -> [String: Any] {
@@ -56,7 +62,6 @@ extension LifeWeatherIndexAPI {
         return dateString + String(format: "%02d", hour)
     }
 
-
     private static var apiKey: String {
         "D6isDBPO8K02ZbuWvj5rekfrmgpuAujejX8OZpMaz0aEwWU070S8US0pordpKMnu0qlD1NS8r83w7FqLWLgGOg%3D%3D"
     }
@@ -71,3 +76,4 @@ extension LifeWeatherIndexAPI {
     }
 
 }
+

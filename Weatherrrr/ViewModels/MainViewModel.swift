@@ -32,7 +32,7 @@ class MainViewModel: ObservableObject {
             Task {
                 await self.kmaViewModel.loadWeather(for: coordinate)
                 await self.addressManager.load(for: coordinate)
-                await self.lifeWeatherViewModel.load(using: self.addressManager.areaCode)
+                await self.lifeWeatherViewModel.load(for: coordinate)
                 await self.airPollutionManager.loadAirPollution(administrativeArea: self.addressManager.address)
             }
         }

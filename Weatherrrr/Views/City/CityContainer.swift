@@ -29,6 +29,9 @@ struct CityContainer: View {
                 
             }
             .navigationTitle("날씨")
+            .toolbar {
+                MenuView()
+            }
             .scrollIndicators(.hidden)
             .padding(.horizontal)
         }
