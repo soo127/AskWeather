@@ -33,7 +33,7 @@ class MainViewModel: ObservableObject {
                 await self.kmaViewModel.loadWeather(for: coordinate)
                 await self.addressManager.load(for: coordinate)
                 await self.lifeWeatherViewModel.load(for: coordinate)
-                await self.airPollutionManager.loadAirPollution(administrativeArea: self.addressManager.address)
+                await self.airPollutionManager.loadAirPollution(for: coordinate)
             }
         }
     }

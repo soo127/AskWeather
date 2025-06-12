@@ -6,15 +6,17 @@
 //
 
 import SwiftUI
+import CoreLocation
 
 class AirPollutionManager {
 
     @Published var airPollution: String?
 
     @MainActor
-    func loadAirPollution(administrativeArea area: String?) async {
+    func loadAirPollution(for coordinate: CLLocationCoordinate2D) async {
         do {
             let nationalAir = try await AirPollutionAPI.fetchAirPollution()
+            let area = try await AddressAPI.fetchAddress(from: coordinate)
             airPollution = AirPollutionMapper.value(area: area, in: nationalAir)
         } catch {
             print("AirPollution Fetch Error: \(error)")
