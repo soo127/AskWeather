@@ -64,7 +64,7 @@ class KMAViewModel: ObservableObject {
     }
 
     var currentForecast: Forecast? {
-        return forecasts.last(where: { $0.dateTime <= Date() })
+        forecasts.last(where: { $0.dateTime <= Date() })
     }
 
     var humidity: Double? {

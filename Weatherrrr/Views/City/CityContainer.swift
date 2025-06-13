@@ -10,38 +10,44 @@ import SwiftUI
 struct CityContainer: View {
 
     var body: some View {
-
         NavigationStack {
-
             ScrollView {
-
-                TextField("Search City", text: .constant(""))
-                    .padding(.vertical, 5)
-                    .background(Color.gray.opacity(0.1))
-                    .padding(.bottom)
-
+                searchBar
                 ForEach(1...5, id: \.self) { i in
                     NavigationLink(destination: WeatherView()) {
                         CityCard()
                     }
                     .buttonStyle(PlainButtonStyle())
                 }
-                
             }
             .navigationTitle("날씨")
+            .scrollIndicators(.hidden)
+            .padding(.horizontal)
             .toolbar {
                 MenuView()
             }
-            .scrollIndicators(.hidden)
-            .padding(.horizontal)
         }
+    }
 
+    private var searchBar: some View {
+        NavigationLink(destination: CitySearchView()) {
+            HStack {
+                Label("도시 검색", systemImage: "magnifyingglass")
+                    .foregroundStyle(.gray)
+                Spacer()
+            }
+            .padding(7)
+            .background(Color.gray.opacity(0.1))
+            .padding(.bottom, 7)
+        }
+        .buttonStyle(PlainButtonStyle())
     }
 
 }
 
 #Preview {
     CityContainer()
+        .environmentObject(MainViewModel())
 }
 
 
