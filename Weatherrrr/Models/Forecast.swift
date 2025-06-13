@@ -31,4 +31,15 @@ struct Forecast {
         self.skyCondition = "--"
     }
 
+    static let categoryKeyPaths: [String: WritableKeyPath<Forecast, String>] = [
+            "PCP": \.parcipitation,
+            "REH": \.humidity,
+            "TMX": \.dailyHighTemp,
+            "TMN": \.dailyLowTemp,
+            "TMP": \.temperature,
+            "VEC": \.windVector,
+            "WSD": \.windSpeed,
+            "SKY": \.skyCondition
+        ]
+
 }

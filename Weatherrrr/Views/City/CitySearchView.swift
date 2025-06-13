@@ -9,7 +9,7 @@ import SwiftUI
 
 struct CitySearchView: View {
 
-    @StateObject private var viewModel = LocationSearchViewModel()
+    @StateObject var viewModel = LocationSearchViewModel()
 
     var body: some View {
         VStack {
@@ -32,11 +32,11 @@ struct CitySearchView: View {
     private var searchResults: some View {
         ScrollView {
             ForEach(viewModel.searchResults, id: \.self) { completion in
-                Button {
-                    print(completion.title)
-                } label: {
+                NavigationLink(destination: WeatherView()) {
                     Text(completion.title)
                 }
+                .padding(.vertical, 5)
+                .buttonStyle(PlainButtonStyle())
             }
         }
     }

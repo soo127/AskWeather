@@ -32,29 +32,11 @@ class KMAViewModel: ObservableObject {
             if forecasts[date] == nil {
                 forecasts[date] = Forecast(dateTime: date)
             }
-
-            switch item.category {
-            case "PCP":
-                forecasts[date]!.parcipitation = item.fcstValue
-            case "REH":
-                forecasts[date]!.humidity = item.fcstValue
-            case "TMX":
-                forecasts[date]!.dailyHighTemp = item.fcstValue
-            case "TMN":
-                forecasts[date]!.dailyLowTemp = item.fcstValue
-            case "TMP":
-                forecasts[date]!.temperature = item.fcstValue
-            case "VEC":
-                forecasts[date]!.windVector = item.fcstValue
-            case "WSD":
-                forecasts[date]!.windSpeed = item.fcstValue
-            case "SKY":
-                forecasts[date]!.skyCondition = item.fcstValue
-            default:
-                continue
+            if let keyPath = Forecast.categoryKeyPaths[item.category] {
+                forecasts[date]![keyPath: keyPath] = item.fcstValue
             }
         }
-        return forecasts.values.sorted(by: { $0.dateTime < $1.dateTime } )
+        return forecasts.values.sorted(by: { $0.dateTime < $1.dateTime })
     }
 
     private func makeDate(from date: String, time: String) -> Date? {
@@ -63,8 +45,12 @@ class KMAViewModel: ObservableObject {
         return formatter.date(from: date + time)
     }
 
+    private var now: Date {
+        Date()
+    }
+
     var currentForecast: Forecast? {
-        forecasts.last(where: { $0.dateTime <= Date() })
+        forecasts.last(where: { $0.dateTime <= now })
     }
 
     var humidity: Double? {
@@ -88,7 +74,7 @@ class KMAViewModel: ObservableObject {
     }
 
     var averagePrecipitation: Double {
-        let today = Calendar.current.startOfDay(for: Date())
+        let today = Calendar.current.startOfDay(for: now)
         let todayForecasts = forecasts.filter {
             Calendar.current.isDate($0.dateTime, inSameDayAs: today)
         }
@@ -115,7 +101,6 @@ class KMAViewModel: ObservableObject {
     }
 
     func hourlyInfo(forNext hours: Int) -> [(time: String, sky: String, temp: String)] {
-        let now = Date()
         let calendar = Calendar.current
         let components = calendar.dateComponents([.year, .month, .day, .hour], from: now)
         let currentHour = calendar.date(from: components)!
@@ -166,7 +151,7 @@ class KMAViewModel: ObservableObject {
     }
 
     private func dailyTemp(onHour hour: Int, afterDays offset: Int) -> Forecast? {
-        guard let targetDate = Calendar.current.date(byAdding: .day, value: offset, to: Date()) else {
+        guard let targetDate = Calendar.current.date(byAdding: .day, value: offset, to: now) else {
             return nil
         }
         let forecast = forecasts.first {
@@ -177,7 +162,7 @@ class KMAViewModel: ObservableObject {
     }
 
     func dailySkyIcon(afterDays offset: Int) -> String? {
-        guard let targetDate = Calendar.current.date(byAdding: .day, value: offset, to: Date()) else {
+        guard let targetDate = Calendar.current.date(byAdding: .day, value: offset, to: now) else {
             return nil
         }
         let skyCodes = forecasts
