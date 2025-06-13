@@ -9,7 +9,7 @@ import SwiftUI
 
 struct HourlyForecastView: View {
 
-    let kmaViewModel: KMAViewModel
+    let weatherViewModel: WeatherViewModel
 
     var body: some View {
         VStack(alignment: .leading) {
@@ -32,7 +32,7 @@ struct HourlyForecastView: View {
 
     private var hourlyForecasts: some View {
         ScrollView(.horizontal, showsIndicators: false){
-            let hourlyInfo = kmaViewModel.hourlyInfo(forNext: 24)
+            let hourlyInfo = weatherViewModel.todayHourlyInfo()
             let count = hourlyInfo.count
             HStack {
                 ForEach(0..<count, id: \.self) { index in
@@ -49,5 +49,5 @@ struct HourlyForecastView: View {
 }
 
 #Preview {
-    HourlyForecastView(kmaViewModel: .init())
+    HourlyForecastView(weatherViewModel: .init())
 }

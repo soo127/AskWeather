@@ -25,25 +25,23 @@ struct WeatherView: View {
 
     @ViewBuilder
     private var content: some View {
-        let kma = mainViewModel.kmaViewModel
+        let kma = mainViewModel.weatherViewModel
         let addr = mainViewModel.addressManager
-        let lifewthr = mainViewModel.lifeWeatherViewModel
-        let air = mainViewModel.airPollutionManager
 
-        TitleView(kmaViewModel: kma, addressManager: addr)
-        HourlyForecastView(kmaViewModel: kma)
-        DailyForecastView(kmaViewModel: kma)
+        TitleView(weatherViewModel: kma, addressManager: addr)
+        HourlyForecastView(weatherViewModel: kma)
+        DailyForecastView(weatherViewModel: kma)
 
         LazyVGrid(columns: [
             GridItem(.flexible()),
             GridItem(.flexible())
         ]) {
-            WeatherCard { AirPollutionView(airPollutionManager: air) }
-            WeatherCard { UltraVioletView(lifeweatherViewModel: lifewthr) }
-            WeatherCard { WindView(kmaViewModel: kma) }
-            WeatherCard { AirDiffusionView(lifeweatherViewModel: lifewthr) }
-            WeatherCard { PrecipitationView(kmaViewModel: kma) }
-            WeatherCard { HumidityView(kmaViewModel: kma) }
+            WeatherCard { AirPollutionView(weatherViewModel: kma) }
+            WeatherCard { UltraVioletView(weatherViewModel: kma) }
+            WeatherCard { WindView(weatherViewModel: kma) }
+            WeatherCard { AirDiffusionView(weatherViewModel: kma) }
+            WeatherCard { PrecipitationView(weatherViewModel: kma) }
+            WeatherCard { HumidityView(weatherViewModel: kma) }
         }
     }
 

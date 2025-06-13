@@ -10,17 +10,13 @@ import SwiftUI
 class MainViewModel: ObservableObject {
 
     let locationManager: LocationManager
-    let kmaViewModel: KMAViewModel
+    let weatherViewModel: WeatherViewModel
     let addressManager: AddressManager
-    let lifeWeatherViewModel: LifeWeatherViewModel
-    let airPollutionManager: AirPollutionManager
 
     init() {
         locationManager = LocationManager()
-        kmaViewModel = KMAViewModel()
+        weatherViewModel = WeatherViewModel()
         addressManager = AddressManager()
-        lifeWeatherViewModel = LifeWeatherViewModel()
-        airPollutionManager = AirPollutionManager()
         setupLocationCallback()
     }
 
@@ -30,10 +26,8 @@ class MainViewModel: ObservableObject {
                 return
             }
             Task {
-                await self.kmaViewModel.loadWeather(for: coordinate)
+                await self.weatherViewModel.load(for: coordinate)
                 await self.addressManager.load(for: coordinate)
-                await self.lifeWeatherViewModel.load(for: coordinate)
-                await self.airPollutionManager.loadAirPollution(for: coordinate)
             }
         }
     }

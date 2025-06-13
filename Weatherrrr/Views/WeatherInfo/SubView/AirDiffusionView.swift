@@ -9,7 +9,7 @@ import SwiftUI
 
 struct AirDiffusionView: View {
 
-    let lifeweatherViewModel: LifeWeatherViewModel
+    let weatherViewModel: WeatherViewModel
 
     var body: some View {
         VStack(alignment: .leading) {
@@ -31,9 +31,9 @@ struct AirDiffusionView: View {
 
     private var diffusionLevel: some View {
         Group {
-            Text(lifeweatherViewModel.airDiffusionIndex ?? "0")
+            Text(weatherViewModel.airDiffusionIndex ?? "0")
                 .font(.title)
-            Text(lifeweatherViewModel.airIndexLevel ?? "0")
+            Text(weatherViewModel.airIndexLevel ?? "0")
                 .font(.title2)
             Capsule()
                 .frame(width: 150, height: 5)

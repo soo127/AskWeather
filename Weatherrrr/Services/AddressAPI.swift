@@ -20,6 +20,11 @@ struct AddressAPI {
         return fetched.documents.last?.code
     }
 
+    static func fetch(from coordinate: CLLocationCoordinate2D) async throws -> (area: String?, areaCode: String?) {
+        let fetched = try await fetchKakaoResponse(from: coordinate)
+        return (fetched.documents.last?.address_name, fetched.documents.last?.code)
+    }
+
 }
 
 extension AddressAPI {

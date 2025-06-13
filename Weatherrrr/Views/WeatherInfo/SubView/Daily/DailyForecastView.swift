@@ -9,7 +9,7 @@ import SwiftUI
 
 struct DailyForecastView: View {
 
-    let kmaViewModel: KMAViewModel
+    let weatherViewModel: WeatherViewModel
 
     var body: some View {
         VStack(alignment: .leading) {
@@ -35,9 +35,9 @@ struct DailyForecastView: View {
             ForEach(0...3, id: \.self) { day in
                 DailyForecastItem(
                     afterDays: day,
-                    skyIcon: kmaViewModel.dailySkyIcon(afterDays: day) ?? "questionmark",
-                    high: kmaViewModel.dailyHighTemp(afterdays: day) ?? .zero,
-                    low: kmaViewModel.dailyLowTemp(afterdays: day) ?? .zero
+                    skyIcon: weatherViewModel.dailySkyIcon(afterDays: day) ?? "questionmark",
+                    high: weatherViewModel.dailyHighTemp(afterdays: day) ?? .zero,
+                    low: weatherViewModel.dailyLowTemp(afterdays: day) ?? .zero
                 )
             }
             .padding(.vertical, 5)
@@ -47,5 +47,5 @@ struct DailyForecastView: View {
 }
 
 #Preview {
-    DailyForecastView(kmaViewModel: .init())
+    DailyForecastView(weatherViewModel: .init())
 }

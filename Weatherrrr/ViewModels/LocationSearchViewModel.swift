@@ -15,8 +15,8 @@ class LocationSearchViewModel: NSObject, ObservableObject {
             completer.queryFragment = queryFragment
         }
     }
-    private let completer = MKLocalSearchCompleter()
     @Published var results = [MKLocalSearchCompletion]()
+    private let completer = MKLocalSearchCompleter()
 
     override init() {
         super.init()

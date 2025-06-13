@@ -10,9 +10,9 @@ import CoreLocation
 
 struct KMAAPI {
 
-    static func fetchWeather(from coordinate: CLLocationCoordinate2D) async throws -> [KMAItem] {
+    static func fetchWeather(from coordinate: CLLocationCoordinate2D) async throws -> [WeatherItem] {
         let (nx, ny) = GridConverter.toGrid(from: coordinate)
-        let fetched: KMAResponse = try await APIHelper.fetch(url: Self.url(nx: nx, ny: ny))
+        let fetched: WeatherResponse = try await APIHelper.fetch(url: Self.url(nx: nx, ny: ny))
         return fetched.response.body.items.item
     }
 

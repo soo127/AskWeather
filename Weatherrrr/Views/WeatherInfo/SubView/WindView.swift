@@ -9,7 +9,7 @@ import SwiftUI
 
 struct WindView: View {
 
-    let kmaViewModel: KMAViewModel
+    let weatherViewModel: WeatherViewModel
 
     var body: some View {
         VStack(alignment: .leading) {
@@ -49,12 +49,12 @@ struct WindView: View {
 
     private var arrow: some View {
         Group {
-            let rotateAngle = (kmaViewModel.rotateAngle ?? .zero) + 90.0
+            let rotateAngle = (weatherViewModel.rotateAngle ?? .zero) + 90.0
             Text("------------------")
                 .font(.caption)
                 .rotationEffect(.degrees(rotateAngle))
 
-            let angleToRad = kmaViewModel.radian(angle: rotateAngle)
+            let angleToRad = weatherViewModel.radian(angle: rotateAngle)
             Image(systemName: "triangle.fill")
                 .resizable()
                 .frame(width: 15, height: 15)
@@ -68,7 +68,7 @@ struct WindView: View {
             Circle()
                 .frame(width: 45, height: 45)
                 .foregroundStyle(.white)
-            Text(String(format: "%.1f", kmaViewModel.windSpeed ?? .zero))
+            Text(String(format: "%.1f", weatherViewModel.windSpeed ?? .zero))
             + Text("m/s")
                 .font(.caption)
         }
@@ -77,5 +77,5 @@ struct WindView: View {
 }
 
 #Preview {
-    WindView(kmaViewModel: .init())
+    WindView(weatherViewModel: .init())
 }

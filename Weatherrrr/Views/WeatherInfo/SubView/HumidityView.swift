@@ -9,7 +9,7 @@ import SwiftUI
 
 struct HumidityView: View {
 
-    let kmaViewModel: KMAViewModel
+    let weatherViewModel: WeatherViewModel
 
     var body: some View {
         VStack(alignment: .leading) {
@@ -26,7 +26,7 @@ struct HumidityView: View {
     }
 
     private var humidity: some View {
-        Text("\(kmaViewModel.humidity ?? .zero, specifier: "%.1f")%")
+        Text("\(weatherViewModel.humidity ?? .zero, specifier: "%.1f")%")
             .font(.title2)
     }
 

@@ -9,7 +9,7 @@ import SwiftUI
 
 struct AirPollutionView: View {
 
-    let airPollutionManager: AirPollutionManager
+    let weatherViewModel: WeatherViewModel
 
     var body: some View {
         VStack(alignment: .leading) {
@@ -31,9 +31,9 @@ struct AirPollutionView: View {
 
     private var dustLevel: some View {
         Group {
-            Text(airPollutionManager.airPollution ?? "0")
+            Text(weatherViewModel.airPollution ?? "0")
                 .font(.title)
-            Text(airPollutionManager.pollutionLevel ?? "0")
+            Text(weatherViewModel.pollutionLevel ?? "0")
                 .font(.title2)
             Capsule()
                 .frame(width: 150, height: 5)

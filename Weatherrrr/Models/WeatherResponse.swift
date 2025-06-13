@@ -1,11 +1,11 @@
 //
-//  KMAResponse.swift
+//  WeatherResponse.swift
 //  Weatherrrr
 //
 //  Created by 이상수 on 6/8/25.
 //
 
-struct KMAResponse: Codable {
+struct WeatherResponse: Codable {
     let response: Response
 }
 
@@ -28,10 +28,10 @@ struct Body: Codable {
 }
 
 struct ItemWrapper: Codable {
-    let item: [KMAItem]
+    let item: [WeatherItem]
 }
 
-struct KMAItem: Codable {
+struct WeatherItem: Codable {
     let baseDate: String
     let baseTime: String
     let category: String
