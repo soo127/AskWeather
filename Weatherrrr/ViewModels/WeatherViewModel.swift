@@ -22,9 +22,9 @@ class WeatherViewModel: ObservableObject {
             let items = try await KMAAPI.fetchWeather(from: coordinate)
             self.forecasts = process(items: items)
 
-            let (area, areaCode) = try await AddressAPI.fetch(from: coordinate)
-            let nationalAir = try await AirPollutionAPI.fetchAirPollution()
-            airPollution = AirPollutionMapper.value(area: area, in: nationalAir)
+            let (address, areaCode) = try await AddressAPI.fetch(from: coordinate)
+            let nationalAir = try await AirPollutionAPI.fetch()
+            airPollution = AirPollutionMapper.value(area: address, in: nationalAir)
 
             let uv = try await LifeWeatherIndexAPI.fetch(for: .uv, areaCode: areaCode)
             let air = try await LifeWeatherIndexAPI.fetch(for: .airDiffusion, areaCode: areaCode)

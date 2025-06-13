@@ -16,8 +16,7 @@ class AddressManager: ObservableObject {
     @MainActor
     func load(for coordinate: CLLocationCoordinate2D) async {
         do {
-            let address = try await AddressAPI.fetchAddress(from: coordinate)
-            let areaCode = try await AddressAPI.fetchAreaCode(from: coordinate)
+            let (address, areaCode) = try await AddressAPI.fetch(from: coordinate)
             self.address = address
             self.areaCode = areaCode
         } catch {

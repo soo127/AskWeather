@@ -12,7 +12,6 @@ struct MapMarker: View {
     let temperature: Int
 
     var body: some View {
-
         VStack(spacing: 0) {
             Text("\(temperature)°")
                 .foregroundColor(.white)
@@ -25,7 +24,6 @@ struct MapMarker: View {
                 .foregroundColor(temperatureColor)
                 .offset(y: -3)
         }
-
     }
 
     private var temperatureColor: Color {

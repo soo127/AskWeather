@@ -6,7 +6,6 @@
 //
 
 struct AirPollutionResponse: Codable {
-
     let response: Response
 
     struct Response: Codable {
@@ -36,5 +35,4 @@ struct AirPollutionResponse: Codable {
         let jeju: String?
         let sejong: String?
     }
-    
 }

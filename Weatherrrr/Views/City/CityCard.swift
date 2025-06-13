@@ -10,9 +10,7 @@ import SwiftUI
 struct CityCard: View {
 
     var body: some View {
-
         HStack(alignment: .center) {
-
             VStack(alignment: .leading, spacing: 5) {
                 Text("화성시")
                     .font(.title2)
@@ -32,14 +30,12 @@ struct CityCard: View {
                     .font(.caption)
                     .foregroundColor(.gray)
             }
-
         }
         .padding()
         .background(
             RoundedRectangle(cornerRadius: 12)
                 .fill(.gray.opacity(0.3))
         )
-
     }
     
 }

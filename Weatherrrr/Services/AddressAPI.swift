@@ -10,17 +10,7 @@ import CoreLocation
 
 struct AddressAPI {
 
-    static func fetchAddress(from coordinate: CLLocationCoordinate2D) async throws -> String? {
-        let fetched = try await fetchKakaoResponse(from: coordinate)
-        return fetched.documents.last?.address_name
-    }
-
-    static func fetchAreaCode(from coordinate: CLLocationCoordinate2D) async throws -> String? {
-        let fetched = try await fetchKakaoResponse(from: coordinate)
-        return fetched.documents.last?.code
-    }
-
-    static func fetch(from coordinate: CLLocationCoordinate2D) async throws -> (area: String?, areaCode: String?) {
+    static func fetch(from coordinate: CLLocationCoordinate2D) async throws -> (address: String?, areaCode: String?) {
         let fetched = try await fetchKakaoResponse(from: coordinate)
         return (fetched.documents.last?.address_name, fetched.documents.last?.code)
     }

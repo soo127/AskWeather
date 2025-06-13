@@ -8,7 +8,6 @@
 import SwiftUI
 
 struct Forecast {
-
     let dateTime: Date
     var temperature: String
     var dailyHighTemp: String
@@ -41,5 +40,4 @@ struct Forecast {
             "WSD": \.windSpeed,
             "SKY": \.skyCondition
         ]
-
 }

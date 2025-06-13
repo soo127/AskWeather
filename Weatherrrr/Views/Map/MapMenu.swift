@@ -10,7 +10,6 @@ import SwiftUI
 struct MapMenu: View {
 
     var body: some View {
-
         Menu {
 
             Button("강수량") {
@@ -34,7 +33,6 @@ struct MapMenu: View {
                 .clipShape(RoundedRectangle(cornerRadius: 5))
         }
         .padding(.trailing)
-        
     }
 
 }
