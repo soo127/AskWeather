@@ -10,12 +10,13 @@ import SwiftUI
 @main
 struct WeatherrrrApp: App {
 
-    @StateObject private var mainViewModel = MainViewModel()
+    @StateObject private var appCoordinator = AppCoordinator()
 
     var body: some Scene {
         WindowGroup {
             ContentView()
-                .environmentObject(mainViewModel)
+                .environmentObject(appCoordinator.weatherViewModel)
+                .environmentObject(appCoordinator.addressManager)
         }
     }
 

@@ -20,10 +20,14 @@ class LocationSearchViewModel: NSObject, ObservableObject {
 
     override init() {
         super.init()
+        setup()
+    }
+
+    private func setup() {
         completer.delegate = self
         completer.resultTypes = [.address]
     }
-
+    
     var searchResults: [MKLocalSearchCompletion]  {
         self.results.filter { $0.title.hasPrefix("대한민국") }
     }

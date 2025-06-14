@@ -47,7 +47,6 @@ struct CityContainer: View {
 
 #Preview {
     CityContainer()
-        .environmentObject(MainViewModel())
 }
 
 

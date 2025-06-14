@@ -9,8 +9,8 @@ import SwiftUI
 
 struct TitleView: View {
 
-    let weatherViewModel: WeatherViewModel
-    let addressManager: AddressManager
+    @EnvironmentObject private var weatherViewModel : WeatherViewModel
+    @EnvironmentObject private var addressManager : AddressManager
 
     var body: some View {
         VStack(spacing: 5) {

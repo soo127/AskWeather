@@ -9,7 +9,7 @@ import SwiftUI
 
 struct WindView: View {
 
-    let weatherViewModel: WeatherViewModel
+    @EnvironmentObject private var weatherViewModel : WeatherViewModel
 
     var body: some View {
         VStack(alignment: .leading) {
@@ -77,5 +77,5 @@ struct WindView: View {
 }
 
 #Preview {
-    WindView(weatherViewModel: .init())
+    WindView()
 }

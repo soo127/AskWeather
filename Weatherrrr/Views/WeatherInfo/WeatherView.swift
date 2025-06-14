@@ -9,7 +9,7 @@ import SwiftUI
 
 struct WeatherView: View {
 
-    @EnvironmentObject private var mainViewModel : MainViewModel
+    @EnvironmentObject private var weatherViewModel : WeatherViewModel
 
     var body: some View {
         NavigationStack {
@@ -25,23 +25,20 @@ struct WeatherView: View {
 
     @ViewBuilder
     private var content: some View {
-        let kma = mainViewModel.weatherViewModel
-        let addr = mainViewModel.addressManager
-
-        TitleView(weatherViewModel: kma, addressManager: addr)
-        HourlyForecastView(weatherViewModel: kma)
-        DailyForecastView(weatherViewModel: kma)
+        TitleView()
+        HourlyForecastView()
+        DailyForecastView()
 
         LazyVGrid(columns: [
             GridItem(.flexible()),
             GridItem(.flexible())
         ]) {
-            WeatherCard { AirPollutionView(weatherViewModel: kma) }
-            WeatherCard { UltraVioletView(weatherViewModel: kma) }
-            WeatherCard { WindView(weatherViewModel: kma) }
-            WeatherCard { AirDiffusionView(weatherViewModel: kma) }
-            WeatherCard { PrecipitationView(weatherViewModel: kma) }
-            WeatherCard { HumidityView(weatherViewModel: kma) }
+            WeatherCard { AirPollutionView() }
+            WeatherCard { UltraVioletView() }
+            WeatherCard { WindView() }
+            WeatherCard { AirDiffusionView() }
+            WeatherCard { PrecipitationView() }
+            WeatherCard { HumidityView() }
         }
     }
 
@@ -49,5 +46,5 @@ struct WeatherView: View {
 
 #Preview {
     WeatherView()
-        .environmentObject(MainViewModel())
+        .environmentObject(WeatherViewModel())
 }

@@ -1,5 +1,5 @@
 //
-//  KMAViewModel.swift
+//  WeatherViewModel.swift
 //  Weatherrrr
 //
 //  Created by 이상수 on 6/9/25.
@@ -21,7 +21,7 @@ class WeatherViewModel: ObservableObject {
         do {
             let items = try await KMAAPI.fetchWeather(from: coordinate)
             self.forecasts = process(items: items)
-
+            
             let (address, areaCode) = try await AddressAPI.fetch(from: coordinate)
             let nationalAir = try await AirPollutionAPI.fetch()
             airPollution = AirPollutionMapper.value(area: address, in: nationalAir)

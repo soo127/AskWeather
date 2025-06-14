@@ -9,7 +9,7 @@ import SwiftUI
 
 struct AirPollutionView: View {
 
-    let weatherViewModel: WeatherViewModel
+    @EnvironmentObject private var weatherViewModel : WeatherViewModel
 
     var body: some View {
         VStack(alignment: .leading) {
