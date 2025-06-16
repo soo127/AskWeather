@@ -10,8 +10,8 @@ import CoreLocation
 
 struct LifeWeatherIndexAPI {
 
-    static func fetch(for type: LifeWeatherIndexType, areaCode: String?) async throws -> LifeWeatherItem? {
-        guard let areaCode, let url = url(for: type, areaCode: areaCode) else {
+    static func fetch(index: LifeWeatherIndex, areaCode: String?) async throws -> LifeWeatherIndexAPI.Item? {
+        guard let areaCode, let url = url(index: index, areaCode: areaCode) else {
             return nil
         }
 
@@ -23,16 +23,16 @@ struct LifeWeatherIndexAPI {
 
 extension LifeWeatherIndexAPI {
 
-    private static func url(for type: LifeWeatherIndexType, areaCode: String) -> URL? {
+    private static func url(index: LifeWeatherIndex, areaCode: String) -> URL? {
         let param = params(areaCode: areaCode)
             .map { "\($0.key)=\($0.value)" }
             .joined(separator: "&")
 
-        return URL(string: baseURL(for: type) + "?" + param)
+        return URL(string: baseURL(index: index) + "?" + param)
     }
 
-    private static func baseURL(for type: LifeWeatherIndexType) -> String {
-        switch type {
+    private static func baseURL(index: LifeWeatherIndex) -> String {
+        switch index {
         case .uv:
             return Constants.baseUVURL
         case .airDiffusion:
@@ -42,7 +42,7 @@ extension LifeWeatherIndexAPI {
 
     private static func params(areaCode: String) -> [String: Any] {
         [
-            "serviceKey": Self.apiKey,
+            "serviceKey": Constants.apiKey,
             "pageNo": 1,
             "numOfRows": 1000,
             "dataType": "JSON",
@@ -53,27 +53,18 @@ extension LifeWeatherIndexAPI {
 
     private static func hourKey() -> String {
         let now = Date()
-        let hour = (Calendar.current.component(.hour, from: now) / 3) * 3
-
-        let formatter = DateFormatter()
-        formatter.dateFormat = "yyyyMMdd"
-        let dateString = formatter.string(from: now)
-
-        return dateString + String(format: "%02d", hour)
+        let hour: Int = (Calendar.current.component(.hour, from: now) / 3) * 3
+        return now.dateString() + String(format: "%02d", hour)
     }
 
-    private static var apiKey: String {
-        "D6isDBPO8K02ZbuWvj5rekfrmgpuAujejX8OZpMaz0aEwWU070S8US0pordpKMnu0qlD1NS8r83w7FqLWLgGOg%3D%3D"
-    }
-    
 }
 
 extension LifeWeatherIndexAPI {
 
     fileprivate enum Constants {
+        static let apiKey = "D6isDBPO8K02ZbuWvj5rekfrmgpuAujejX8OZpMaz0aEwWU070S8US0pordpKMnu0qlD1NS8r83w7FqLWLgGOg%3D%3D"
         static let baseUVURL = "http://apis.data.go.kr/1360000/LivingWthrIdxServiceV4/getUVIdxV4"
         static let baseAirURL = "http://apis.data.go.kr/1360000/LivingWthrIdxServiceV4/getAirDiffusionIdxV4"
     }
 
 }
-

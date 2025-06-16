@@ -10,7 +10,7 @@ import CoreLocation
 
 struct KMAAPI {
 
-    static func fetchWeather(from coordinate: CLLocationCoordinate2D) async throws -> [WeatherItem] {
+    static func fetch(coordinate: CLLocationCoordinate2D) async throws -> [Item] {
         let (nx, ny) = GridConverter.toGrid(from: coordinate)
         let fetched: WeatherResponse = try await APIHelper.fetch(url: Self.url(nx: nx, ny: ny))
         return fetched.response.body.items.item
@@ -30,7 +30,7 @@ extension KMAAPI {
 
     private static func params(nx: Int, ny: Int) -> [String: Any] {
         [
-            "serviceKey": Self.apiKey,
+            "serviceKey": Constants.apiKey,
             "pageNo": 1,
             "numOfRows": 1000,
             "dataType": "JSON",
@@ -48,15 +48,12 @@ extension KMAAPI {
         return formatter.string(from: yesterday)
     }
 
-    private static var apiKey: String {
-        "D6isDBPO8K02ZbuWvj5rekfrmgpuAujejX8OZpMaz0aEwWU070S8US0pordpKMnu0qlD1NS8r83w7FqLWLgGOg%3D%3D"
-    }
-
 }
 
 extension KMAAPI {
 
     fileprivate enum Constants {
+        static let apiKey = "D6isDBPO8K02ZbuWvj5rekfrmgpuAujejX8OZpMaz0aEwWU070S8US0pordpKMnu0qlD1NS8r83w7FqLWLgGOg%3D%3D"
         static let baseURL = "https://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getVilageFcst"
     }
 

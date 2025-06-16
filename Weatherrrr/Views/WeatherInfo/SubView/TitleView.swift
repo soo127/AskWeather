@@ -10,13 +10,12 @@ import SwiftUI
 struct TitleView: View {
 
     @EnvironmentObject private var weatherViewModel : WeatherViewModel
-    @EnvironmentObject private var addressManager : AddressManager
 
     var body: some View {
         VStack(spacing: 5) {
-            Text(addressManager.address ?? "주소 로딩 중...")
+            Text(weatherViewModel.address ?? "주소 로딩 중...")
                 .font(.title2)
-            Text("\(weatherViewModel.temperature ?? .zero, specifier: "%.0f")°")
+            Text("\(weatherViewModel.temperature ?? .zero)°")
                 .font(.largeTitle)
             HStack {
                 Text("최고: \(weatherViewModel.dailyHighTemp(afterdays: 0) ?? .zero, specifier: "%.0f")° ")

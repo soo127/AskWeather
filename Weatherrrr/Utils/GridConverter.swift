@@ -10,6 +10,7 @@ import CoreLocation
 
 enum GridConverter {
 
+    /// 기상청41_단기예보 조회서비스_오픈API활용가이드 (위도 경도 -> 기상청 격자)
     static func toGrid(from coordinate: CLLocationCoordinate2D) -> (Int, Int) {
         let lat = coordinate.latitude
         let lon = coordinate.longitude

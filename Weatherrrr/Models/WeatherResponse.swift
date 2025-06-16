@@ -5,39 +5,61 @@
 //  Created by 이상수 on 6/8/25.
 //
 
-struct WeatherResponse: Codable {
-    let response: Response
-}
+extension KMAAPI {
 
-struct Response: Codable {
-    let header: Header
-    let body: Body
-}
+    struct WeatherResponse: Decodable {
+        let response: Response
+    }
 
-struct Header: Codable {
-    let resultCode: String
-    let resultMsg: String
-}
+    struct Response: Decodable {
+        let header: Header
+        let body: Body
+    }
 
-struct Body: Codable {
-    let dataType: String
-    let items: ItemWrapper
-    let pageNo: Int
-    let numOfRows: Int
-    let totalCount: Int
-}
+    struct Header: Decodable {
+        let resultCode: String
+        let resultMsg: String
+    }
 
-struct ItemWrapper: Codable {
-    let item: [WeatherItem]
-}
+    struct Body: Decodable {
+        let dataType: String
+        let items: Items
+        let pageNo: Int
+        let numOfRows: Int
+        let totalCount: Int
+    }
 
-struct WeatherItem: Codable {
-    let baseDate: String
-    let baseTime: String
-    let category: String
-    let fcstDate: String
-    let fcstTime: String
-    let fcstValue: String
-    let nx: Int
-    let ny: Int
+    struct Items: Decodable {
+        let item: [Item]
+    }
+
+    struct Item: Decodable {
+        let baseDate: String
+        let baseTime: String
+        let category: Category
+        let fcstDate: String
+        let fcstTime: String
+        let fcstValue: String
+        let nx: Int
+        let ny: Int
+    }
+
+    enum Category: String, Decodable {
+        case parcipitation = "PCP"
+        case humidity = "REH"
+        case dailyHighTemp = "TMX"
+        case dailyLowTemp = "TMN"
+        case temperature = "TMP"
+        case windVector = "VEC"
+        case windSpeed = "WSD"
+        case skyCondition = "SKY"
+        case unknown
+
+        init(from decoder: Decoder) throws {
+            let container = try decoder.singleValueContainer()
+            let rawValue = try container.decode(String.self)
+            self = Category(rawValue: rawValue) ?? .unknown
+        }
+    }
+
 }

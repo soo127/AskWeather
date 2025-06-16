@@ -19,7 +19,7 @@ struct AddressAPI {
 
 extension AddressAPI {
 
-    private static func fetchKakaoResponse(from coordinate: CLLocationCoordinate2D) async throws -> KakaoAddressResponse {
+    private static func fetchKakaoResponse(from coordinate: CLLocationCoordinate2D) async throws -> AddressAPI.Response {
         let lat = coordinate.latitude
         let lon = coordinate.longitude
         return try await APIHelper.fetch(request: request(lat: lat, lon: lon))
@@ -30,7 +30,7 @@ extension AddressAPI {
             return nil
         }
         var request = URLRequest(url: url)
-        request.setValue("KakaoAK \(apiKey)", forHTTPHeaderField: "Authorization")
+        request.setValue("KakaoAK \(Constants.apiKey)", forHTTPHeaderField: "Authorization")
         return request
     }
 
@@ -49,15 +49,12 @@ extension AddressAPI {
         ]
     }
 
-    private static var apiKey: String {
-        "078c1b349c8cc258f38f2eb91d60e196"
-    }
-
 }
 
 extension AddressAPI {
 
     fileprivate enum Constants {
+        static let apiKey = "078c1b349c8cc258f38f2eb91d60e196"
         static let baseURL = "https://dapi.kakao.com/v2/local/geo/coord2regioncode.json"
     }
 

@@ -16,7 +16,6 @@ struct WeatherrrrApp: App {
         WindowGroup {
             ContentView()
                 .environmentObject(appCoordinator.weatherViewModel)
-                .environmentObject(appCoordinator.addressManager)
         }
     }
 

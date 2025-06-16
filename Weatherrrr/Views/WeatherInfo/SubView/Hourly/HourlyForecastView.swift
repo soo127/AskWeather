@@ -32,15 +32,10 @@ struct HourlyForecastView: View {
 
     private var hourlyForecasts: some View {
         ScrollView(.horizontal, showsIndicators: false){
-            let hourlyInfo = weatherViewModel.todayHourlyInfo()
-            let count = hourlyInfo.count
+            let viewModels = weatherViewModel.todayHourlyViewModels()
             HStack {
-                ForEach(0..<count, id: \.self) { index in
-                    HourlyForecastItem(
-                        time: hourlyInfo[index].time,
-                        iconName: hourlyInfo[index].sky,
-                        temperature: hourlyInfo[index].temp
-                    )
+                ForEach(viewModels) { viewModel in
+                    HourlyForecastItem(viewModel: viewModel)
                 }
             }
         }

@@ -11,12 +11,10 @@ import CoreLocation
 final class AppCoordinator: ObservableObject {
 
     let weatherViewModel: WeatherViewModel
-    let addressManager: AddressManager
     private let locationManager: LocationManager
 
     init() {
         self.weatherViewModel = WeatherViewModel()
-        self.addressManager = AddressManager()
         self.locationManager = LocationManager()
         setupLocationHandlers()
     }
@@ -28,8 +26,7 @@ final class AppCoordinator: ObservableObject {
     }
 
     func loadLocationData(for coordinate: CLLocationCoordinate2D) async {
-        await weatherViewModel.load(for: coordinate)
-        await addressManager.load(for: coordinate)
+        await weatherViewModel.load(coordinate: coordinate)
     }
 
 }

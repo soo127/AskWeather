@@ -28,7 +28,7 @@ extension AirPollutionAPI {
 
     private static func params() -> [String: Any] {
         [
-            "serviceKey": Self.apiKey,
+            "serviceKey": Constants.apiKey,
             "pageNo": 1,
             "numOfRows": 1000,
             "returnType": "json",
@@ -38,14 +38,12 @@ extension AirPollutionAPI {
         ]
     }
 
-    private static var apiKey: String {
-        "D6isDBPO8K02ZbuWvj5rekfrmgpuAujejX8OZpMaz0aEwWU070S8US0pordpKMnu0qlD1NS8r83w7FqLWLgGOg%3D%3D"
-    }
-
 }
+
 extension AirPollutionAPI {
 
     fileprivate enum Constants {
+        static let apiKey = "D6isDBPO8K02ZbuWvj5rekfrmgpuAujejX8OZpMaz0aEwWU070S8US0pordpKMnu0qlD1NS8r83w7FqLWLgGOg%3D%3D"
         static let baseURL = "http://apis.data.go.kr/B552584/ArpltnStatsSvc/getCtprvnMesureLIst"
     }
 }

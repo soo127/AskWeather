@@ -14,49 +14,52 @@ class WeatherViewModel: ObservableObject {
     @Published var uvIndex: String?
     @Published var airDiffusionIndex: String?
     @Published var airPollution: String?
+    @Published var address: String?
+    @Published var areaCode: String?
+
     private let now = Date()
 
     @MainActor
-    func load(for coordinate: CLLocationCoordinate2D) async {
+    func load(coordinate: CLLocationCoordinate2D) async {
         do {
-            let items = try await KMAAPI.fetchWeather(from: coordinate)
-            self.forecasts = process(items: items)
-            
             let (address, areaCode) = try await AddressAPI.fetch(from: coordinate)
-            let nationalAir = try await AirPollutionAPI.fetch()
-            airPollution = AirPollutionMapper.value(area: address, in: nationalAir)
+            self.address = address
+            self.areaCode = areaCode
 
-            let uv = try await LifeWeatherIndexAPI.fetch(for: .uv, areaCode: areaCode)
-            let air = try await LifeWeatherIndexAPI.fetch(for: .airDiffusion, areaCode: areaCode)
-            uvIndex = uv?.current
-            airDiffusionIndex = air?.after3Hours
+            async let nationalAir = AirPollutionAPI.fetch()
+            async let uv = LifeWeatherIndexAPI.fetch(index: .uv, areaCode: areaCode)
+            async let air = LifeWeatherIndexAPI.fetch(index: .airDiffusion, areaCode: areaCode)
+            async let items = KMAAPI.fetch(coordinate: coordinate)
 
+            airPollution = AirPollutionMapper.value(area: address, in: try await nationalAir)
+            uvIndex = try await uv?.current
+            airDiffusionIndex = try await air?.after3Hours
+            forecasts = makeForecasts(items: try await items)
         } catch {
             print("날씨 가져오기 실패: \(error)")
         }
     }
 
-    private func process(items: [WeatherItem]) -> [Forecast] {
-        var forecasts: [Date: Forecast] = [:]
+    private func makeForecasts(items: [KMAAPI.Item]) -> [Forecast] {
+        let itemsByDate: [Date: [KMAAPI.Item]] = items
+            .reduce(into: [:]) { partialResult, item in
+                let dateString = item.fcstDate + item.fcstTime
+                guard let date = dateString.date() else {
+                    return
+                }
+                let prevItems = partialResult[date] ?? []
+                return partialResult[date] = (prevItems + [item])
+            }
 
-        for item in items {
-            guard let date = makeDate(from: item.fcstDate, time: item.fcstTime) else {
-                continue
+        let forecasts = itemsByDate
+            .sorted { $0.key < $1.key }
+            .map { (date, items) in
+                var forecast = Forecast(date: date)
+                forecast.update(items: items)
+                return forecast
             }
-            if forecasts[date] == nil {
-                forecasts[date] = Forecast(dateTime: date)
-            }
-            if let keyPath = Forecast.categoryKeyPaths[item.category] {
-                forecasts[date]![keyPath: keyPath] = item.fcstValue
-            }
-        }
-        return forecasts.values.sorted(by: { $0.dateTime < $1.dateTime })
-    }
 
-    private func makeDate(from date: String, time: String) -> Date? {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "yyyyMMddHHmm"
-        return formatter.date(from: date + time)
+        return forecasts
     }
 
 }
@@ -65,10 +68,10 @@ class WeatherViewModel: ObservableObject {
 
 extension WeatherViewModel {
 
-    func todayHourlyInfo() -> [(time: String, sky: String, temp: String)] {
+    func todayHourlyViewModels() -> [HourlyForecastItem.ViewModel] {
         let currentHour = truncatedHour
         let hourlyForecasts = todayForecasts(from: currentHour)
-        return hourlyForecasts.map { formatForecast($0) }
+        return hourlyForecasts.map { .init(forecast: $0) }
     }
 
     private var truncatedHour: Date {
@@ -79,34 +82,9 @@ extension WeatherViewModel {
 
     private func todayForecasts(from startDate: Date) -> ArraySlice<Forecast> {
         forecasts
-            .filter { $0.dateTime >= startDate }
-            .sorted { $0.dateTime < $1.dateTime }
+            .filter { $0.date >= startDate }
+            .sorted { $0.date < $1.date }
             .prefix(24)
-    }
-
-    private func formatForecast(_ forecast: Forecast) -> (time: String, sky: String, temp: String) {
-        let hour = Calendar.current.component(.hour, from: forecast.dateTime)
-        let timeLabel = formatHourTo12H(hour: hour)
-        let skyIcon = skyCodeToSymbol(code: forecast.skyCondition)
-        return (time: timeLabel, sky: skyIcon, temp: forecast.temperature)
-    }
-
-    private func formatHourTo12H(hour: Int) -> String {
-        switch hour {
-        case 0: return "오전 12시"
-        case 12: return "오후 12시"
-        case 13..<24: return "오후 \(hour - 12)시"
-        default: return "오전 \(hour)시"
-        }
-    }
-
-    private func skyCodeToSymbol(code: String) -> String {
-        switch code {
-        case "1": return "sun.max"
-        case "3": return "cloud.sun"
-        case "4": return "cloud"
-        default: return "questionmark"
-        }
     }
 
 }
@@ -130,8 +108,8 @@ extension WeatherViewModel {
             return nil
         }
         let forecast = forecasts.first {
-            Calendar.current.isDate($0.dateTime, inSameDayAs: targetDate) &&
-            Calendar.current.component(.hour, from: $0.dateTime) == hour
+            Calendar.current.isDate($0.date, inSameDayAs: targetDate) &&
+            Calendar.current.component(.hour, from: $0.date) == hour
         }
         return forecast
     }
@@ -142,8 +120,8 @@ extension WeatherViewModel {
         }
         let skyCodes = forecasts
             .filter {
-                Calendar.current.isDate($0.dateTime, inSameDayAs: targetDate) &&
-                (6...21).contains(Calendar.current.component(.hour, from: $0.dateTime))
+                Calendar.current.isDate($0.date, inSameDayAs: targetDate) &&
+                (6...21).contains(Calendar.current.component(.hour, from: $0.date))
             }
             .map { $0.skyCondition }
 
@@ -167,7 +145,7 @@ extension WeatherViewModel {
 extension WeatherViewModel {
 
     var currentForecast: Forecast? {
-        forecasts.last(where: { $0.dateTime <= now })
+        forecasts.last(where: { $0.date <= now })
     }
 
     var pollutionLevel: String? {
@@ -188,7 +166,10 @@ extension WeatherViewModel {
     }
 
     var uvIndexLevel: String? {
-        guard let value = uvIndex, let intValue = Int(value) else { return nil }
+        guard let value = uvIndex,
+              let intValue = Int(value) else {
+            return nil
+        }
         switch intValue {
         case 0...2:
             return "낮음"
@@ -204,7 +185,10 @@ extension WeatherViewModel {
     }
 
     var airIndexLevel: String? {
-        guard let value = airDiffusionIndex, let intValue = Int(value) else { return nil }
+        guard let value = airDiffusionIndex,
+              let intValue = Int(value) else {
+            return nil
+        }
         switch intValue {
         case 25:
             return "낮음"
@@ -221,8 +205,8 @@ extension WeatherViewModel {
         Double(currentForecast?.humidity ?? "")
     }
 
-    var temperature: Double? {
-        Double(currentForecast?.temperature ?? "")
+    var temperature: Int? {
+        currentForecast?.temperature
     }
 
     var windSpeed: Double? {
@@ -240,7 +224,7 @@ extension WeatherViewModel {
     var averagePrecipitation: Double {
         let today = Calendar.current.startOfDay(for: now)
         let todayForecasts = forecasts.filter {
-            Calendar.current.isDate($0.dateTime, inSameDayAs: today)
+            Calendar.current.isDate($0.date, inSameDayAs: today)
         }
 
         let values = todayForecasts.compactMap { forecast -> Double? in

@@ -9,17 +9,36 @@ import SwiftUI
 
 struct HourlyForecastItem: View {
 
-    let time: String
-    let iconName: String
-    let temperature: String
+    let viewModel: ViewModel
 
     var body: some View {
         VStack(spacing: 5) {
-            Text(time)
-            Image(systemName: iconName)
-            Text("\(Double(temperature) ?? .zero, specifier: "%.0f")°")
+            Text(viewModel.date)
+            viewModel.icon
+            Text(viewModel.temperature)
         }
         .padding(.horizontal, 5)
+    }
+
+}
+
+extension HourlyForecastItem {
+
+    struct ViewModel: Identifiable {
+        let id = UUID()
+        let date: String
+        let icon: Image
+        let temperature: String
+    }
+
+}
+
+extension HourlyForecastItem.ViewModel {
+
+    init(forecast: Forecast) {
+        self.date = forecast.date.formatHourTo12H()
+        self.icon = forecast.skyImage
+        self.temperature = "\(forecast.temperature)°C"
     }
 
 }
