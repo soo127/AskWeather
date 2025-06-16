@@ -15,11 +15,11 @@ struct TitleView: View {
         VStack(spacing: 5) {
             Text(weatherViewModel.address ?? "주소 로딩 중...")
                 .font(.title2)
-            Text("\(weatherViewModel.temperature ?? .zero)°")
+            Text("\(weatherViewModel.temperature)°")
                 .font(.largeTitle)
             HStack {
-                Text("최고: \(weatherViewModel.dailyHighTemp(afterdays: 0) ?? .zero, specifier: "%.0f")° ")
-                Text("최저: \(weatherViewModel.dailyLowTemp(afterdays: 0) ?? .zero, specifier: "%.0f")° ")
+                Text("최고: \(weatherViewModel.dailyHighTemp(afterdays: 0), specifier: "%.0f")° ")
+                Text("최저: \(weatherViewModel.dailyLowTemp(afterdays: 0), specifier: "%.0f")° ")
             }
         }
         .padding(.vertical)

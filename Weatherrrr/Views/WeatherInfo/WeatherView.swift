@@ -26,8 +26,8 @@ struct WeatherView: View {
     @ViewBuilder
     private var content: some View {
         TitleView()
-        HourlyForecastView()
-        DailyForecastView()
+        HourlyForecastContainer()
+        DailyForecastContainer()
 
         LazyVGrid(columns: [
             GridItem(.flexible()),

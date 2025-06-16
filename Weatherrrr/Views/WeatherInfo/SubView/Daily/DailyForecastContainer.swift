@@ -1,5 +1,5 @@
 //
-//  DailyForecastView.swift
+//  DailyForecastContainer.swift
 //  Weather
 //
 //  Created by 이상수 on 5/29/25.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct DailyForecastView: View {
+struct DailyForecastContainer: View {
 
     @EnvironmentObject private var weatherViewModel : WeatherViewModel
 
@@ -33,11 +33,11 @@ struct DailyForecastView: View {
     private var dailyForecasts: some View {
         Group {
             ForEach(0...3, id: \.self) { day in
-                DailyForecastItem(
+                DailyForecastCell(
                     afterDays: day,
-                    skyIcon: weatherViewModel.dailySkyIcon(afterDays: day) ?? "questionmark",
-                    high: weatherViewModel.dailyHighTemp(afterdays: day) ?? .zero,
-                    low: weatherViewModel.dailyLowTemp(afterdays: day) ?? .zero
+                    skyIcon: weatherViewModel.dailySkyIcon(afterDays: day),
+                    high: weatherViewModel.dailyHighTemp(afterdays: day),
+                    low: weatherViewModel.dailyLowTemp(afterdays: day)
                 )
             }
             .padding(.vertical, 5)
@@ -47,5 +47,5 @@ struct DailyForecastView: View {
 }
 
 #Preview {
-    DailyForecastView()
+    DailyForecastContainer()
 }

@@ -1,5 +1,5 @@
 //
-//  HourlyForecastItem.swift
+//  HourlyForecastCell.swift
 //  Weather
 //
 //  Created by 이상수 on 5/27/25.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct HourlyForecastItem: View {
+struct HourlyForecastCell: View {
 
     let viewModel: ViewModel
 
@@ -22,7 +22,7 @@ struct HourlyForecastItem: View {
 
 }
 
-extension HourlyForecastItem {
+extension HourlyForecastCell {
 
     struct ViewModel: Identifiable {
         let id = UUID()
@@ -33,12 +33,12 @@ extension HourlyForecastItem {
 
 }
 
-extension HourlyForecastItem.ViewModel {
+extension HourlyForecastCell.ViewModel {
 
     init(forecast: Forecast) {
         self.date = forecast.date.formatHourTo12H()
         self.icon = forecast.skyImage
-        self.temperature = "\(forecast.temperature)°C"
+        self.temperature = "\(forecast.temperature)°"
     }
 
 }

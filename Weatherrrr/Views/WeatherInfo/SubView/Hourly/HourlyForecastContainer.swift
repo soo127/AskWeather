@@ -1,5 +1,5 @@
 //
-//  HourlyForecastView.swift
+//  HourlyForecastContainer.swift
 //  Weather
 //
 //  Created by 이상수 on 5/27/25.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct HourlyForecastView: View {
+struct HourlyForecastContainer: View {
 
     @EnvironmentObject private var weatherViewModel : WeatherViewModel
 
@@ -35,7 +35,7 @@ struct HourlyForecastView: View {
             let viewModels = weatherViewModel.todayHourlyViewModels()
             HStack {
                 ForEach(viewModels) { viewModel in
-                    HourlyForecastItem(viewModel: viewModel)
+                    HourlyForecastCell(viewModel: viewModel)
                 }
             }
         }
@@ -44,5 +44,5 @@ struct HourlyForecastView: View {
 }
 
 #Preview {
-    HourlyForecastView()
+    HourlyForecastContainer()
 }

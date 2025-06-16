@@ -26,7 +26,7 @@ struct HumidityView: View {
     }
 
     private var humidity: some View {
-        Text("\(weatherViewModel.humidity ?? .zero, specifier: "%.1f")%")
+        Text("\(weatherViewModel.humidity)%")
             .font(.title2)
     }
 

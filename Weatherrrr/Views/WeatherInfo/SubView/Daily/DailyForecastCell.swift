@@ -1,5 +1,5 @@
 //
-//  DailyForecastItem.swift
+//  DailyForecastCell.swift
 //  Weather
 //
 //  Created by 이상수 on 5/29/25.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct DailyForecastItem: View {
+struct DailyForecastCell: View {
 
     let afterDays: Int
     let skyIcon: String
@@ -34,7 +34,6 @@ struct DailyForecastItem: View {
                         startPoint: .leading,
                         endPoint: .trailing
                     )
-                    
                 )
 
             Text(String(format: "%.0f", high) + "°")

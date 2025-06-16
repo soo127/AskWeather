@@ -12,24 +12,35 @@ struct Forecast {
 
     let date: Date
     var temperature: Int
-    var dailyHighTemp: String
-    var dailyLowTemp: String
+    var dailyHighTemp: Double
+    var dailyLowTemp: Double
     var parcipitation: String
-    var humidity: String
-    var windVector: String
-    var windSpeed: String
-    var skyCondition: String
+    var humidity: Int
+    var windVector: Int
+    var windSpeed: Double
+    var skyCondition: SkyCondition
 
     init(date: Date) {
         self.date = date
         self.temperature = .zero
-        self.dailyHighTemp = "--"
-        self.dailyLowTemp = "--"
+        self.dailyHighTemp = .zero
+        self.dailyLowTemp = .zero
         self.parcipitation = "--"
-        self.humidity = "--"
-        self.windVector = "--"
-        self.windSpeed = "--"
-        self.skyCondition = "--"
+        self.humidity = .zero
+        self.windVector = .zero
+        self.windSpeed = .zero
+        self.skyCondition = .clear
+    }
+
+    enum SkyCondition: String {
+        case clear = "1"
+        case cloudy = "3"
+        case overcast = "4"
+        case unknown
+
+        init(from rawValue: String) {
+            self = SkyCondition(rawValue: rawValue) ?? .unknown
+        }
     }
 
 }
@@ -46,19 +57,19 @@ extension Forecast {
         case .parcipitation:
             self.parcipitation = item.fcstValue
         case .humidity:
-            self.humidity = item.fcstValue
+            self.humidity = Int(item.fcstValue) ?? .zero
         case .dailyHighTemp:
-            self.dailyHighTemp = item.fcstValue
+            self.dailyHighTemp = Double(item.fcstValue) ?? .zero
         case .dailyLowTemp:
-            self.dailyLowTemp = item.fcstValue
+            self.dailyLowTemp = Double(item.fcstValue) ?? .zero
         case .temperature:
             self.temperature = Int(item.fcstValue) ?? .zero
         case .windVector:
-            self.windVector = item.fcstValue
+            self.windVector = Int(item.fcstValue) ?? .zero
         case .windSpeed:
-            self.windSpeed = item.fcstValue
+            self.windSpeed = Double(item.fcstValue) ?? .zero
         case .skyCondition:
-            self.skyCondition = item.fcstValue
+            self.skyCondition = SkyCondition(from: item.fcstValue)
         case .unknown:
             break
         }
@@ -70,11 +81,11 @@ extension Forecast {
 
     var skyImage: Image {
         switch self.skyCondition {
-        case "1":
+        case .clear:
             return Image(systemName: "sun.max")
-        case "3":
+        case .cloudy:
             return Image(systemName: "cloud.sun")
-        case "4":
+        case .overcast:
             return Image(systemName: "cloud")
         default:
             return Image(systemName: "questionmark")

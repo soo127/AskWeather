@@ -49,7 +49,7 @@ struct WindView: View {
 
     private var arrow: some View {
         Group {
-            let rotateAngle = (weatherViewModel.rotateAngle ?? .zero) + 90.0
+            let rotateAngle = Double(weatherViewModel.rotateAngle + 90)
             Text("------------------")
                 .font(.caption)
                 .rotationEffect(.degrees(rotateAngle))
@@ -68,7 +68,7 @@ struct WindView: View {
             Circle()
                 .frame(width: 45, height: 45)
                 .foregroundStyle(.white)
-            Text(String(format: "%.1f", weatherViewModel.windSpeed ?? .zero))
+            Text(String(format: "%.1f", weatherViewModel.windSpeed))
             + Text("m/s")
                 .font(.caption)
         }

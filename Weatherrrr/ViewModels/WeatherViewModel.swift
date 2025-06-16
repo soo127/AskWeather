@@ -68,7 +68,7 @@ class WeatherViewModel: ObservableObject {
 
 extension WeatherViewModel {
 
-    func todayHourlyViewModels() -> [HourlyForecastItem.ViewModel] {
+    func todayHourlyViewModels() -> [HourlyForecastCell.ViewModel] {
         let currentHour = truncatedHour
         let hourlyForecasts = todayForecasts(from: currentHour)
         return hourlyForecasts.map { .init(forecast: $0) }
@@ -93,14 +93,14 @@ extension WeatherViewModel {
 
 extension WeatherViewModel {
 
-    func dailyLowTemp(afterdays offset: Int) -> Double? {
+    func dailyLowTemp(afterdays offset: Int) -> Double {
         let forecast = dailyTemp(onHour: 6, afterDays: offset)
-        return Double(forecast?.dailyLowTemp ?? "")
+        return forecast?.dailyLowTemp ?? .zero
     }
 
-    func dailyHighTemp(afterdays offset: Int) -> Double? {
+    func dailyHighTemp(afterdays offset: Int) -> Double {
         let forecast = dailyTemp(onHour: 15, afterDays: offset)
-        return Double(forecast?.dailyHighTemp ?? "")
+        return forecast?.dailyHighTemp ?? .zero
     }
 
     private func dailyTemp(onHour hour: Int, afterDays offset: Int) -> Forecast? {
@@ -114,9 +114,9 @@ extension WeatherViewModel {
         return forecast
     }
 
-    func dailySkyIcon(afterDays offset: Int) -> String? {
+    func dailySkyIcon(afterDays offset: Int) -> String {
         guard let targetDate = Calendar.current.date(byAdding: .day, value: offset, to: now) else {
-            return nil
+            return "questionmark"
         }
         let skyCodes = forecasts
             .filter {
@@ -126,11 +126,11 @@ extension WeatherViewModel {
             .map { $0.skyCondition }
 
         if skyCodes.isEmpty {
-            return nil
+            return "questionmark"
         }
-        let clear = skyCodes.filter { $0 == "1" }.count
-        let cloudy = skyCodes.filter { $0 == "3" }.count
-        let overcast = skyCodes.filter { $0 == "4" }.count
+        let clear = skyCodes.filter { $0 == .clear }.count
+        let cloudy = skyCodes.filter { $0 == .cloudy }.count
+        let overcast = skyCodes.filter { $0 == .overcast }.count
         let total = clear + cloudy + overcast
 
         return (cloudy + overcast >= total / 3)
@@ -201,20 +201,20 @@ extension WeatherViewModel {
         }
     }
 
-    var humidity: Double? {
-        Double(currentForecast?.humidity ?? "")
+    var humidity: Int {
+        currentForecast?.humidity ?? .zero
     }
 
-    var temperature: Int? {
-        currentForecast?.temperature
+    var temperature: Int {
+        currentForecast?.temperature ?? .zero
     }
 
-    var windSpeed: Double? {
-        Double(currentForecast?.windSpeed ?? "")
+    var windSpeed: Double {
+        currentForecast?.windSpeed ?? .zero
     }
 
-    var rotateAngle: Double? {
-        Double(currentForecast?.windVector ?? "")
+    var rotateAngle: Int {
+        currentForecast?.windVector ?? .zero
     }
 
     func radian(angle: Double) -> Double {
@@ -226,8 +226,8 @@ extension WeatherViewModel {
         let todayForecasts = forecasts.filter {
             Calendar.current.isDate($0.date, inSameDayAs: today)
         }
-
         let values = todayForecasts.compactMap { forecast -> Double? in
+            print(forecast.parcipitation)
             switch forecast.parcipitation {
             case "강수없음":
                 return 0
@@ -241,10 +241,13 @@ extension WeatherViewModel {
                 return Double(forecast.parcipitation)
             }
         }
-
+        print(values)
         if values.isEmpty {
             return 0
         }
+        print(values.reduce(0, +))
+        print(Double(values.count))
+        //print(values.reduce(0, +) / Double(values.count))
         return values.reduce(0, +) / Double(values.count)
     }
 
