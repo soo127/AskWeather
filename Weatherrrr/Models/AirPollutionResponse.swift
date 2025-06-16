@@ -5,10 +5,11 @@
 //  Created by 이상수 on 6/11/25.
 //
 
-struct AirPollutionResponse: Decodable {
+extension AirPollutionAPI {
 
-    let response: Response
-
+    struct AirPollutionResponse: Decodable {
+        let response: Response
+    }
     struct Response: Decodable {
         let body: Body
     }
@@ -39,7 +40,7 @@ struct AirPollutionResponse: Decodable {
 
 }
 
-extension AirPollutionResponse.Item {
+extension AirPollutionAPI.Item {
 
     func value(area: Area) -> String? {
         switch area {

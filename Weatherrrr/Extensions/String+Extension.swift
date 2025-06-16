@@ -15,9 +15,5 @@ extension String {
         formatter.dateFormat = "yyyyMMddHHmm"
         return formatter.date(from: self)
     }
-
-    func toDouble() -> Double? {
-        return nil
-    }
-
+    
 }

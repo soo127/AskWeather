@@ -9,8 +9,6 @@ import SwiftUI
 
 struct WeatherView: View {
 
-    @EnvironmentObject private var weatherViewModel : WeatherViewModel
-
     var body: some View {
         NavigationStack {
             ScrollView {
@@ -46,5 +44,4 @@ struct WeatherView: View {
 
 #Preview {
     WeatherView()
-        .environmentObject(WeatherViewModel())
 }

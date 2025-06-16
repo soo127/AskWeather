@@ -9,7 +9,7 @@ import SwiftUI
 
 struct AirPollutionAPI {
 
-    static func fetch() async throws -> AirPollutionResponse.Item? {
+    static func fetch() async throws -> AirPollutionAPI.Item? {
         let fetched: AirPollutionResponse = try await APIHelper.fetch(url: url())
         return fetched.response.body.items.first
     }
