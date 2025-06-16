@@ -7,30 +7,17 @@
 
 import SwiftUI
 
-// TODO: - 온도 Double, Int
 struct Forecast {
 
     let date: Date
-    var temperature: Int
-    var dailyHighTemp: Double
-    var dailyLowTemp: Double
-    var parcipitation: String
-    var humidity: Int
-    var windVector: Int
-    var windSpeed: Double
-    var skyCondition: SkyCondition
-
-    init(date: Date) {
-        self.date = date
-        self.temperature = .zero
-        self.dailyHighTemp = .zero
-        self.dailyLowTemp = .zero
-        self.parcipitation = "--"
-        self.humidity = .zero
-        self.windVector = .zero
-        self.windSpeed = .zero
-        self.skyCondition = .clear
-    }
+    var temperature: Int = .zero
+    var dailyHighTemp: Double = .zero
+    var dailyLowTemp: Double = .zero
+    var parcipitation: Double = .zero
+    var humidity: Int = .zero
+    var windVector: Int = .zero
+    var windSpeed: Double = .zero
+    var skyCondition: SkyCondition = .clear
 
     enum SkyCondition: String {
         case clear = "1"
@@ -55,19 +42,19 @@ extension Forecast {
     mutating private func update(item: KMAAPI.Item) {
         switch item.category {
         case .parcipitation:
-            self.parcipitation = item.fcstValue
+            self.parcipitation = parsePrecipitation(item.fcstValue)
         case .humidity:
-            self.humidity = Int(item.fcstValue) ?? .zero
+            self.humidity = Int(item.fcstValue) ?? humidity
         case .dailyHighTemp:
-            self.dailyHighTemp = Double(item.fcstValue) ?? .zero
+            self.dailyHighTemp = Double(item.fcstValue) ?? dailyHighTemp
         case .dailyLowTemp:
-            self.dailyLowTemp = Double(item.fcstValue) ?? .zero
+            self.dailyLowTemp = Double(item.fcstValue) ?? dailyLowTemp
         case .temperature:
-            self.temperature = Int(item.fcstValue) ?? .zero
+            self.temperature = Int(item.fcstValue) ?? temperature
         case .windVector:
-            self.windVector = Int(item.fcstValue) ?? .zero
+            self.windVector = Int(item.fcstValue) ?? windVector
         case .windSpeed:
-            self.windSpeed = Double(item.fcstValue) ?? .zero
+            self.windSpeed = Double(item.fcstValue) ?? windSpeed
         case .skyCondition:
             self.skyCondition = SkyCondition(from: item.fcstValue)
         case .unknown:
@@ -78,6 +65,21 @@ extension Forecast {
 }
 
 extension Forecast {
+
+    private func parsePrecipitation(_ precipitation: String) -> Double {
+        switch precipitation {
+        case "강수없음":
+            return 0
+        case "1mm 미만":
+            return 0.05
+        case "30":
+            return 40.0
+        case "50":
+            return 60.0
+        default:
+            return Double(precipitation.replacingOccurrences(of: "mm", with: "")) ?? 0
+        }
+    }
 
     var skyImage: Image {
         switch self.skyCondition {

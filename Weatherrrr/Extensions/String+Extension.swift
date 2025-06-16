@@ -16,4 +16,8 @@ extension String {
         return formatter.date(from: self)
     }
 
+    func toDouble() -> Double? {
+        return nil
+    }
+
 }

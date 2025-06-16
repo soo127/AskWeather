@@ -12,21 +12,11 @@ extension KMAAPI {
     }
 
     struct Response: Decodable {
-        let header: Header
         let body: Body
     }
 
-    struct Header: Decodable {
-        let resultCode: String
-        let resultMsg: String
-    }
-
     struct Body: Decodable {
-        let dataType: String
         let items: Items
-        let pageNo: Int
-        let numOfRows: Int
-        let totalCount: Int
     }
 
     struct Items: Decodable {

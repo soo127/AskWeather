@@ -226,28 +226,9 @@ extension WeatherViewModel {
         let todayForecasts = forecasts.filter {
             Calendar.current.isDate($0.date, inSameDayAs: today)
         }
-        let values = todayForecasts.compactMap { forecast -> Double? in
-            print(forecast.parcipitation)
-            switch forecast.parcipitation {
-            case "강수없음":
-                return 0
-            case "1mm 미만":
-                return 0.05
-            case "30":
-                return 40.0
-            case "50":
-                return 60.0
-            default:
-                return Double(forecast.parcipitation)
-            }
-        }
-        print(values)
-        if values.isEmpty {
-            return 0
-        }
-        print(values.reduce(0, +))
-        print(Double(values.count))
-        //print(values.reduce(0, +) / Double(values.count))
+
+        let values = todayForecasts.map(\.parcipitation)
+        guard !values.isEmpty else { return 0 }
         return values.reduce(0, +) / Double(values.count)
     }
 
