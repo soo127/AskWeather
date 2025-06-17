@@ -10,6 +10,7 @@ import SwiftUI
 struct CitySearchView: View {
 
     @StateObject var viewModel = LocationSearchViewModel()
+    @EnvironmentObject private var weatherViewModel: WeatherViewModel
 
     var body: some View {
         VStack {
@@ -17,6 +18,9 @@ struct CitySearchView: View {
             searchResults
         }
         .padding(.horizontal)
+        .fullScreenCover(isPresented: $viewModel.showWeather) {
+            SearchedCityView(viewModel: viewModel)
+        }
     }
 
     private var searchField: some View {
@@ -32,11 +36,14 @@ struct CitySearchView: View {
     private var searchResults: some View {
         ScrollView {
             ForEach(viewModel.searchResults, id: \.self) { completion in
-                NavigationLink(destination: WeatherView()) {
+                Button {
+                    viewModel.handleSearchSelection(completion: completion)
+                } label: {
                     Text(completion.title)
                 }
                 .padding(.vertical, 5)
                 .buttonStyle(PlainButtonStyle())
+
             }
         }
     }

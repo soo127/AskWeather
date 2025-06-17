@@ -16,6 +16,8 @@ class LocationSearchViewModel: NSObject, ObservableObject {
         }
     }
     @Published var results = [MKLocalSearchCompletion]()
+    @Published var coordinate: CLLocationCoordinate2D?
+    @Published var showWeather = false
     private let completer = MKLocalSearchCompleter()
 
     override init() {
@@ -34,7 +36,29 @@ class LocationSearchViewModel: NSObject, ObservableObject {
 
 }
 
-extension LocationSearchViewModel: MKLocalSearchCompleterDelegate{
+extension LocationSearchViewModel {
+
+    func handleSearchSelection(completion: MKLocalSearchCompletion) {
+        closeKeyboard()
+        let request = MKLocalSearch.Request(completion: completion)
+        let search = MKLocalSearch(request: request)
+
+        search.start { response, error in
+            guard let coordinate = response?.mapItems.first?.placemark.coordinate else {
+                return
+            }
+            self.coordinate = coordinate
+            self.showWeather = true
+        }
+    }
+
+    private func closeKeyboard() {
+        UIApplication.shared.sendAction(#selector(UIResponder.resolveInstanceMethod), to: nil, from: nil, for: nil)
+    }
+
+}
+
+extension LocationSearchViewModel: MKLocalSearchCompleterDelegate {
 
     func completerDidUpdateResults(_ completer: MKLocalSearchCompleter) {
         results = completer.results
