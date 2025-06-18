@@ -24,11 +24,17 @@ extension LifeWeatherIndexAPI {
     }
 
     struct Item: Decodable {
-        let current: String?
-        let after3Hours: String?
+        let current: Int?
+        let after3Hours: Int?
         enum CodingKeys: String, CodingKey {
             case current = "h0"
             case after3Hours = "h3"
+        }
+
+        init(from decoder: Decoder) throws {
+            let container = try decoder.container(keyedBy: CodingKeys.self)
+            self.current = try? DecodingHelper.decodeToInt(from: container, forKey: .current)
+            self.after3Hours = try? DecodingHelper.decodeToInt(from: container, forKey: .after3Hours)
         }
     }
     

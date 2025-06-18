@@ -10,6 +10,7 @@ extension AirPollutionAPI {
     struct AirPollutionResponse: Decodable {
         let response: Response
     }
+    
     struct Response: Decodable {
         let body: Body
     }
@@ -19,30 +20,59 @@ extension AirPollutionAPI {
     }
 
     struct Item: Decodable {
-        let seoul: String?
-        let busan: String?
-        let daegu: String?
-        let incheon: String?
-        let gwangju: String?
-        let daejeon: String?
-        let ulsan: String?
-        let gyeonggi: String?
-        let gangwon: String?
-        let chungbuk: String?
-        let chungnam: String?
-        let jeonbuk: String?
-        let jeonnam: String?
-        let gyeongbuk: String?
-        let gyeongnam: String?
-        let jeju: String?
-        let sejong: String?
+        let seoul: Int?
+        let busan: Int?
+        let daegu: Int?
+        let incheon: Int?
+        let gwangju: Int?
+        let daejeon: Int?
+        let ulsan: Int?
+        let gyeonggi: Int?
+        let gangwon: Int?
+        let chungbuk: Int?
+        let chungnam: Int?
+        let jeonbuk: Int?
+        let jeonnam: Int?
+        let gyeongbuk: Int?
+        let gyeongnam: Int?
+        let jeju: Int?
+        let sejong: Int?
+
+        enum CodingKeys: String, CodingKey {
+            case seoul, busan, daegu, incheon, gwangju, daejeon, ulsan
+            case gyeonggi, gangwon, chungbuk, chungnam, jeonbuk, jeonnam
+            case gyeongbuk, gyeongnam, jeju, sejong
+        }
+
+        init(from decoder: Decoder) throws {
+            let container = try decoder.container(keyedBy: CodingKeys.self)
+
+            self.seoul = try? DecodingHelper.decodeToInt(from: container, forKey: .seoul)
+            self.busan = try? DecodingHelper.decodeToInt(from: container, forKey: .busan)
+            self.daegu = try? DecodingHelper.decodeToInt(from: container, forKey: .daegu)
+            self.incheon = try? DecodingHelper.decodeToInt(from: container, forKey: .incheon)
+            self.gwangju = try? DecodingHelper.decodeToInt(from: container, forKey: .gwangju)
+            self.daejeon = try? DecodingHelper.decodeToInt(from: container, forKey: .daejeon)
+            self.ulsan = try? DecodingHelper.decodeToInt(from: container, forKey: .ulsan)
+            self.gyeonggi = try? DecodingHelper.decodeToInt(from: container, forKey: .gyeonggi)
+            self.gangwon = try? DecodingHelper.decodeToInt(from: container, forKey: .gangwon)
+            self.chungbuk = try? DecodingHelper.decodeToInt(from: container, forKey: .chungbuk)
+            self.chungnam = try? DecodingHelper.decodeToInt(from: container, forKey: .chungnam)
+            self.jeonbuk = try? DecodingHelper.decodeToInt(from: container, forKey: .jeonbuk)
+            self.jeonnam = try? DecodingHelper.decodeToInt(from: container, forKey: .jeonnam)
+            self.gyeongbuk = try? DecodingHelper.decodeToInt(from: container, forKey: .gyeongbuk)
+            self.gyeongnam = try? DecodingHelper.decodeToInt(from: container, forKey: .gyeongnam)
+            self.jeju = try? DecodingHelper.decodeToInt(from: container, forKey: .jeju)
+            self.sejong = try? DecodingHelper.decodeToInt(from: container, forKey: .sejong)
+        }
+
     }
 
 }
 
 extension AirPollutionAPI.Item {
 
-    func value(area: Area) -> String? {
+    func value(area: Area) -> Int? {
         switch area {
         case .seoul:
             return self.seoul

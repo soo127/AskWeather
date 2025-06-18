@@ -31,9 +31,9 @@ struct AirDiffusionView: View {
 
     private var diffusionLevel: some View {
         Group {
-            Text(weatherViewModel.airDiffusionIndex ?? "0")
+            Text("\(weatherViewModel.airDiffusionIndex)")
                 .font(.title)
-            Text(weatherViewModel.airIndexLevel ?? "0")
+            Text(weatherViewModel.airDiffusionLevel)
                 .font(.title2)
             Capsule()
                 .frame(width: 150, height: 5)

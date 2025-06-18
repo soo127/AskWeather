@@ -31,9 +31,9 @@ struct AirPollutionView: View {
 
     private var dustLevel: some View {
         Group {
-            Text(weatherViewModel.airPollution ?? "0")
+            Text("\(weatherViewModel.airPollution)")
                 .font(.title)
-            Text(weatherViewModel.pollutionLevel ?? "0")
+            Text("\(weatherViewModel.pollutionLevel)")
                 .font(.title2)
             Capsule()
                 .frame(width: 150, height: 5)

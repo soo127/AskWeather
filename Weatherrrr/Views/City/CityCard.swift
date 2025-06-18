@@ -9,12 +9,13 @@ import SwiftUI
 
 struct CityCard: View {
 
+    let bundle: ForecastBundle
+
     var body: some View {
         HStack(alignment: .center) {
             VStack(alignment: .leading, spacing: 5) {
-                Text("화성시")
+                Text(bundle.address)
                     .font(.title2)
-
                 Text("맑음")
                     .font(.subheadline)
             }
@@ -40,6 +41,6 @@ struct CityCard: View {
     
 }
 
-#Preview {
-    CityCard()
-}
+//#Preview {
+//    CityCard(bundle: .init())
+//}

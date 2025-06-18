@@ -24,14 +24,10 @@ extension KMAAPI {
     }
 
     struct Item: Decodable {
-        let baseDate: String
-        let baseTime: String
         let category: Category
         let fcstDate: String
         let fcstTime: String
         let fcstValue: String
-        let nx: Int
-        let ny: Int
     }
 
     enum Category: String, Decodable {

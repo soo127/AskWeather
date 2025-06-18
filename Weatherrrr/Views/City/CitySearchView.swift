@@ -30,14 +30,18 @@ struct CitySearchView: View {
                 .fill(Color.gray.opacity(0.1))
                 .frame(height: 40)
             )
+            .autocorrectionDisabled(true)
             .padding(.bottom)
+
     }
 
     private var searchResults: some View {
         ScrollView {
             ForEach(viewModel.searchResults, id: \.self) { completion in
                 Button {
-                    viewModel.handleSearchSelection(completion: completion)
+                    Task {
+                        await viewModel.handleSearch(completion: completion)
+                    }
                 } label: {
                     Text(completion.title)
                 }

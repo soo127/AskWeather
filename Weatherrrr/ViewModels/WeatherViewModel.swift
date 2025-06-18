@@ -10,33 +10,16 @@ import CoreLocation
 
 class WeatherViewModel: ObservableObject {
 
-    @Published var forecasts: [Forecast] = []
-    @Published var uvIndex: String?
-    @Published var airDiffusionIndex: String?
-    @Published var airPollution: String?
-    @Published var address: String?
-    @Published var areaCode: String?
+    @Published var bundle: ForecastBundle = .empty
 
     private let now = Date()
 
     @MainActor
     func load(coordinate: CLLocationCoordinate2D) async {
         do {
-            let (address, areaCode) = try await AddressAPI.fetch(from: coordinate)
-            self.address = address
-            self.areaCode = areaCode
-
-            async let nationalAir = AirPollutionAPI.fetch()
-            async let uv = LifeWeatherIndexAPI.fetch(index: .uv, areaCode: areaCode)
-            async let air = LifeWeatherIndexAPI.fetch(index: .airDiffusion, areaCode: areaCode)
-            async let items = KMAAPI.fetch(coordinate: coordinate)
-
-            airPollution = AirPollutionMapper.value(area: address, in: try await nationalAir)
-            uvIndex = try await uv?.current
-            airDiffusionIndex = try await air?.after3Hours
-            forecasts = makeForecasts(items: try await items)
+            self.bundle = try await WeatherLoader.load(coordinate: coordinate)
         } catch {
-            print("날씨 가져오기 실패: \(error)")
+            print("날씨 로딩 실패: \(error)")
         }
     }
 
@@ -63,6 +46,40 @@ class WeatherViewModel: ObservableObject {
     }
 
 }
+
+// MARK: - 편리한 접근
+
+extension WeatherViewModel {
+
+    var forecasts: [Forecast] {
+        bundle.forecasts
+    }
+
+    var address: String {
+        bundle.address
+    }
+
+    var areaCode: String {
+        bundle.areaCode
+    }
+
+    var coordinate: CLLocationCoordinate2D {
+        bundle.coordinate
+    }
+
+    var uvIndex: Int {
+        bundle.uvIndex
+    }
+
+    var airPollution: Int {
+        bundle.airPollution
+    }
+
+    var airDiffusionIndex: Int {
+        bundle.airDiffusionIndex
+    }
+}
+
 
 // MARK: - 시간 단위 예보
 
@@ -148,12 +165,8 @@ extension WeatherViewModel {
         forecasts.last(where: { $0.date <= now })
     }
 
-    var pollutionLevel: String? {
-        guard let airPollution = airPollution,
-              let amount = Int(airPollution) else {
-            return nil
-        }
-        switch amount {
+    var pollutionLevel: String {
+        switch airPollution {
         case 0...30:
             return "좋음"
         case 31...80:
@@ -165,12 +178,8 @@ extension WeatherViewModel {
         }
     }
 
-    var uvIndexLevel: String? {
-        guard let value = uvIndex,
-              let intValue = Int(value) else {
-            return nil
-        }
-        switch intValue {
+    var uvLevel: String {
+        switch uvIndex {
         case 0...2:
             return "낮음"
         case 3...5:
@@ -184,12 +193,8 @@ extension WeatherViewModel {
         }
     }
 
-    var airIndexLevel: String? {
-        guard let value = airDiffusionIndex,
-              let intValue = Int(value) else {
-            return nil
-        }
-        switch intValue {
+    var airDiffusionLevel: String {
+        switch airDiffusionIndex {
         case 25:
             return "낮음"
         case 50:

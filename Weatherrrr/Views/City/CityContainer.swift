@@ -9,13 +9,15 @@ import SwiftUI
 
 struct CityContainer: View {
 
+    @EnvironmentObject private var weatherStorage: WeatherStorage
+
     var body: some View {
         NavigationStack {
             ScrollView {
                 searchBar
-                ForEach(1...5, id: \.self) { i in
+                ForEach(weatherStorage.stored) { bundle in
                     NavigationLink(destination: WeatherView()) {
-                        CityCard()
+                        CityCard(bundle: bundle)
                     }
                     .buttonStyle(PlainButtonStyle())
                 }

@@ -9,6 +9,7 @@ import SwiftUI
 
 struct SearchedCityView: View {
 
+    @EnvironmentObject private var weatherStorage: WeatherStorage
     @EnvironmentObject private var weatherViewModel: WeatherViewModel
     @ObservedObject var viewModel: LocationSearchViewModel
 
@@ -24,13 +25,14 @@ struct SearchedCityView: View {
                     }
                     ToolbarItem(placement: .navigationBarTrailing) {
                         Button("추가") {
-                            //viewModel.confirmSelection()
+                            viewModel.showWeather = false
+                            weatherStorage.store(bundle: weatherViewModel.bundle)
                         }
                     }
                 }
-                .onAppear {
+                .task {
                     if let coordinate = viewModel.coordinate {
-                        Task { await weatherViewModel.load(coordinate: coordinate) }
+                        await weatherViewModel.load(coordinate: coordinate)
                     }
                 }
         }

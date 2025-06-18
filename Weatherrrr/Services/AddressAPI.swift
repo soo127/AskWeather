@@ -10,25 +10,25 @@ import CoreLocation
 
 struct AddressAPI {
 
-    static func fetch(from coordinate: CLLocationCoordinate2D) async throws -> (address: String?, areaCode: String?) {
-        let fetched = try await fetchKakaoResponse(from: coordinate)
-        return (fetched.documents.last?.address_name, fetched.documents.last?.code)
+    static func fetch(from coordinate: CLLocationCoordinate2D) async throws -> (address: String, areaCode: String) {
+        let response: AddressResponse = try await APIHelper.fetch(request: request(coordinate: coordinate))
+        guard let fetched = response.documents.last else {
+            throw FetchError.noData
+        }
+        return (fetched.address_name, fetched.code)
     }
 
 }
 
 extension AddressAPI {
 
-    private static func fetchKakaoResponse(from coordinate: CLLocationCoordinate2D) async throws -> AddressAPI.Response {
+    private static func request(coordinate: CLLocationCoordinate2D) -> URLRequest? {
         let lat = coordinate.latitude
         let lon = coordinate.longitude
-        return try await APIHelper.fetch(request: request(lat: lat, lon: lon))
-    }
-
-    private static func request(lat: Double, lon: Double) -> URLRequest? {
         guard let url = Self.url(lat: lat, lon: lon) else {
             return nil
         }
+
         var request = URLRequest(url: url)
         request.setValue("KakaoAK \(Constants.apiKey)", forHTTPHeaderField: "Authorization")
         return request
@@ -59,4 +59,3 @@ extension AddressAPI {
     }
 
 }
-

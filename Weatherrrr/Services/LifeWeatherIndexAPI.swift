@@ -8,15 +8,14 @@
 import SwiftUI
 import CoreLocation
 
-struct LifeWeatherIndexAPI {
+struct LifeWeatherIndexAPI { //생활 기상 지수
 
-    static func fetch(index: LifeWeatherIndex, areaCode: String?) async throws -> LifeWeatherIndexAPI.Item? {
-        guard let areaCode, let url = url(index: index, areaCode: areaCode) else {
-            return nil
+    static func fetch(index: LifeWeatherIndex, areaCode: String) async throws -> LifeWeatherIndexAPI.Item {
+        let response: LifeWeatherResponse = try await APIHelper.fetch(url: url(index: index, areaCode: areaCode))
+        guard let fetched = response.response.body.items.item.first else {
+            throw FetchError.noData
         }
-
-        let response: LifeWeatherResponse = try await APIHelper.fetch(url: url)
-        return response.response.body.items.item.first
+        return fetched
     }
 
 }
@@ -67,4 +66,13 @@ extension LifeWeatherIndexAPI {
         static let baseAirURL = "http://apis.data.go.kr/1360000/LivingWthrIdxServiceV4/getAirDiffusionIdxV4"
     }
 
+}
+
+extension LifeWeatherIndexAPI {
+
+    enum LifeWeatherIndex {
+        case uv
+        case airDiffusion
+    }
+    
 }

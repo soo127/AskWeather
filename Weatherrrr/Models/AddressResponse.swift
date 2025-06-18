@@ -7,7 +7,7 @@
 
 extension AddressAPI {
 
-    struct Response: Decodable {
+    struct AddressResponse: Decodable {
         let documents: [Document]
     }
 

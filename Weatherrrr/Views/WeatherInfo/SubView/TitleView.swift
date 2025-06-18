@@ -13,7 +13,7 @@ struct TitleView: View {
 
     var body: some View {
         VStack(spacing: 5) {
-            Text(weatherViewModel.address ?? "주소 로딩 중...")
+            Text(weatherViewModel.address)
                 .font(.title2)
             Text("\(weatherViewModel.temperature)°")
                 .font(.largeTitle)

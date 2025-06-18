@@ -38,22 +38,21 @@ class LocationSearchViewModel: NSObject, ObservableObject {
 
 extension LocationSearchViewModel {
 
-    func handleSearchSelection(completion: MKLocalSearchCompletion) {
-        closeKeyboard()
+    @MainActor
+    func handleSearch(completion: MKLocalSearchCompletion) async {
         let request = MKLocalSearch.Request(completion: completion)
         let search = MKLocalSearch(request: request)
 
-        search.start { response, error in
-            guard let coordinate = response?.mapItems.first?.placemark.coordinate else {
+        do {
+            let response = try await search.start()
+            guard let coordinate = response.mapItems.first?.placemark.coordinate else {
                 return
             }
             self.coordinate = coordinate
             self.showWeather = true
+        } catch {
+            print("검색 실패: \(error)")
         }
-    }
-
-    private func closeKeyboard() {
-        UIApplication.shared.sendAction(#selector(UIResponder.resolveInstanceMethod), to: nil, from: nil, for: nil)
     }
 
 }

@@ -15,7 +15,7 @@ struct UltraVioletView: View {
 
         VStack(alignment: .leading) {
             title
-            UVLevel
+            uvLevel
         }
         .padding()
 
@@ -31,11 +31,11 @@ struct UltraVioletView: View {
             .foregroundStyle(.gray)
     }
 
-    private var UVLevel: some View {
+    private var uvLevel: some View {
         Group {
-            Text(weatherViewModel.uvIndex ?? "0")
+            Text("\(weatherViewModel.uvIndex)")
                 .font(.title)
-            Text(weatherViewModel.uvIndexLevel ?? "0")
+            Text(weatherViewModel.uvLevel)
                 .font(.title2)
             Capsule()
                 .frame(width: 150, height: 5)
