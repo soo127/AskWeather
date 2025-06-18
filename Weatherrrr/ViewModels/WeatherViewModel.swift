@@ -10,39 +10,16 @@ import CoreLocation
 
 class WeatherViewModel: ObservableObject {
 
-    @Published var bundle: ForecastBundle = .empty
-
+    @Published var weatherReport: WeatherReport = .empty
     private let now = Date()
 
     @MainActor
     func load(coordinate: CLLocationCoordinate2D) async {
         do {
-            self.bundle = try await WeatherLoader.load(coordinate: coordinate)
+            self.weatherReport = try await WeatherLoader.load(coordinate: coordinate)
         } catch {
             print("날씨 로딩 실패: \(error)")
         }
-    }
-
-    private func makeForecasts(items: [KMAAPI.Item]) -> [Forecast] {
-        let itemsByDate: [Date: [KMAAPI.Item]] = items
-            .reduce(into: [:]) { partialResult, item in
-                let dateString = item.fcstDate + item.fcstTime
-                guard let date = dateString.date() else {
-                    return
-                }
-                let prevItems = partialResult[date] ?? []
-                return partialResult[date] = (prevItems + [item])
-            }
-
-        let forecasts = itemsByDate
-            .sorted { $0.key < $1.key }
-            .map { (date, items) in
-                var forecast = Forecast(date: date)
-                forecast.update(items: items)
-                return forecast
-            }
-
-        return forecasts
     }
 
 }
@@ -52,31 +29,31 @@ class WeatherViewModel: ObservableObject {
 extension WeatherViewModel {
 
     var forecasts: [Forecast] {
-        bundle.forecasts
+        weatherReport.forecasts
     }
 
     var address: String {
-        bundle.address
+        weatherReport.address
     }
 
     var areaCode: String {
-        bundle.areaCode
+        weatherReport.areaCode
     }
 
     var coordinate: CLLocationCoordinate2D {
-        bundle.coordinate
+        weatherReport.coordinate
     }
 
     var uvIndex: Int {
-        bundle.uvIndex
+        weatherReport.uvIndex
     }
 
     var airPollution: Int {
-        bundle.airPollution
+        weatherReport.airPollution
     }
 
     var airDiffusionIndex: Int {
-        bundle.airDiffusionIndex
+        weatherReport.airDiffusionIndex
     }
 }
 

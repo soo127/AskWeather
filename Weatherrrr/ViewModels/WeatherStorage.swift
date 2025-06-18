@@ -10,9 +10,9 @@ import CoreLocation
 
 class WeatherStorage: ObservableObject {
 
-    @Published private(set) var stored: [ForecastBundle] = []
+    @Published private(set) var stored: [WeatherReport] = []
 
-    func store(bundle: ForecastBundle) {
+    func store(bundle: WeatherReport) {
         stored.append(bundle)
     }
 

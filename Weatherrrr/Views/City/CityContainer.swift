@@ -15,9 +15,9 @@ struct CityContainer: View {
         NavigationStack {
             ScrollView {
                 searchBar
-                ForEach(weatherStorage.stored) { bundle in
+                ForEach(weatherStorage.stored) { weatherReport in
                     NavigationLink(destination: WeatherView()) {
-                        CityCard(bundle: bundle)
+                        CityCard(weatherReport: weatherReport)
                     }
                     .buttonStyle(PlainButtonStyle())
                 }

@@ -26,7 +26,7 @@ struct SearchedCityView: View {
                     ToolbarItem(placement: .navigationBarTrailing) {
                         Button("추가") {
                             viewModel.showWeather = false
-                            weatherStorage.store(bundle: weatherViewModel.bundle)
+                            weatherStorage.store(bundle: weatherViewModel.weatherReport)
                         }
                     }
                 }

@@ -1,5 +1,5 @@
 //
-//  ForecastBundle.swift
+//  WeatherReport.swift
 //  Weatherrrr
 //
 //  Created by 이상수 on 6/17/25.
@@ -8,7 +8,7 @@
 import SwiftUI
 import CoreLocation
 
-struct ForecastBundle: Identifiable {
+struct WeatherReport: Identifiable {
 
     let id = UUID()
     let forecasts: [Forecast]
@@ -21,9 +21,9 @@ struct ForecastBundle: Identifiable {
 
 }
 
-extension ForecastBundle {
+extension WeatherReport {
 
-    static let empty = ForecastBundle(
+    static let empty = WeatherReport(
         forecasts: [],
         uvIndex: .zero,
         airDiffusionIndex: .zero,

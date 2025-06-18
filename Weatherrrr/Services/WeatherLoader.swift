@@ -10,7 +10,7 @@ import CoreLocation
 
 enum WeatherLoader {
 
-    static func load(coordinate: CLLocationCoordinate2D) async throws -> ForecastBundle {
+    static func load(coordinate: CLLocationCoordinate2D) async throws -> WeatherReport {
         let (address, areaCode) = try await AddressAPI.fetch(from: coordinate)
 
         async let nationalAir = AirPollutionAPI.fetch()
@@ -24,7 +24,7 @@ enum WeatherLoader {
             throw FetchError.noData
         }
 
-        return ForecastBundle(
+        return WeatherReport(
             forecasts: makeForecasts(items: try await items),
             uvIndex: uv,
             airDiffusionIndex: airDiffusion,
