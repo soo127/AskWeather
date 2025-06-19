@@ -8,34 +8,24 @@
 import SwiftUI
 import MapKit
 
-extension CLLocationCoordinate2D {
-    static let seoul = Self(latitude: 37.5665, longitude: 126.9780)
-    static let busan = Self(latitude: 35.1796, longitude: 129.0756)
-}
-
 struct MapView: View {
 
-    //@EnvironmentObject private var locationManager: LocationManager
+    @StateObject private var mapViewModel = MapViewModel()
+    @EnvironmentObject private var weatherStorage: WeatherStorage
 
     var body: some View {
         ZStack(alignment: .topTrailing) {
             Map {
-
-//                if let location = locationManager.userLocation {
-//                    Annotation("내 위치", coordinate: location) {
-//                        MapMarker(temperature: 22)
-//                    }
-//                }
-
-                Annotation("Seoul", coordinate: .seoul) {
-                    MapMarker(temperature: 25)
-                }
-
-                Annotation("Busan", coordinate: .busan) {
-                    MapMarker(temperature: 19)
+                ForEach(weatherStorage.stored) { report in
+                    Annotation(report.address, coordinate: report.coordinate) {
+                        MapMarker(
+                            viewModel: mapViewModel,
+                            weatherReport: report
+                        )
+                    }
                 }
             }
-            MapMenu()
+            MapMenu(viewModel: mapViewModel)
         }
     }
 
@@ -43,5 +33,5 @@ struct MapView: View {
 
 #Preview {
     MapView()
-        //.environmentObject(LocationManager())
+        .environmentObject(WeatherStorage())
 }

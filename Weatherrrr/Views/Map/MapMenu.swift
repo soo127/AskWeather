@@ -9,21 +9,19 @@ import SwiftUI
 
 struct MapMenu: View {
 
+    @ObservedObject var viewModel: MapViewModel
+
     var body: some View {
         Menu {
-
-            Button("강수량") {
-
+            Button("자외선") {
+                viewModel.select(type: .uvIndex)
             }
-
+            Button("미세먼지") {
+                viewModel.select(type: .airPollution)
+            }
             Button("기온") {
-
+                viewModel.select(type: .temperature)
             }
-
-            Button("미세먼지 농도") {
-
-            }
-
         } label: {
             Image(systemName: "ellipsis.circle")
                 .font(.title)
@@ -35,8 +33,4 @@ struct MapMenu: View {
         .padding(.trailing)
     }
 
-}
-
-#Preview {
-    MapMenu()
 }

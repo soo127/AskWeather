@@ -9,20 +9,22 @@ import SwiftUI
 
 struct MapMarker: View {
 
-    let temperature: Int
-
+    @ObservedObject var viewModel: MapViewModel
+    let weatherReport: WeatherReport
+    
     var body: some View {
         VStack(spacing: 0) {
-            Text("\(temperature)°")
+            let value = viewModel.value(weatherReport: weatherReport)
+            Text("\(value)")
+                .font(.system(size: 13))
                 .foregroundColor(.white)
                 .padding(5)
-                .background(WeatherFormatter.temperatureColor(temperature))
+                .background(viewModel.color(value: value))
                 .clipShape(Circle())
 
             Image(systemName: "arrowtriangle.down.fill")
                 .font(.system(size: 8))
-                .foregroundColor(WeatherFormatter.temperatureColor(temperature))
-                .offset(y: -3)
+                .foregroundColor(viewModel.color(value: value))
         }
     }
 
