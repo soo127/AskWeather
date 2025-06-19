@@ -13,15 +13,9 @@ struct MapMenu: View {
 
     var body: some View {
         Menu {
-            Button("자외선") {
-                viewModel.select(type: .uvIndex)
-            }
-            Button("미세먼지") {
-                viewModel.select(type: .airPollution)
-            }
-            Button("기온") {
-                viewModel.select(type: .temperature)
-            }
+            menuButton(type: .uvIndex, title: "자외선")
+            menuButton(type: .airPollution, title: "미세먼지")
+            menuButton(type: .temperature, title: "기온")
         } label: {
             Image(systemName: "ellipsis.circle")
                 .font(.title)
@@ -31,6 +25,21 @@ struct MapMenu: View {
                 .clipShape(RoundedRectangle(cornerRadius: 5))
         }
         .padding(.trailing)
+    }
+
+    @ViewBuilder
+    private func menuButton(type: MapMenuType, title: String) -> some View {
+        Button {
+            viewModel.select(type: type)
+        } label: {
+            Label {
+                Text(title)
+            } icon: {
+                if viewModel.menuType == type {
+                    Image(systemName: "checkmark")
+                }
+            }
+        }
     }
 
 }
