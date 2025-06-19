@@ -6,8 +6,15 @@
 //
 
 import SwiftUI
+import CoreLocation
 
 struct WeatherView: View {
+
+    @StateObject var viewModel: WeatherViewModel
+
+    init(coordinate: CLLocationCoordinate2D?) {
+        _viewModel = StateObject(wrappedValue: WeatherViewModel(coordinate: coordinate))
+    }
 
     var body: some View {
         NavigationStack {
@@ -18,6 +25,7 @@ struct WeatherView: View {
             .background(Image("cloudy"))
             .scrollIndicators(.hidden)
         }
+        .environmentObject(viewModel)
         .toolbarBackground(.hidden)
     }
 
@@ -42,6 +50,6 @@ struct WeatherView: View {
 
 }
 
-#Preview {
-    WeatherView()
-}
+//#Preview {
+//    WeatherView()
+//}

@@ -12,8 +12,16 @@ class WeatherStorage: ObservableObject {
 
     @Published private(set) var stored: [WeatherReport] = []
 
-    func store(bundle: WeatherReport) {
-        stored.append(bundle)
+    @MainActor
+    func store(coordinate: CLLocationCoordinate2D?) {
+        Task {
+            do {
+                let weather = try await WeatherLoader.load(coordinate: coordinate)
+                stored.append(weather)
+            } catch {
+                print("weatherstorage error: \(error)")
+            }
+        }
     }
 
 }

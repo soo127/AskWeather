@@ -14,22 +14,14 @@ struct CityCard: View {
     var body: some View {
         HStack(alignment: .center) {
             VStack(alignment: .leading, spacing: 5) {
-                Text(weatherReport.address)
-                    .font(.title2)
-                Text("맑음")
-                    .font(.subheadline)
+                address
+                skyIcon
             }
-
             Spacer()
-
             VStack(alignment: .trailing, spacing: 5) {
-                Text("24°")
-                    .font(.largeTitle)
-                    .fontWeight(.semibold)
-
-                Text("최고 20°, 최저 12°")
-                    .font(.caption)
-                    .foregroundColor(.gray)
+                temperature
+                uv
+                airPollution
             }
         }
         .padding()
@@ -38,5 +30,33 @@ struct CityCard: View {
                 .fill(.gray.opacity(0.3))
         )
     }
-    
+
+    private var address: some View {
+        Text(weatherReport.address)
+            .font(.title2)
+    }
+
+    private var skyIcon: some View {
+        WeatherFormatter.current(forecasts: weatherReport.forecasts)?.skyImage
+            .font(.subheadline)
+    }
+
+    private var temperature: some View {
+        Text("\(WeatherFormatter.current(forecasts: weatherReport.forecasts)?.temperature ?? .zero)°")
+            .font(.largeTitle)
+            .fontWeight(.semibold)
+    }
+
+    private var uv: some View {
+        Text("자외선: \(WeatherFormatter.uvLevel(for: weatherReport.uvIndex))")
+            .font(.caption)
+            .foregroundColor(.gray)
+    }
+
+    private var airPollution: some View {
+        Text("대기: \(WeatherFormatter.pollutionLevel(for: weatherReport.airPollution))")
+            .font(.caption)
+            .foregroundColor(.gray)
+    }
+
 }

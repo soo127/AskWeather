@@ -16,23 +16,13 @@ struct MapMarker: View {
             Text("\(temperature)°")
                 .foregroundColor(.white)
                 .padding(5)
-                .background(temperatureColor)
+                .background(WeatherFormatter.temperatureColor(temperature))
                 .clipShape(Circle())
 
             Image(systemName: "arrowtriangle.down.fill")
                 .font(.system(size: 8))
-                .foregroundColor(temperatureColor)
+                .foregroundColor(WeatherFormatter.temperatureColor(temperature))
                 .offset(y: -3)
-        }
-    }
-
-    private var temperatureColor: Color {
-        switch temperature {
-        case ..<0: return .blue
-        case 0..<10: return .cyan
-        case 10..<20: return .green
-        case 20..<30: return .orange
-        default: return .red
         }
     }
 

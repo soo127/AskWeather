@@ -16,7 +16,7 @@ struct CityContainer: View {
             ScrollView {
                 searchBar
                 ForEach(weatherStorage.stored) { weatherReport in
-                    NavigationLink(destination: WeatherView()) {
+                    NavigationLink(destination: WeatherView(coordinate: weatherReport.coordinate)) {
                         CityCard(weatherReport: weatherReport)
                     }
                     .buttonStyle(PlainButtonStyle())

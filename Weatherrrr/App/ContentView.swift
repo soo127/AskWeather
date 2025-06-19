@@ -6,8 +6,11 @@
 //
 
 import SwiftUI
+import CoreLocation
 
 struct ContentView: View {
+
+    let coordinate: CLLocationCoordinate2D?
 
     var body: some View {
         TabView {
@@ -15,7 +18,7 @@ struct ContentView: View {
                 .tabItem {
                     Image(systemName: "map")
                 }
-            WeatherView()
+            WeatherView(coordinate: coordinate)
                 .tabItem {
                     Image(systemName: "paperplane")
                 }
@@ -29,5 +32,5 @@ struct ContentView: View {
 }
 
 #Preview {
-    ContentView()
+    ContentView(coordinate: nil)
 }

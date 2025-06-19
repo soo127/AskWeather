@@ -10,7 +10,7 @@ import SwiftUI
 struct CitySearchView: View {
 
     @StateObject var viewModel = LocationSearchViewModel()
-    @EnvironmentObject private var weatherViewModel: WeatherViewModel
+    @EnvironmentObject private var weatherStorage: WeatherStorage
 
     var body: some View {
         VStack {

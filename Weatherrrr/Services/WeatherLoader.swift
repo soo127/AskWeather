@@ -10,7 +10,12 @@ import CoreLocation
 
 enum WeatherLoader {
 
-    static func load(coordinate: CLLocationCoordinate2D) async throws -> WeatherReport {
+    static func load(coordinate: CLLocationCoordinate2D?) async throws -> WeatherReport {
+
+        guard let coordinate else {
+            throw FetchError.noData
+        }
+
         let (address, areaCode) = try await AddressAPI.fetch(from: coordinate)
 
         async let nationalAir = AirPollutionAPI.fetch()

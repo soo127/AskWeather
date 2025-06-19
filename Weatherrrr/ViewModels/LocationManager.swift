@@ -12,7 +12,6 @@ class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
     @Published var userLocation: CLLocationCoordinate2D?
     @Published var authorizationStatus: CLAuthorizationStatus?
     private let manager = CLLocationManager()
-    var onLocationUpdate: ((CLLocationCoordinate2D) -> Void)?
 
     override init() {
         super.init()
@@ -24,7 +23,6 @@ class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
             return
         }
         self.userLocation = location.coordinate
-        onLocationUpdate?(location.coordinate)
     }
 
     func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {

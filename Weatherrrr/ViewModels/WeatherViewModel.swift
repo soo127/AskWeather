@@ -11,15 +11,23 @@ import CoreLocation
 class WeatherViewModel: ObservableObject {
 
     @Published var weatherReport: WeatherReport = .empty
+    @Published var isLoading = true
     private let now = Date()
 
+    init(coordinate: CLLocationCoordinate2D?) {
+        Task {
+            await load(coordinate: coordinate)
+        }
+    }
+
     @MainActor
-    func load(coordinate: CLLocationCoordinate2D) async {
+    func load(coordinate: CLLocationCoordinate2D?) async {
         do {
-            self.weatherReport = try await WeatherLoader.load(coordinate: coordinate)
+            weatherReport = try await WeatherLoader.load(coordinate: coordinate)
         } catch {
             print("날씨 로딩 실패: \(error)")
         }
+        isLoading = false
     }
 
 }
@@ -114,8 +122,7 @@ extension WeatherViewModel {
         }
         let skyCodes = forecasts
             .filter {
-                Calendar.current.isDate($0.date, inSameDayAs: targetDate) &&
-                (6...21).contains(Calendar.current.component(.hour, from: $0.date))
+                Calendar.current.isDate($0.date, inSameDayAs: targetDate)
             }
             .map { $0.skyCondition }
 
@@ -138,65 +145,32 @@ extension WeatherViewModel {
 
 extension WeatherViewModel {
 
-    var currentForecast: Forecast? {
-        forecasts.last(where: { $0.date <= now })
-    }
-
     var pollutionLevel: String {
-        switch airPollution {
-        case 0...30:
-            return "좋음"
-        case 31...80:
-            return "보통"
-        case 81...150:
-            return "나쁨"
-        default:
-            return "매우 나쁨"
-        }
+        WeatherFormatter.pollutionLevel(for: airPollution)
     }
 
     var uvLevel: String {
-        switch uvIndex {
-        case 0...2:
-            return "낮음"
-        case 3...5:
-            return "보통"
-        case 6...7:
-            return "높음"
-        case 8...10:
-            return "매우 높음"
-        default:
-            return "위험"
-        }
+        WeatherFormatter.uvLevel(for: uvIndex)
     }
 
     var airDiffusionLevel: String {
-        switch airDiffusionIndex {
-        case 25:
-            return "낮음"
-        case 50:
-            return "보통"
-        case 75:
-            return "높음"
-        default:
-            return "매우 높음"
-        }
+        WeatherFormatter.airDiffusionLevel(for: airDiffusionIndex)
     }
 
     var humidity: Int {
-        currentForecast?.humidity ?? .zero
+        WeatherFormatter.current(forecasts: forecasts)?.humidity ?? .zero
     }
 
     var temperature: Int {
-        currentForecast?.temperature ?? .zero
+        WeatherFormatter.current(forecasts: forecasts)?.temperature ?? .zero
     }
 
     var windSpeed: Double {
-        currentForecast?.windSpeed ?? .zero
+        WeatherFormatter.current(forecasts: forecasts)?.windSpeed ?? .zero
     }
 
     var rotateAngle: Int {
-        currentForecast?.windVector ?? .zero
+        WeatherFormatter.current(forecasts: forecasts)?.windVector ?? .zero
     }
 
     func radian(angle: Double) -> Double {

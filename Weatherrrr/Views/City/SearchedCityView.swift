@@ -10,13 +10,11 @@ import SwiftUI
 struct SearchedCityView: View {
 
     @EnvironmentObject private var weatherStorage: WeatherStorage
-    @EnvironmentObject private var weatherViewModel: WeatherViewModel
     @ObservedObject var viewModel: LocationSearchViewModel
 
     var body: some View {
         NavigationStack {
-            WeatherView()
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
+            WeatherView(coordinate: viewModel.coordinate)
                 .toolbar {
                     ToolbarItem(placement: .navigationBarLeading) {
                         Button("취소") {
@@ -25,14 +23,9 @@ struct SearchedCityView: View {
                     }
                     ToolbarItem(placement: .navigationBarTrailing) {
                         Button("추가") {
+                            weatherStorage.store(coordinate: viewModel.coordinate)
                             viewModel.showWeather = false
-                            weatherStorage.store(bundle: weatherViewModel.weatherReport)
                         }
-                    }
-                }
-                .task {
-                    if let coordinate = viewModel.coordinate {
-                        await weatherViewModel.load(coordinate: coordinate)
                     }
                 }
         }

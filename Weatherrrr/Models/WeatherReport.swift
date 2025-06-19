@@ -33,4 +33,8 @@ extension WeatherReport {
         coordinate: .init()
     )
 
+    var temperature: Int {
+        forecasts.last(where: { $0.date <= Date() })?.temperature ?? 0
+    }
+
 }
