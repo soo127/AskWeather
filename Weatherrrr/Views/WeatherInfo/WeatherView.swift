@@ -18,15 +18,35 @@ struct WeatherView: View {
 
     var body: some View {
         NavigationStack {
-            ScrollView {
-                content
-                    .padding(.horizontal)
-            }
-            .background(Image("cloudy"))
-            .scrollIndicators(.hidden)
+            weatherScreen
         }
         .environmentObject(viewModel)
         .toolbarBackground(.hidden)
+    }
+
+    private var weatherScreen: some View {
+        Group {
+            if viewModel.isLoading {
+                loadingView
+            } else {
+                ScrollView {
+                    content
+                        .padding(.horizontal)
+                }
+                .scrollIndicators(.hidden)
+            }
+        }
+        .background(Image("cloudy"))
+    }
+
+    private var loadingView: some View {
+        VStack {
+            Spacer()
+            ProgressView("날씨 정보를 불러오는 중...")
+                .progressViewStyle(CircularProgressViewStyle())
+                .padding()
+            Spacer()
+        }
     }
 
     @ViewBuilder

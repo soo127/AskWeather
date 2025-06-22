@@ -49,10 +49,15 @@ extension LocationSearchViewModel {
                 return
             }
             self.coordinate = coordinate
+            dismissKeyboard()
             self.showWeather = true
         } catch {
             print("검색 실패: \(error)")
         }
+    }
+
+    private func dismissKeyboard() {
+        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
     }
 
 }

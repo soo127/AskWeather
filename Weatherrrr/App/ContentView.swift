@@ -14,7 +14,7 @@ struct ContentView: View {
 
     var body: some View {
         TabView {
-            MapView()
+            MapView(coordinate: coordinate)
                 .tabItem {
                     Image(systemName: "map")
                 }
