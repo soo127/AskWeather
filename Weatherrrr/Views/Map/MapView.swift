@@ -12,7 +12,6 @@ struct MapView: View {
 
     @StateObject private var mapViewModel = MapViewModel()
     @EnvironmentObject private var weatherStorage: WeatherStorage
-    let coordinate: CLLocationCoordinate2D?
 
     var body: some View {
         ZStack(alignment: .topTrailing) {

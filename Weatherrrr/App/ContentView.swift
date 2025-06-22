@@ -10,11 +10,11 @@ import CoreLocation
 
 struct ContentView: View {
 
-    let coordinate: CLLocationCoordinate2D?
+    let coordinate: CLLocationCoordinate2D
 
     var body: some View {
         TabView {
-            MapView(coordinate: coordinate)
+            MapView()
                 .tabItem {
                     Image(systemName: "map")
                 }
@@ -32,5 +32,5 @@ struct ContentView: View {
 }
 
 #Preview {
-    ContentView(coordinate: nil)
+    ContentView(coordinate: .init())
 }
