@@ -10,7 +10,8 @@ import CoreLocation
 
 class WeatherStorage: ObservableObject {
 
-    @Published private(set) var stored: [WeatherReport] = [] {
+    @Published private(set) var currentWeather: WeatherReport = .empty
+    @Published private(set) var favorites: [WeatherReport] = [] {
         didSet {
             saveToDisk()
         }
@@ -21,11 +22,22 @@ class WeatherStorage: ObservableObject {
     }
 
     @MainActor
-    func store(coordinate: CLLocationCoordinate2D?) {
+    func updateCurrentWeather(coordinate: CLLocationCoordinate2D?) {
+        Task {
+            do {
+                currentWeather = try await WeatherLoader.load(coordinate: coordinate)
+            } catch {
+                print("weatherstorage error: \(error)")
+            }
+        }
+    }
+
+    @MainActor
+    func addFavorite(coordinate: CLLocationCoordinate2D?) {
         Task {
             do {
                 let weather = try await WeatherLoader.load(coordinate: coordinate)
-                stored.append(weather)
+                favorites.append(weather)
             } catch {
                 print("weatherstorage error: \(error)")
             }
@@ -34,7 +46,7 @@ class WeatherStorage: ObservableObject {
 
     private func saveToDisk() {
         do {
-            let data = try JSONEncoder().encode(stored)
+            let data = try JSONEncoder().encode(favorites)
             try data.write(to: fileURL())
         } catch {
             print("저장 실패: \(error)")
@@ -45,11 +57,10 @@ class WeatherStorage: ObservableObject {
         guard FileManager.default.fileExists(atPath: fileURL().path) else {
             return
         }
-
         do {
             let data = try Data(contentsOf: fileURL())
             let reports = try JSONDecoder().decode([WeatherReport].self, from: data)
-            stored = reports
+            favorites = reports
         } catch {
             print("불러오기 실패: \(error)")
         }

@@ -15,7 +15,7 @@ struct CityContainer: View {
         NavigationStack {
             ScrollView {
                 searchBar
-                ForEach(weatherStorage.stored) { weatherReport in
+                ForEach(weatherStorage.favorites) { weatherReport in
                     NavigationLink(destination: WeatherView(coordinate: weatherReport.coordinate)) {
                         CityCard(weatherReport: weatherReport)
                     }

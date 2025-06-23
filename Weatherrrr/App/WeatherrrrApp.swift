@@ -18,7 +18,7 @@ struct WeatherrrrApp: App {
             if let userLocation = locationManager.userLocation {
                 ContentView(coordinate: userLocation)
                     .onAppear {
-                        weatherStorage.store(coordinate: userLocation)
+                        weatherStorage.updateCurrentWeather(coordinate: userLocation)
                     }
                     .environmentObject(weatherStorage)
             } else {

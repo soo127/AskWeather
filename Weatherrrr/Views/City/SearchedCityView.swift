@@ -23,7 +23,7 @@ struct SearchedCityView: View {
                     }
                     ToolbarItem(placement: .navigationBarTrailing) {
                         Button("추가") {
-                            weatherStorage.store(coordinate: viewModel.coordinate)
+                            weatherStorage.addFavorite(coordinate: viewModel.coordinate)
                             viewModel.showWeather = false
                         }
                     }

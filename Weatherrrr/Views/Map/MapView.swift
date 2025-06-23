@@ -16,7 +16,7 @@ struct MapView: View {
     var body: some View {
         ZStack(alignment: .topTrailing) {
             Map {
-                ForEach(weatherStorage.stored) { report in
+                ForEach(weatherStorage.favorites) { report in
                     Annotation(report.address, coordinate: report.coordinate) {
                         MapMarker(
                             viewModel: mapViewModel,
