@@ -7,10 +7,16 @@
 
 import SwiftUI
 import CoreLocation
+import MapKit
 
 class MapViewModel: ObservableObject {
 
     @Published var menuType: MapMenuType = .temperature
+
+    let koreaRegion = MKCoordinateRegion(
+        center: CLLocationCoordinate2D(latitude: 36.5, longitude: 127.5),
+        span: MKCoordinateSpan(latitudeDelta: 4.0, longitudeDelta: 4.0)
+    )
 
     func select(type: MapMenuType) {
         menuType = type

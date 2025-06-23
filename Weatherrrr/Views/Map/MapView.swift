@@ -15,7 +15,7 @@ struct MapView: View {
 
     var body: some View {
         ZStack(alignment: .topTrailing) {
-            Map {
+            Map(initialPosition: .region(mapViewModel.koreaRegion)) {
                 currentMarker
                 favoriteMarkers
             }
