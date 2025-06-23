@@ -11,22 +11,36 @@ struct Forecast: Codable {
 
     let date: Date
     var temperature: Int = .zero
+    var humidity: Int = .zero
+    var windSpeed: Double = .zero
+    var windVector: Int = .zero
+    var cloud: CloudCondition = .clear
+    var precipitationType: PrecipitationType = .none
+    var parcipitation: Double = .zero
     var dailyHighTemp: Double = .zero
     var dailyLowTemp: Double = .zero
-    var parcipitation: Double = .zero
-    var humidity: Int = .zero
-    var windVector: Int = .zero
-    var windSpeed: Double = .zero
-    var skyCondition: SkyCondition = .clear
 
-    enum SkyCondition: String, Codable {
+    enum CloudCondition: String, Codable {
         case clear = "1"
         case cloudy = "3"
         case overcast = "4"
         case unknown
 
         init(from rawValue: String) {
-            self = SkyCondition(rawValue: rawValue) ?? .unknown
+            self = CloudCondition(rawValue: rawValue) ?? .unknown
+        }
+    }
+
+    enum PrecipitationType: String, Codable {
+        case none = "0"
+        case rain = "1"
+        case sleet = "2"
+        case snow = "3"
+        case shower = "4"
+        case unknown
+        
+        init(from rawValue: String) {
+            self = PrecipitationType(rawValue: rawValue) ?? .unknown
         }
     }
 
@@ -41,22 +55,24 @@ extension Forecast {
 
     mutating private func update(item: KMAAPI.Item) {
         switch item.category {
-        case .parcipitation:
-            self.parcipitation = parsePrecipitation(item.fcstValue)
+        case .temperature:
+            self.temperature = Int(item.fcstValue) ?? temperature
         case .humidity:
             self.humidity = Int(item.fcstValue) ?? humidity
+        case .windSpeed:
+            self.windSpeed = Double(item.fcstValue) ?? windSpeed
+        case .windVector:
+            self.windVector = Int(item.fcstValue) ?? windVector
+        case .cloud:
+            self.cloud = CloudCondition(from: item.fcstValue)
+        case .precipitationType:
+            self.precipitationType = PrecipitationType(from: item.fcstValue)
+        case .parcipitation:
+            self.parcipitation = parsePrecipitation(item.fcstValue)
         case .dailyHighTemp:
             self.dailyHighTemp = Double(item.fcstValue) ?? dailyHighTemp
         case .dailyLowTemp:
             self.dailyLowTemp = Double(item.fcstValue) ?? dailyLowTemp
-        case .temperature:
-            self.temperature = Int(item.fcstValue) ?? temperature
-        case .windVector:
-            self.windVector = Int(item.fcstValue) ?? windVector
-        case .windSpeed:
-            self.windSpeed = Double(item.fcstValue) ?? windSpeed
-        case .skyCondition:
-            self.skyCondition = SkyCondition(from: item.fcstValue)
         case .unknown:
             break
         }
@@ -81,17 +97,17 @@ extension Forecast {
         }
     }
 
-    var skyImage: Image {
-        switch self.skyCondition {
-        case .clear:
-            return Image(systemName: "sun.max")
-        case .cloudy:
-            return Image(systemName: "cloud.sun")
-        case .overcast:
-            return Image(systemName: "cloud")
-        default:
-            return Image(systemName: "questionmark")
-        }
-    }
+//    var skyImage: Image {
+//        switch cloud {
+//        case .clear:
+//            return Image(systemName: "sun.max")
+//        case .cloudy:
+//            return Image(systemName: "cloud.sun")
+//        case .overcast:
+//            return Image(systemName: "cloud")
+//        default:
+//            return Image(systemName: "questionmark")
+//        }
+//    }
 
 }

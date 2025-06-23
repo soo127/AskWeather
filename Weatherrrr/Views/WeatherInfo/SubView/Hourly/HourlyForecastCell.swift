@@ -37,7 +37,7 @@ extension HourlyForecastCell.ViewModel {
 
     init(forecast: Forecast) {
         self.date = forecast.date.formatHourTo12H()
-        self.icon = forecast.skyImage
+        self.icon = ForecastProcessor.skyIcon(forecast: forecast)
         self.temperature = "\(forecast.temperature)°"
     }
 

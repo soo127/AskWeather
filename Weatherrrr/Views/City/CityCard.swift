@@ -15,7 +15,6 @@ struct CityCard: View {
         HStack(alignment: .center) {
             VStack(alignment: .leading, spacing: 5) {
                 address
-                skyIcon
             }
             Spacer()
             VStack(alignment: .trailing, spacing: 5) {
@@ -26,19 +25,16 @@ struct CityCard: View {
         }
         .padding()
         .background(
-            RoundedRectangle(cornerRadius: 12)
-                .fill(.gray.opacity(0.3))
+            Image("cloudy")
+                .resizable()
+                .scaledToFill()
         )
+        .clipShape(RoundedRectangle(cornerRadius: 12))
     }
 
     private var address: some View {
         Text(weatherReport.address)
             .font(.title2)
-    }
-
-    private var skyIcon: some View {
-        WeatherFormatter.current(forecasts: weatherReport.forecasts)?.skyImage
-            .font(.subheadline)
     }
 
     private var temperature: some View {

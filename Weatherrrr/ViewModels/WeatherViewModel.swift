@@ -124,7 +124,7 @@ extension WeatherViewModel {
             .filter {
                 Calendar.current.isDate($0.date, inSameDayAs: targetDate)
             }
-            .map { $0.skyCondition }
+            .map { $0.cloud }
 
         if skyCodes.isEmpty {
             return "questionmark"

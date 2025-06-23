@@ -31,14 +31,15 @@ extension KMAAPI {
     }
 
     enum Category: String, Decodable {
-        case parcipitation = "PCP"
+        case temperature = "TMP"
         case humidity = "REH"
+        case windSpeed = "WSD"
+        case windVector = "VEC"
+        case cloud = "SKY"
+        case precipitationType = "PTY"
+        case parcipitation = "PCP"
         case dailyHighTemp = "TMX"
         case dailyLowTemp = "TMN"
-        case temperature = "TMP"
-        case windVector = "VEC"
-        case windSpeed = "WSD"
-        case skyCondition = "SKY"
         case unknown
 
         init(from decoder: Decoder) throws {
