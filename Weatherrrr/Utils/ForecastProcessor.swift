@@ -37,30 +37,30 @@ enum ForecastProcessor {
         }
     }
 
-    static func background(forecasts: [Forecast]) -> Image {
+    static func backgroundImg(forecasts: [Forecast]) -> Image {
         guard let current = Self.current(forecasts: forecasts) else {
-            return Image(systemName: "questionmark")
+            return Image("cloudy")
         }
         switch current.precipitationType {
         case .rain, .shower:
-            return Image(systemName: "cloud.rain")
+            return Image("rain")
         case .snow:
-            return Image(systemName: "cloud.snow")
+            return Image("snow")
         case .sleet:
-            return Image(systemName: "cloud.sleet")
+            return Image("sleet")
         case .none:
             switch current.cloud {
             case .clear:
-                return Image(systemName: "sun.max")
+                return Image("clear")
             case .cloudy:
-                return Image(systemName: "cloud.sun")
+                return Image("cloudy")
             case .overcast:
-                return Image(systemName: "cloud")
+                return Image("overcast")
             case .unknown:
                 return Image(systemName: "questionmark")
             }
         case .unknown:
-            return Image(systemName: "questionmark")
+            return Image("cloudy")
         }
     }
 

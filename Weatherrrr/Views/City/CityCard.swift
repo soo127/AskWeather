@@ -24,12 +24,9 @@ struct CityCard: View {
             }
         }
         .padding()
-        .background(
-            Image("cloudy")
-                .resizable()
-                .scaledToFill()
-        )
+        .background(backgroundImage)
         .clipShape(RoundedRectangle(cornerRadius: 12))
+        .contentShape(RoundedRectangle(cornerRadius: 12))
     }
 
     private var address: some View {
@@ -53,6 +50,12 @@ struct CityCard: View {
         Text("대기: \(WeatherFormatter.pollutionLevel(for: weatherReport.airPollution))")
             .font(.caption)
             .foregroundColor(.gray)
+    }
+
+    private var backgroundImage: some View {
+        ForecastProcessor.backgroundImg(forecasts: weatherReport.forecasts)
+            .resizable()
+            .scaledToFill()
     }
 
 }

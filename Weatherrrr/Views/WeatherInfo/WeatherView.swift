@@ -27,34 +27,25 @@ struct WeatherView: View {
     private var weatherScreen: some View {
         Group {
             if viewModel.isLoading {
-                loadingView
+                ProgressView("날씨 정보를 불러오는 중...")
             } else {
-                ScrollView {
-                    content
-                        .padding(.horizontal)
-                }
-                .scrollIndicators(.hidden)
+                contents
             }
         }
-        .background(Image("cloudy"))
     }
 
-    private var loadingView: some View {
-        VStack {
-            Spacer()
-            ProgressView("날씨 정보를 불러오는 중...")
-                .progressViewStyle(CircularProgressViewStyle())
-                .padding()
-            Spacer()
+    private var contents: some View {
+        ScrollView {
+            TitleView()
+            HourlyForecastContainer()
+            DailyForecastContainer()
+            cardView
         }
+        .scrollIndicators(.hidden)
+        .background(backgroundImage)
     }
 
-    @ViewBuilder
-    private var content: some View {
-        TitleView()
-        HourlyForecastContainer()
-        DailyForecastContainer()
-
+    private var cardView: some View {
         LazyVGrid(columns: [
             GridItem(.flexible()),
             GridItem(.flexible())
@@ -66,6 +57,14 @@ struct WeatherView: View {
             WeatherCard { PrecipitationView() }
             WeatherCard { HumidityView() }
         }
+        .padding(.horizontal)
+    }
+
+    private var backgroundImage: some View {
+        ForecastProcessor.backgroundImg(forecasts: viewModel.forecasts)
+            .resizable()
+            .scaledToFill()
+            .ignoresSafeArea()
     }
 
 }
