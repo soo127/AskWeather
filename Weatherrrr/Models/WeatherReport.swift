@@ -8,16 +8,38 @@
 import SwiftUI
 import CoreLocation
 
-struct WeatherReport: Identifiable {
+struct WeatherReport: Codable, Identifiable {
 
-    let id = UUID()
+    let id: UUID
     let forecasts: [Forecast]
     let uvIndex: Int
     let airDiffusionIndex: Int
     let airPollution: Int
     let address: String
     let areaCode: String
-    let coordinate: CLLocationCoordinate2D
+    let latitude: Double
+    let longitude: Double
+
+    init(
+        forecasts: [Forecast],
+        uvIndex: Int,
+        airDiffusionIndex: Int,
+        airPollution: Int,
+        address: String,
+        areaCode: String,
+        latitude: Double,
+        longitude: Double
+    ) {
+        self.id = UUID()
+        self.forecasts = forecasts
+        self.uvIndex = uvIndex
+        self.airDiffusionIndex = airDiffusionIndex
+        self.airPollution = airPollution
+        self.address = address
+        self.areaCode = areaCode
+        self.latitude = latitude
+        self.longitude = longitude
+    }
 
 }
 
@@ -25,16 +47,17 @@ extension WeatherReport {
 
     static let empty = WeatherReport(
         forecasts: [],
-        uvIndex: .zero,
-        airDiffusionIndex: .zero,
-        airPollution: .zero,
+        uvIndex: 0,
+        airDiffusionIndex: 0,
+        airPollution: 0,
         address: "--",
         areaCode: "--",
-        coordinate: .init()
+        latitude: 0,
+        longitude: 0
     )
 
-    var temperature: Int {
-        forecasts.last(where: { $0.date <= Date() })?.temperature ?? 0
+    var coordinate: CLLocationCoordinate2D {
+        CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
     }
 
 }

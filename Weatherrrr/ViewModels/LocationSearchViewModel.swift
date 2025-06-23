@@ -40,16 +40,16 @@ extension LocationSearchViewModel {
 
     @MainActor
     func handleSearch(completion: MKLocalSearchCompletion) async {
+        defer { dismissKeyboard() }
+
         let request = MKLocalSearch.Request(completion: completion)
         let search = MKLocalSearch(request: request)
-
         do {
             let response = try await search.start()
             guard let coordinate = response.mapItems.first?.placemark.coordinate else {
                 return
             }
             self.coordinate = coordinate
-            dismissKeyboard()
             self.showWeather = true
         } catch {
             print("검색 실패: \(error)")

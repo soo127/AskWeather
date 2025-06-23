@@ -13,16 +13,28 @@ struct TitleView: View {
 
     var body: some View {
         VStack(spacing: 5) {
-            Text(weatherViewModel.address)
-                .font(.title2)
-            Text("\(weatherViewModel.temperature)°")
-                .font(.largeTitle)
-            HStack {
-                Text("최고: \(weatherViewModel.dailyHighTemp(afterdays: 0), specifier: "%.0f")° ")
-                Text("최저: \(weatherViewModel.dailyLowTemp(afterdays: 0), specifier: "%.0f")° ")
-            }
+            address
+            temperature
+            dailyTemp
         }
         .padding(.vertical)
+    }
+
+    private var address: some View {
+        Text(weatherViewModel.address)
+            .font(.title2)
+    }
+
+    private var temperature: some View {
+        Text("\(weatherViewModel.temperature)°")
+            .font(.largeTitle)
+    }
+
+    private var dailyTemp: some View {
+        HStack {
+            Text("최고: \(weatherViewModel.dailyHighTemp(afterdays: 0), specifier: "%.0f")° ")
+            Text("최저: \(weatherViewModel.dailyLowTemp(afterdays: 0), specifier: "%.0f")° ")
+        }
     }
 
 }

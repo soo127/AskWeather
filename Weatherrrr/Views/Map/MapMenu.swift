@@ -17,12 +17,7 @@ struct MapMenu: View {
             menuButton(type: .airPollution, title: "미세먼지")
             menuButton(type: .temperature, title: "기온")
         } label: {
-            Image(systemName: "ellipsis.circle")
-                .font(.title)
-                .foregroundStyle(.white)
-                .padding(5)
-                .background(.black.opacity(0.6))
-                .clipShape(RoundedRectangle(cornerRadius: 5))
+            icon
         }
         .padding(.trailing)
     }
@@ -40,6 +35,15 @@ struct MapMenu: View {
                 }
             }
         }
+    }
+
+    private var icon: some View {
+        Image(systemName: "ellipsis.circle")
+            .font(.title)
+            .foregroundStyle(.white)
+            .padding(5)
+            .background(.black.opacity(0.6))
+            .clipShape(RoundedRectangle(cornerRadius: 5))
     }
 
 }

@@ -15,17 +15,24 @@ struct MapMarker: View {
     var body: some View {
         VStack(spacing: 0) {
             let value = viewModel.value(weatherReport: weatherReport)
-            Text("\(value)")
-                .font(.system(size: 13))
-                .foregroundColor(.white)
-                .padding(5)
-                .background(viewModel.color(value: value))
-                .clipShape(Circle())
-
-            Image(systemName: "arrowtriangle.down.fill")
-                .font(.system(size: 8))
-                .foregroundColor(viewModel.color(value: value))
+            textIcon(value: value)
+            pointer(value: value)
         }
+    }
+
+    private func textIcon(value: Int) -> some View {
+        Text("\(value)")
+            .font(.system(size: 13))
+            .foregroundColor(.white)
+            .padding(5)
+            .background(viewModel.color(value: value))
+            .clipShape(Circle())
+    }
+
+    private func pointer(value: Int) -> some View {
+        Image(systemName: "arrowtriangle.down.fill")
+            .font(.system(size: 8))
+            .foregroundColor(viewModel.color(value: value))
     }
 
 }

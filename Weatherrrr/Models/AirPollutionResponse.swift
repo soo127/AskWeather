@@ -46,7 +46,7 @@ extension AirPollutionAPI {
 
         init(from decoder: Decoder) throws {
             let container = try decoder.container(keyedBy: CodingKeys.self)
-
+            
             self.seoul = try? DecodingHelper.decodeToInt(from: container, forKey: .seoul)
             self.busan = try? DecodingHelper.decodeToInt(from: container, forKey: .busan)
             self.daegu = try? DecodingHelper.decodeToInt(from: container, forKey: .daegu)
@@ -65,7 +65,6 @@ extension AirPollutionAPI {
             self.jeju = try? DecodingHelper.decodeToInt(from: container, forKey: .jeju)
             self.sejong = try? DecodingHelper.decodeToInt(from: container, forKey: .sejong)
         }
-
     }
 
 }

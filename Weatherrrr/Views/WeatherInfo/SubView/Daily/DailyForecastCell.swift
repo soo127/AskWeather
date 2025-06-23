@@ -16,28 +16,38 @@ struct DailyForecastCell: View {
 
     var body: some View {
         HStack {
-            Text("\(afterDays == 0 ? "오늘" : "\(afterDays)일 뒤")")
-                .frame(width: 50, alignment: .leading)
+            date
             Spacer()
-
             Image(systemName: skyIcon)
             Spacer()
+            dailyTemp
+        }
+    }
 
+    private var date: some View {
+        Text("\(afterDays == 0 ? "오늘" : "\(afterDays)일 뒤")")
+            .frame(width: 50, alignment: .leading)
+    }
+
+    private var dailyTemp: some View {
+        Group {
             Text(String(format: "%.0f", low) + "°")
                 .foregroundStyle(.gray)
-
-            Capsule()
-                .frame(width: 100, height: 5)
-                .overlay(
-                    LinearGradient(
-                        gradient: gradient,
-                        startPoint: .leading,
-                        endPoint: .trailing
-                    )
-                )
-
+            capsule
             Text(String(format: "%.0f", high) + "°")
         }
+    }
+
+    private var capsule: some View {
+        Capsule()
+            .frame(width: 100, height: 5)
+            .overlay(
+                LinearGradient(
+                    gradient: gradient,
+                    startPoint: .leading,
+                    endPoint: .trailing
+                )
+            )
     }
 
     private let gradient = Gradient(colors: [

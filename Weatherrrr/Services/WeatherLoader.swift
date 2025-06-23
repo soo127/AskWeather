@@ -36,7 +36,8 @@ enum WeatherLoader {
             airPollution: airPollution,
             address: address,
             areaCode: areaCode,
-            coordinate: coordinate
+            latitude: coordinate.latitude,
+            longitude: coordinate.longitude
         )
     }
 

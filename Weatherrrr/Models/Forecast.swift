@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct Forecast {
+struct Forecast: Codable {
 
     let date: Date
     var temperature: Int = .zero
@@ -19,7 +19,7 @@ struct Forecast {
     var windSpeed: Double = .zero
     var skyCondition: SkyCondition = .clear
 
-    enum SkyCondition: String {
+    enum SkyCondition: String, Codable {
         case clear = "1"
         case cloudy = "3"
         case overcast = "4"
