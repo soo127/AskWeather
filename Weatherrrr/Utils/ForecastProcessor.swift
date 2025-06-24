@@ -14,6 +14,8 @@ enum ForecastProcessor {
     }
 
     static func skyIcon(forecast: Forecast) -> Image {
+        let isNight = forecast.date.isNight()
+
         switch forecast.precipitationType {
         case .rain, .shower:
             return Image(systemName: "cloud.rain")
@@ -22,16 +24,7 @@ enum ForecastProcessor {
         case .sleet:
             return Image(systemName: "cloud.sleet")
         case .none:
-            switch forecast.cloud {
-            case .clear:
-                return Image(systemName: "sun.max")
-            case .cloudy:
-                return Image(systemName: "cloud.sun")
-            case .overcast:
-                return Image(systemName: "cloud")
-            case .unknown:
-                return Image(systemName: "questionmark")
-            }
+            return cloudIcon(cloud: forecast.cloud, isNight: isNight)
         case .unknown:
             return Image(systemName: "questionmark")
         }
@@ -41,26 +34,51 @@ enum ForecastProcessor {
         guard let current = Self.current(forecasts: forecasts) else {
             return Image("cloudy")
         }
+        let isNight = current.date.isNight()
+
         switch current.precipitationType {
         case .rain, .shower:
-            return Image("rain")
+            return Image(isNight ? "rain.night" : "rain")
         case .snow:
-            return Image("snow")
+            return Image(isNight ? "snow.night" : "snow")
         case .sleet:
-            return Image("sleet")
+            return Image(isNight ? "rain.night" : "sleet") // sleet.night 대체
         case .none:
-            switch current.cloud {
-            case .clear:
-                return Image("clear")
-            case .cloudy:
-                return Image("cloudy")
-            case .overcast:
-                return Image("overcast")
-            case .unknown:
-                return Image(systemName: "questionmark")
-            }
+            return cloudBackgroundImage(cloud: current.cloud, isNight: isNight)
         case .unknown:
-            return Image("cloudy")
+            return Image("clear.night")
+        }
+    }
+
+
+
+}
+
+extension ForecastProcessor {
+
+    private static func cloudIcon(cloud: Forecast.CloudCondition, isNight: Bool) -> Image {
+        switch cloud {
+        case .clear:
+            return Image(systemName: isNight ? "moon.stars" : "sun.max")
+        case .cloudy:
+            return Image(systemName: isNight ? "cloud.moon" : "cloud.sun")
+        case .overcast:
+            return Image(systemName: "cloud")
+        case .unknown:
+            return Image(systemName: "questionmark")
+        }
+    }
+
+    private static func cloudBackgroundImage(cloud: Forecast.CloudCondition, isNight: Bool) -> Image {
+        switch cloud {
+        case .clear:
+            return Image(isNight ? "clear.night" : "clear")
+        case .cloudy:
+            return Image(isNight ? "cloudy.night" : "cloudy")
+        case .overcast:
+            return Image(isNight ? "overcast.night" : "overcast")
+        case .unknown:
+            return Image("clear.night")
         }
     }
 

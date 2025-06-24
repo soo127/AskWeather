@@ -32,4 +32,10 @@ extension Date {
             == calendar.dateComponents(components, from: date)
     }
 
+    /// Check if it is between 6 and 18 o'clock
+    func isNight() -> Bool {
+        let hour = Calendar.current.component(.hour, from: self)
+        return hour < 6 || hour >= 18
+    }
+
 }
