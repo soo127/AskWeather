@@ -33,4 +33,5 @@ struct ContentView: View {
 
 #Preview {
     ContentView(coordinate: .init())
+        .environmentObject(WeatherStorage())
 }

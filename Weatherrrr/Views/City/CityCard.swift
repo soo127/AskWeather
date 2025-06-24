@@ -35,7 +35,7 @@ struct CityCard: View {
     }
 
     private var temperature: some View {
-        Text("\(WeatherFormatter.current(forecasts: weatherReport.forecasts)?.temperature ?? .zero)°")
+        Text("\(ForecastProcessor.current(forecasts: weatherReport.forecasts)?.temperature ?? .zero)°")
             .font(.largeTitle)
             .fontWeight(.semibold)
     }

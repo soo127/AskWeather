@@ -9,10 +9,6 @@ import SwiftUI
 
 enum WeatherFormatter {
 
-    static func current(forecasts: [Forecast]) -> Forecast? {
-        forecasts.last(where: { $0.date <= Date() })
-    }
-
     static func pollutionLevel(for value: Int) -> String {
         switch value {
         case 0...30:

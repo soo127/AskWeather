@@ -167,19 +167,19 @@ extension WeatherViewModel {
     }
 
     var humidity: Int {
-        WeatherFormatter.current(forecasts: forecasts)?.humidity ?? .zero
+        ForecastProcessor.current(forecasts: forecasts)?.humidity ?? .zero
     }
 
     var temperature: Int {
-        WeatherFormatter.current(forecasts: forecasts)?.temperature ?? .zero
+        ForecastProcessor.current(forecasts: forecasts)?.temperature ?? .zero
     }
 
     var windSpeed: Double {
-        WeatherFormatter.current(forecasts: forecasts)?.windSpeed ?? .zero
+        ForecastProcessor.current(forecasts: forecasts)?.windSpeed ?? .zero
     }
 
     var rotateAngle: Int {
-        WeatherFormatter.current(forecasts: forecasts)?.windVector ?? .zero
+        ForecastProcessor.current(forecasts: forecasts)?.windVector ?? .zero
     }
 
     func radian(angle: Double) -> Double {

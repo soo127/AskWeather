@@ -25,7 +25,7 @@ class MapViewModel: ObservableObject {
     func value(weatherReport: WeatherReport) -> Int {
         switch menuType {
         case .temperature:
-            return WeatherFormatter.current(forecasts: weatherReport.forecasts)?.temperature ?? .zero
+            return ForecastProcessor.current(forecasts: weatherReport.forecasts)?.temperature ?? .zero
         case .airPollution:
             return weatherReport.airPollution
         case .uvIndex:
