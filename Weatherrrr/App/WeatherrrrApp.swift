@@ -17,10 +17,10 @@ struct WeatherrrrApp: App {
         WindowGroup {
             if let userLocation = locationManager.userLocation {
                 ContentView(coordinate: userLocation)
-                    .onAppear {
-                        weatherStorage.updateCurrentWeather(coordinate: userLocation)
-                    }
                     .environmentObject(weatherStorage)
+                    .task {
+                        await weatherStorage.update(coordinate: userLocation)
+                    }
             } else {
                 ProgressView("현재 위치를 불러오는 중...")
             }

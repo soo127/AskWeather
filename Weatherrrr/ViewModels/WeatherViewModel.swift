@@ -15,19 +15,28 @@ class WeatherViewModel: ObservableObject {
     private let now = Date()
 
     init(coordinate: CLLocationCoordinate2D?) {
-        Task {
-            await load(coordinate: coordinate)
-        }
+        load(coordinate: coordinate)
     }
 
-    @MainActor
-    func load(coordinate: CLLocationCoordinate2D?) async {
-        do {
-            weatherReport = try await WeatherLoader.load(coordinate: coordinate)
-        } catch {
-            print("날씨 로딩 실패: \(error)")
+    /// using cache
+    init(report: WeatherReport) {
+        if report.updatedAt.isSameHour(comparedTo: now) { // can use cache
+            self.weatherReport = report
+            isLoading = false
+            return
         }
-        isLoading = false
+        load(coordinate: report.coordinate)
+    }
+
+    private func load(coordinate: CLLocationCoordinate2D?) {
+        Task { @MainActor in
+            do {
+                weatherReport = try await WeatherLoader.load(coordinate: coordinate)
+            } catch {
+                print("날씨 로딩 실패: \(error)")
+            }
+            isLoading = false
+        }
     }
 
 }

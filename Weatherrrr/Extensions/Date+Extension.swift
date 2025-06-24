@@ -24,4 +24,12 @@ extension Date {
         return formatter.string(from: self)
     }
 
+    /// Check if the given time match in hours
+    func isSameHour(comparedTo date: Date) -> Bool {
+        let calendar = Calendar.current
+        let components: Set<Calendar.Component> = [.year, .month, .day, .hour]
+        return calendar.dateComponents(components, from: self)
+            == calendar.dateComponents(components, from: date)
+    }
+
 }

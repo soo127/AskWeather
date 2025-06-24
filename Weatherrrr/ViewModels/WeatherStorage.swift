@@ -22,22 +22,11 @@ class WeatherStorage: ObservableObject {
     }
 
     @MainActor
-    func updateCurrentWeather(coordinate: CLLocationCoordinate2D?) {
-        Task {
-            do {
-                currentWeather = try await WeatherLoader.load(coordinate: coordinate)
-            } catch {
-                print("weatherstorage error: \(error)")
-            }
-        }
-    }
-
-    @MainActor
     func addFavorite(coordinate: CLLocationCoordinate2D?) {
         Task {
             do {
-                let weather = try await WeatherLoader.load(coordinate: coordinate)
-                favorites.append(weather)
+                let report = try await WeatherLoader.load(coordinate: coordinate)
+                favorites.append(report)
             } catch {
                 print("weatherstorage error: \(error)")
             }
@@ -64,6 +53,47 @@ class WeatherStorage: ObservableObject {
         } catch {
             print("불러오기 실패: \(error)")
         }
+    }
+
+}
+
+extension WeatherStorage {
+
+    @MainActor
+    func update(coordinate: CLLocationCoordinate2D?) async {
+        async let current: () = updateCurrentWeather(coordinate: coordinate)
+        async let refresh: () = updateFavorites(favorites)
+        _ = await (current, refresh)
+    }
+
+    @MainActor
+    func updateCurrentWeather(coordinate: CLLocationCoordinate2D?) async {
+        do {
+            currentWeather = try await WeatherLoader.load(coordinate: coordinate)
+        } catch {
+            print("weatherstorage error: \(error)")
+        }
+    }
+
+    @MainActor
+    private func updateFavorites(_ reports: [WeatherReport]) async {
+        var updated: [WeatherReport] = []
+        let now = Date()
+
+        for report in reports {
+            guard !report.updatedAt.isSameHour(comparedTo: now) else { // can use cache
+                updated.append(report)
+                continue
+            }
+            do {
+                let coordinate = CLLocationCoordinate2D(latitude: report.latitude, longitude: report.longitude)
+                let newReport = try await WeatherLoader.load(coordinate: coordinate)
+                updated.append(newReport)
+            } catch {
+                print("weatherStorage error: \(error)")
+            }
+        }
+        favorites = updated
     }
 
 }

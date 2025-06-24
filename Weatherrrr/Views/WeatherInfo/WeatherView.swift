@@ -12,10 +12,6 @@ struct WeatherView: View {
 
     @StateObject var viewModel: WeatherViewModel
 
-    init(coordinate: CLLocationCoordinate2D?) {
-        _viewModel = StateObject(wrappedValue: WeatherViewModel(coordinate: coordinate))
-    }
-
     var body: some View {
         NavigationStack {
             weatherScreen
@@ -42,6 +38,7 @@ struct WeatherView: View {
             cardView
         }
         .scrollIndicators(.hidden)
+        .padding(.horizontal)
         .background(backgroundImage)
     }
 
@@ -57,7 +54,6 @@ struct WeatherView: View {
             WeatherCard { PrecipitationView() }
             WeatherCard { HumidityView() }
         }
-        .padding(.horizontal)
     }
 
     private var backgroundImage: some View {
@@ -69,6 +65,18 @@ struct WeatherView: View {
 
 }
 
+extension WeatherView {
+
+    init(coordinate: CLLocationCoordinate2D?) {
+        _viewModel = StateObject(wrappedValue: WeatherViewModel(coordinate: coordinate))
+    }
+
+    /// using cache
+    init(report: WeatherReport) {
+        _viewModel = StateObject(wrappedValue: WeatherViewModel(report: report))
+    }
+    
+}
 //#Preview {
 //    WeatherView()
 //}
