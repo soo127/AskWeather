@@ -13,6 +13,12 @@ enum ForecastProcessor {
         forecasts.last(where: { $0.date <= Date() })
     }
 
+}
+
+// MARK: - icon in hourlyForecast
+
+extension ForecastProcessor {
+
     static func skyIcon(forecast: Forecast) -> Image {
         let isNight = forecast.date.isNight()
 
@@ -29,6 +35,25 @@ enum ForecastProcessor {
             return Image(systemName: "questionmark")
         }
     }
+
+    private static func cloudIcon(cloud: Forecast.CloudCondition, isNight: Bool) -> Image {
+        switch cloud {
+        case .clear:
+            return Image(systemName: isNight ? "moon.stars" : "sun.max")
+        case .cloudy:
+            return Image(systemName: isNight ? "cloud.moon" : "cloud.sun")
+        case .overcast:
+            return Image(systemName: "cloud")
+        case .unknown:
+            return Image(systemName: "questionmark")
+        }
+    }
+
+}
+
+// MARK: - background
+
+extension ForecastProcessor {
 
     static func backgroundImg(forecasts: [Forecast]) -> Image {
         guard let current = Self.current(forecasts: forecasts) else {
@@ -50,25 +75,6 @@ enum ForecastProcessor {
         }
     }
 
-
-
-}
-
-extension ForecastProcessor {
-
-    private static func cloudIcon(cloud: Forecast.CloudCondition, isNight: Bool) -> Image {
-        switch cloud {
-        case .clear:
-            return Image(systemName: isNight ? "moon.stars" : "sun.max")
-        case .cloudy:
-            return Image(systemName: isNight ? "cloud.moon" : "cloud.sun")
-        case .overcast:
-            return Image(systemName: "cloud")
-        case .unknown:
-            return Image(systemName: "questionmark")
-        }
-    }
-
     private static func cloudBackgroundImage(cloud: Forecast.CloudCondition, isNight: Bool) -> Image {
         switch cloud {
         case .clear:
@@ -80,6 +86,88 @@ extension ForecastProcessor {
         case .unknown:
             return Image("clear.night")
         }
+    }
+
+}
+
+// MARK: - daily weather icon
+
+extension ForecastProcessor {
+
+    /// rain > snow > sleet 순, 강수가 없는 날이면 cloudCondition에 의해 결정
+    static func dailySkyIcon(forecasts: [Forecast], after: Int) -> Image {
+        guard let targetDate = Calendar.current.date(byAdding: .day, value: after, to: Date()) else {
+            return Image(systemName: "questionmark")
+        }
+        let dayForecasts = forecasts.filter {
+            Calendar.current.isDate($0.date, inSameDayAs: targetDate)
+        }
+
+        if let precipitationIcon = dailyPrecipitationIcon(forecasts: dayForecasts) {
+            return precipitationIcon
+        }
+        return dailyCloudIcon(forecasts: dayForecasts)
+    }
+
+    private static func dailyPrecipitationIcon(forecasts: [Forecast]) -> Image? {
+        let priority: [Forecast.PrecipitationType] = [.shower, .rain, .snow, .sleet]
+
+        for type in priority {
+            if forecasts.contains(where: { $0.precipitationType == type }) {
+                switch type {
+                case .shower, .rain: return Image(systemName: "cloud.rain")
+                case .snow: return Image(systemName: "cloud.snow")
+                case .sleet: return Image(systemName: "cloud.sleet")
+                default: continue
+                }
+            }
+        }
+        return nil
+    }
+
+    private static func dailyCloudIcon(forecasts: [Forecast]) -> Image {
+        var clear = 0
+        var cloudy = 0
+        var overcast = 0
+
+        for forecast in forecasts {
+            switch forecast.cloud {
+            case .clear: clear += 1
+            case .cloudy: cloudy += 1
+            case .overcast: overcast += 1
+            case .unknown: continue
+            }
+        }
+        let maxCount = max(clear, cloudy, overcast)
+        switch maxCount {
+        case clear: return Image(systemName: "sun.max")
+        case cloudy: return Image(systemName: "cloud.sun")
+        case overcast: return Image(systemName: "cloud")
+        default: return Image(systemName: "questionmark")
+        }
+    }
+
+}
+
+// MARK: - daily low/high temp
+
+extension ForecastProcessor {
+
+    static func dailyTemp(forecasts: [Forecast], type: dailyTemperature, after: Int) -> Double? {
+        guard let targetDate = Calendar.current.date(byAdding: .day, value: after, to: Date()) else {
+            return nil
+        }
+        let hour = type == .low ? 6 : 15
+        let forecast = forecasts.first {
+            Calendar.current.isDate($0.date, inSameDayAs: targetDate) &&
+            Calendar.current.component(.hour, from: $0.date) == hour
+        }
+        return type == .low ? forecast?.dailyLowTemp : forecast?.dailyHighTemp
+    }
+
+    enum dailyTemperature {
+        case low
+        case high
     }
 
 }

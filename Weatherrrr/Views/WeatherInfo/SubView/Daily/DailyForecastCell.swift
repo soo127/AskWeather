@@ -10,7 +10,7 @@ import SwiftUI
 struct DailyForecastCell: View {
 
     let afterDays: Int
-    let skyIcon: String
+    let skyIcon: Image
     let high: Double
     let low: Double
 
@@ -18,7 +18,7 @@ struct DailyForecastCell: View {
         HStack {
             date
             Spacer()
-            Image(systemName: skyIcon)
+            skyIcon
             Spacer()
             dailyTemp
         }

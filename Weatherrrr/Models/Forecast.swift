@@ -97,17 +97,4 @@ extension Forecast {
         }
     }
 
-//    var skyImage: Image {
-//        switch cloud {
-//        case .clear:
-//            return Image(systemName: "sun.max")
-//        case .cloudy:
-//            return Image(systemName: "cloud.sun")
-//        case .overcast:
-//            return Image(systemName: "cloud")
-//        default:
-//            return Image(systemName: "questionmark")
-//        }
-//    }
-
 }

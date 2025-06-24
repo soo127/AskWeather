@@ -35,17 +35,13 @@ struct DailyForecastContainer: View {
             ForEach(0...3, id: \.self) { day in
                 DailyForecastCell(
                     afterDays: day,
-                    skyIcon: weatherViewModel.dailySkyIcon(afterDays: day),
-                    high: weatherViewModel.dailyHighTemp(afterdays: day),
-                    low: weatherViewModel.dailyLowTemp(afterdays: day)
+                    skyIcon: weatherViewModel.dailySkyIcon(after: day),
+                    high: weatherViewModel.dailyHighTemp(after: day),
+                    low: weatherViewModel.dailyLowTemp(after: day)
                 )
             }
             .padding(.vertical, 5)
         }
     }
 
-}
-
-#Preview {
-    DailyForecastContainer()
 }

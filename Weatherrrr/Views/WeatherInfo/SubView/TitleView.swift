@@ -32,8 +32,8 @@ struct TitleView: View {
 
     private var dailyTemp: some View {
         HStack {
-            Text("최고: \(weatherViewModel.dailyHighTemp(afterdays: 0), specifier: "%.0f")° ")
-            Text("최저: \(weatherViewModel.dailyLowTemp(afterdays: 0), specifier: "%.0f")° ")
+            Text("최고: \(weatherViewModel.dailyHighTemp(after: 0), specifier: "%.0f")° ")
+            Text("최저: \(weatherViewModel.dailyLowTemp(after: 0), specifier: "%.0f")° ")
         }
     }
 

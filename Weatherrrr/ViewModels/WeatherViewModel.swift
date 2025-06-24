@@ -104,48 +104,16 @@ extension WeatherViewModel {
 
 extension WeatherViewModel {
 
-    func dailyLowTemp(afterdays offset: Int) -> Double {
-        let forecast = dailyTemp(onHour: 6, afterDays: offset)
-        return forecast?.dailyLowTemp ?? .zero
+    func dailyLowTemp(after: Int) -> Double {
+        ForecastProcessor.dailyTemp(forecasts: forecasts, type: .low, after: after) ?? .zero
     }
 
-    func dailyHighTemp(afterdays offset: Int) -> Double {
-        let forecast = dailyTemp(onHour: 15, afterDays: offset)
-        return forecast?.dailyHighTemp ?? .zero
+    func dailyHighTemp(after: Int) -> Double {
+        ForecastProcessor.dailyTemp(forecasts: forecasts, type: .high, after: after) ?? .zero
     }
 
-    private func dailyTemp(onHour hour: Int, afterDays offset: Int) -> Forecast? {
-        guard let targetDate = Calendar.current.date(byAdding: .day, value: offset, to: now) else {
-            return nil
-        }
-        let forecast = forecasts.first {
-            Calendar.current.isDate($0.date, inSameDayAs: targetDate) &&
-            Calendar.current.component(.hour, from: $0.date) == hour
-        }
-        return forecast
-    }
-
-    func dailySkyIcon(afterDays offset: Int) -> String {
-        guard let targetDate = Calendar.current.date(byAdding: .day, value: offset, to: now) else {
-            return "questionmark"
-        }
-        let skyCodes = forecasts
-            .filter {
-                Calendar.current.isDate($0.date, inSameDayAs: targetDate)
-            }
-            .map { $0.cloud }
-
-        if skyCodes.isEmpty {
-            return "questionmark"
-        }
-        let clear = skyCodes.filter { $0 == .clear }.count
-        let cloudy = skyCodes.filter { $0 == .cloudy }.count
-        let overcast = skyCodes.filter { $0 == .overcast }.count
-        let total = clear + cloudy + overcast
-
-        return (cloudy + overcast >= total / 3)
-            ? (overcast > 0 ? "cloud" : "cloud.sun")
-            : "sun.max"
+    func dailySkyIcon(after: Int) -> Image {
+        ForecastProcessor.dailySkyIcon(forecasts: forecasts, after: after)
     }
 
 }
