@@ -13,7 +13,7 @@ class WeatherStorage: ObservableObject {
     @Published private(set) var currentWeather: WeatherReport = .empty
     @Published private(set) var favorites: [WeatherReport] = [] {
         didSet {
-            saveToDisk()
+            storeToDisk()
         }
     }
 
@@ -33,29 +33,9 @@ class WeatherStorage: ObservableObject {
         }
     }
 
-    private func saveToDisk() {
-        do {
-            let data = try JSONEncoder().encode(favorites)
-            try data.write(to: fileURL())
-        } catch {
-            print("저장 실패: \(error)")
-        }
-    }
-
-    private func loadFromDisk() {
-        guard FileManager.default.fileExists(atPath: fileURL().path) else {
-            return
-        }
-        do {
-            let data = try Data(contentsOf: fileURL())
-            let reports = try JSONDecoder().decode([WeatherReport].self, from: data)
-            favorites = reports
-        } catch {
-            print("불러오기 실패: \(error)")
-        }
-    }
-
 }
+
+//MARK: - 초기 설정
 
 extension WeatherStorage {
 
@@ -97,6 +77,37 @@ extension WeatherStorage {
     }
 
 }
+
+
+//MARK: - load/store
+
+extension WeatherStorage {
+
+    private func loadFromDisk() {
+        guard FileManager.default.fileExists(atPath: fileURL().path) else {
+            return
+        }
+        do {
+            let data = try Data(contentsOf: fileURL())
+            let reports = try JSONDecoder().decode([WeatherReport].self, from: data)
+            favorites = reports
+        } catch {
+            print("불러오기 실패: \(error)")
+        }
+    }
+
+    private func storeToDisk() {
+        do {
+            let data = try JSONEncoder().encode(favorites)
+            try data.write(to: fileURL())
+        } catch {
+            print("저장 실패: \(error)")
+        }
+    }
+
+}
+
+//MARK: - 기타
 
 extension WeatherStorage {
 

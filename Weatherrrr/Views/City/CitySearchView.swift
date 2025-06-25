@@ -32,7 +32,6 @@ struct CitySearchView: View {
             )
             .autocorrectionDisabled(true)
             .padding(.bottom)
-
     }
 
     private var searchResults: some View {
@@ -52,8 +51,4 @@ struct CitySearchView: View {
         }
     }
 
-}
-
-#Preview {
-    CitySearchView()
 }

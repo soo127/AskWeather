@@ -9,7 +9,7 @@ import SwiftUI
 
 struct CityCard: View {
 
-    let weatherReport: WeatherReport
+    let report: WeatherReport
 
     var body: some View {
         HStack(alignment: .center) {
@@ -31,28 +31,28 @@ struct CityCard: View {
     }
 
     private var address: some View {
-        Text(weatherReport.address)
+        Text(report.address)
             .font(.title2)
     }
 
     private var temperature: some View {
-        Text("\(ForecastProcessor.current(forecasts: weatherReport.forecasts)?.temperature ?? .zero)°")
+        Text("\(ForecastProcessor.current(forecasts: report.forecasts)?.temperature ?? .zero)°")
             .font(.largeTitle)
             .fontWeight(.semibold)
     }
 
     private var uv: some View {
-        Text("자외선: \(WeatherFormatter.uvLevel(for: weatherReport.uvIndex))")
+        Text("자외선: \(WeatherFormatter.uvLevel(for: report.uvIndex))")
             .font(.caption)
     }
 
     private var airPollution: some View {
-        Text("대기: \(WeatherFormatter.pollutionLevel(for: weatherReport.airPollution))")
+        Text("대기: \(WeatherFormatter.pollutionLevel(for: report.airPollution))")
             .font(.caption)
     }
 
     private var backgroundImage: some View {
-        ForecastProcessor.backgroundImg(forecasts: weatherReport.forecasts)
+        ForecastProcessor.backgroundImg(forecasts: report.forecasts)
             .resizable()
             .scaledToFill()
     }

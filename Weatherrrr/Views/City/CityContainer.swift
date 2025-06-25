@@ -17,7 +17,7 @@ struct CityContainer: View {
                 searchBar
                 ForEach(weatherStorage.favorites) { weatherReport in
                     NavigationLink(destination: WeatherView(report: weatherReport)) {
-                        CityCard(weatherReport: weatherReport)
+                        CityCard(report: weatherReport)
                     }
                     .buttonStyle(PlainButtonStyle())
                 }
@@ -45,10 +45,6 @@ struct CityContainer: View {
         .buttonStyle(PlainButtonStyle())
     }
 
-}
-
-#Preview {
-    CityContainer()
 }
 
 
