@@ -24,6 +24,7 @@ struct CityCard: View {
             }
         }
         .padding()
+        .foregroundStyle(.white)
         .background(backgroundImage)
         .clipShape(RoundedRectangle(cornerRadius: 12))
         .contentShape(RoundedRectangle(cornerRadius: 12))
@@ -43,13 +44,11 @@ struct CityCard: View {
     private var uv: some View {
         Text("자외선: \(WeatherFormatter.uvLevel(for: weatherReport.uvIndex))")
             .font(.caption)
-            .foregroundColor(.gray)
     }
 
     private var airPollution: some View {
         Text("대기: \(WeatherFormatter.pollutionLevel(for: weatherReport.airPollution))")
             .font(.caption)
-            .foregroundColor(.gray)
     }
 
     private var backgroundImage: some View {

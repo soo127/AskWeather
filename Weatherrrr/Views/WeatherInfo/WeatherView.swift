@@ -26,6 +26,7 @@ struct WeatherView: View {
                 ProgressView("날씨 정보를 불러오는 중...")
             } else {
                 contents
+                    .foregroundStyle(.black)
             }
         }
     }
@@ -33,6 +34,7 @@ struct WeatherView: View {
     private var contents: some View {
         ScrollView {
             TitleView()
+                .foregroundStyle(.white)
             HourlyForecastContainer()
             DailyForecastContainer()
             cardView
@@ -77,6 +79,3 @@ extension WeatherView {
     }
     
 }
-//#Preview {
-//    WeatherView()
-//}
