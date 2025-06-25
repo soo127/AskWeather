@@ -9,12 +9,35 @@ import SwiftUI
 
 struct CityCard: View {
 
+    @EnvironmentObject private var weatherStorage: WeatherStorage
+    @State private var isChecked = false
     let report: WeatherReport
 
     var body: some View {
         HStack(alignment: .center) {
+            if weatherStorage.isEditMode {
+                checkButton
+            }
+            card
+        }
+    }
+
+    private var checkButton: some View {
+        Button {
+            isChecked.toggle()
+            weatherStorage.toggleFavorite(report: report)
+        } label: {
+            Image(systemName: isChecked ? "checkmark.circle" : "circle")
+                .resizable()
+                .frame(width: 20, height: 20)
+        }
+    }
+
+    private var card: some View {
+        HStack(alignment: .center) {
             VStack(alignment: .leading, spacing: 5) {
                 address
+                dailyTemp
             }
             Spacer()
             VStack(alignment: .trailing, spacing: 5) {
@@ -33,6 +56,14 @@ struct CityCard: View {
     private var address: some View {
         Text(report.address)
             .font(.title2)
+    }
+
+    private var dailyTemp: some View {
+        Group {
+            Text("최고: \(ForecastProcessor.dailyTemp(forecasts: report.forecasts, type: .high) ?? .zero, specifier: "%.0f")°")
+            Text("최저: \(ForecastProcessor.dailyTemp(forecasts: report.forecasts, type: .low) ?? .zero, specifier: "%.0f")°")
+        }
+        .font(.caption2)
     }
 
     private var temperature: some View {

@@ -16,6 +16,8 @@ class WeatherStorage: ObservableObject {
             storeToDisk()
         }
     }
+    @Published var isEditMode = false
+    @Published var checkedFavorites: Set<UUID> = []
 
     init() {
         loadFromDisk()
@@ -31,6 +33,25 @@ class WeatherStorage: ObservableObject {
                 print("weatherstorage error: \(error)")
             }
         }
+    }
+
+    func handleRemove() {
+        isEditMode.toggle()
+        if !isEditMode {
+            removeFavorites(ids: checkedFavorites)
+        }
+    }
+
+    func toggleFavorite(report: WeatherReport) {
+        if checkedFavorites.contains(report.id) {
+            checkedFavorites.remove(report.id)
+        } else {
+            checkedFavorites.insert(report.id)
+        }
+    }
+
+    private func removeFavorites(ids: Set<UUID>) {
+        favorites.removeAll { ids.contains($0.id) }
     }
 
 }

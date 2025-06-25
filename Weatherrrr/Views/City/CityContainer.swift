@@ -15,19 +15,33 @@ struct CityContainer: View {
         NavigationStack {
             ScrollView {
                 searchBar
-                ForEach(weatherStorage.favorites) { weatherReport in
-                    NavigationLink(destination: WeatherView(report: weatherReport)) {
-                        CityCard(report: weatherReport)
-                    }
-                    .buttonStyle(PlainButtonStyle())
-                }
+                favoriteCities
             }
             .navigationTitle("날씨")
             .scrollIndicators(.hidden)
             .padding(.horizontal)
             .toolbar {
-                MenuView()
+                removeButton
             }
+        }
+    }
+
+    private var removeButton: some View {
+        Button {
+            weatherStorage.handleRemove()
+        } label: {
+            Image(systemName: weatherStorage.isEditMode ? "checkmark" : "trash")
+        }
+    }
+
+    private var favoriteCities: some View {
+        ForEach(weatherStorage.favorites) { weatherReport in
+            NavigationLink {
+                WeatherView(report: weatherReport)
+            } label: {
+                CityCard(report: weatherReport)
+            }
+            .buttonStyle(PlainButtonStyle())
         }
     }
 
@@ -46,5 +60,3 @@ struct CityContainer: View {
     }
 
 }
-
-

@@ -153,7 +153,7 @@ extension ForecastProcessor {
 
 extension ForecastProcessor {
 
-    static func dailyTemp(forecasts: [Forecast], type: dailyTemperature, after: Int) -> Double? {
+    static func dailyTemp(forecasts: [Forecast], type: dailyTemperature, after: Int = 0) -> Double? {
         guard let targetDate = Calendar.current.date(byAdding: .day, value: after, to: Date()) else {
             return nil
         }
