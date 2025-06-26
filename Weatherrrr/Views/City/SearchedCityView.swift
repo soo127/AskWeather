@@ -14,17 +14,19 @@ struct SearchedCityView: View {
 
     var body: some View {
         NavigationStack {
-            WeatherView(coordinate: viewModel.coordinate)
+            WeatherView(coordinate: viewModel.coordinate, address: viewModel.address)
                 .toolbar {
                     ToolbarItem(placement: .navigationBarLeading) {
                         Button("취소") {
                             viewModel.showWeather = false
                         }
                     }
-                    ToolbarItem(placement: .navigationBarTrailing) {
-                        Button("추가") {
-                            weatherStorage.addFavorite(coordinate: viewModel.coordinate)
-                            viewModel.showWeather = false
+                    if !weatherStorage.hasFavorite(coordinate: viewModel.coordinate) {
+                        ToolbarItem(placement: .navigationBarTrailing) {
+                            Button("추가") {
+                                weatherStorage.addFavorite(coordinate: viewModel.coordinate, address: viewModel.address)
+                                viewModel.showWeather = false
+                            }
                         }
                     }
                 }

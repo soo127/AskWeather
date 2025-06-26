@@ -14,8 +14,8 @@ class WeatherViewModel: ObservableObject {
     @Published var isLoading = true
     private let now = Date()
 
-    init(coordinate: CLLocationCoordinate2D?) {
-        load(coordinate: coordinate)
+    init(coordinate: CLLocationCoordinate2D?, address: String?) {
+        load(coordinate: coordinate, address: address)
     }
 
     /// using cache
@@ -28,10 +28,10 @@ class WeatherViewModel: ObservableObject {
         load(coordinate: report.coordinate)
     }
 
-    private func load(coordinate: CLLocationCoordinate2D?) {
+    private func load(coordinate: CLLocationCoordinate2D?, address: String? = nil) {
         Task { @MainActor in
             do {
-                weatherReport = try await WeatherLoader.load(coordinate: coordinate)
+                weatherReport = try await WeatherLoader.load(coordinate: coordinate, displayAddress: address)
             } catch {
                 print("날씨 로딩 실패: \(error)")
             }

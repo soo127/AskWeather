@@ -10,7 +10,7 @@ import CoreLocation
 
 enum WeatherLoader {
 
-    static func load(coordinate: CLLocationCoordinate2D?) async throws -> WeatherReport {
+    static func load(coordinate: CLLocationCoordinate2D?, displayAddress: String? = nil) async throws -> WeatherReport {
 
         guard let coordinate else {
             throw FetchError.noData
@@ -34,7 +34,7 @@ enum WeatherLoader {
             uvIndex: uv,
             airDiffusionIndex: airDiffusion,
             airPollution: airPollution,
-            address: address,
+            address: displayAddress ?? address,
             areaCode: areaCode,
             latitude: coordinate.latitude,
             longitude: coordinate.longitude

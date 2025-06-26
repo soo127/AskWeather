@@ -15,8 +15,9 @@ class LocationSearchViewModel: NSObject, ObservableObject {
             completer.queryFragment = queryFragment
         }
     }
-    @Published var results = [MKLocalSearchCompletion]()
-    @Published var coordinate: CLLocationCoordinate2D?
+    @Published private(set) var results = [MKLocalSearchCompletion]()
+    @Published private(set) var coordinate: CLLocationCoordinate2D?
+    @Published private var searchedAddress: String?
     @Published var showWeather = false
     private let completer = MKLocalSearchCompleter()
 
@@ -34,6 +35,9 @@ class LocationSearchViewModel: NSObject, ObservableObject {
         self.results.filter { $0.title.hasPrefix("대한민국") }
     }
 
+    var address: String? {
+        searchedAddress?.replacingOccurrences(of: "대한민국 ", with: "")
+    }
 }
 
 extension LocationSearchViewModel {
@@ -42,6 +46,7 @@ extension LocationSearchViewModel {
     func handleSearch(completion: MKLocalSearchCompletion) async {
         defer { dismissKeyboard() }
 
+        searchedAddress = completion.title
         let request = MKLocalSearch.Request(completion: completion)
         let search = MKLocalSearch(request: request)
         do {

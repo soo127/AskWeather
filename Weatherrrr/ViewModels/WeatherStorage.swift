@@ -24,14 +24,26 @@ class WeatherStorage: ObservableObject {
     }
 
     @MainActor
-    func addFavorite(coordinate: CLLocationCoordinate2D?) {
+    func addFavorite(coordinate: CLLocationCoordinate2D?, address: String?) {
         Task {
             do {
-                let report = try await WeatherLoader.load(coordinate: coordinate)
+                let report = try await WeatherLoader.load(coordinate: coordinate, displayAddress: address)
                 favorites.append(report)
             } catch {
                 print("weatherstorage error: \(error)")
             }
+        }
+    }
+
+    func hasFavorite(coordinate: CLLocationCoordinate2D?) -> Bool {
+        guard let target = coordinate else { return false }
+
+        return favorites.contains { report in
+            let c = report.coordinate
+            let delta = 0.0001
+
+            return abs(c.latitude - target.latitude) < delta &&
+            abs(c.longitude - target.longitude) < delta
         }
     }
 
@@ -88,7 +100,7 @@ extension WeatherStorage {
             }
             do {
                 let coordinate = CLLocationCoordinate2D(latitude: report.latitude, longitude: report.longitude)
-                let newReport = try await WeatherLoader.load(coordinate: coordinate)
+                let newReport = try await WeatherLoader.load(coordinate: coordinate, displayAddress: report.address)
                 updated.append(newReport)
             } catch {
                 print("weatherStorage error: \(error)")

@@ -69,8 +69,8 @@ struct WeatherView: View {
 
 extension WeatherView {
 
-    init(coordinate: CLLocationCoordinate2D?) {
-        _viewModel = StateObject(wrappedValue: WeatherViewModel(coordinate: coordinate))
+    init(coordinate: CLLocationCoordinate2D?, address: String? = nil) {
+        _viewModel = StateObject(wrappedValue: WeatherViewModel(coordinate: coordinate, address: address))
     }
 
     /// using cache
