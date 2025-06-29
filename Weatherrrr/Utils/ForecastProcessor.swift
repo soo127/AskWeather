@@ -19,33 +19,33 @@ enum ForecastProcessor {
 
 extension ForecastProcessor {
 
-    static func skyIcon(forecast: Forecast) -> Image {
+    static func skyName(forecast: Forecast) -> String {
         let isNight = forecast.date.isNight()
 
         switch forecast.precipitationType {
         case .rain, .shower:
-            return Image(systemName: "cloud.rain")
+            return "cloud.rain"
         case .snow:
-            return Image(systemName: "cloud.snow")
+            return "cloud.snow"
         case .sleet:
-            return Image(systemName: "cloud.sleet")
+            return "cloud.sleet"
         case .none:
-            return cloudIcon(cloud: forecast.cloud, isNight: isNight)
+            return cloudName(cloud: forecast.cloud, isNight: isNight)
         case .unknown:
-            return Image(systemName: "questionmark")
+            return "questionmark"
         }
     }
 
-    private static func cloudIcon(cloud: Forecast.CloudCondition, isNight: Bool) -> Image {
+    private static func cloudName(cloud: Forecast.CloudCondition, isNight: Bool) -> String {
         switch cloud {
         case .clear:
-            return Image(systemName: isNight ? "moon.stars" : "sun.max")
+            return isNight ? "moon.stars" : "sun.max"
         case .cloudy:
-            return Image(systemName: isNight ? "cloud.moon" : "cloud.sun")
+            return isNight ? "cloud.moon" : "cloud.sun"
         case .overcast:
-            return Image(systemName: "cloud")
+            return "cloud"
         case .unknown:
-            return Image(systemName: "questionmark")
+            return "questionmark"
         }
     }
 

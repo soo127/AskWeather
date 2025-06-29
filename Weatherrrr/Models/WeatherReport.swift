@@ -63,3 +63,23 @@ extension WeatherReport {
     }
 
 }
+
+// widget
+extension WeatherReport {
+
+    func toWidgetModel() throws -> WidgetWeather {
+        guard let current = ForecastProcessor.current(forecasts: forecasts) else {
+            throw FetchError.noData
+        }
+        return WidgetWeather(
+            temperature: current.temperature,
+            windSpeed: current.windSpeed,
+            address: address,
+            skyName: ForecastProcessor.skyName(forecast: current),
+            uvLevel: WeatherFormatter.uvLevel(for: uvIndex),
+            pollutionLevel: WeatherFormatter.pollutionLevel(for: airPollution)
+        )
+    }
+    
+}
+

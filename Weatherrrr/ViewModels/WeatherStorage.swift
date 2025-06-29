@@ -83,6 +83,7 @@ extension WeatherStorage {
     func updateCurrentWeather(coordinate: CLLocationCoordinate2D?) async {
         do {
             currentWeather = try await WeatherLoader.load(coordinate: coordinate)
+            storeForWidget()
         } catch {
             print("weatherstorage error: \(error)")
         }
@@ -138,6 +139,17 @@ extension WeatherStorage {
         }
     }
 
+    ///위젯 전용
+    func storeForWidget() {
+        do {
+            let widgetData = try currentWeather.toWidgetModel()
+            let data = try JSONEncoder().encode(widgetData)
+            try data.write(to: SharedFile.widgetWeatherURL)
+        } catch {
+            print("위젯용 저장 실패: \(error)")
+        }
+    }
+
 }
 
 //MARK: - 기타
@@ -150,3 +162,5 @@ extension WeatherStorage {
     }
 
 }
+
+
