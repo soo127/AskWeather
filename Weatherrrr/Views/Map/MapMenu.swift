@@ -19,7 +19,6 @@ struct MapMenu: View {
         } label: {
             icon
         }
-        .padding(.trailing)
     }
 
     @ViewBuilder

@@ -13,19 +13,6 @@ class MapViewModel: ObservableObject {
 
     @Published var menuType: MapMenuType = .temperature
 
-    let koreaRegion = MKCoordinateRegion (
-        center: CLLocationCoordinate2D(latitude: 36.0, longitude: 127.8),
-        span: MKCoordinateSpan(latitudeDelta: 4, longitudeDelta: 4)
-    )
-    
-    var cameraBounds: MapCameraBounds {
-        MapCameraBounds(
-            centerCoordinateBounds: koreaRegion,
-            minimumDistance: 2000,
-            maximumDistance: 1700000
-        )
-    }
-    
 
     func select(type: MapMenuType) {
         menuType = type
@@ -53,4 +40,21 @@ class MapViewModel: ObservableObject {
         }
     }
 
+}
+
+extension MapViewModel {
+    
+    static let koreaRegion = MKCoordinateRegion (
+        center: CLLocationCoordinate2D(latitude: 36.0, longitude: 127.8),
+        span: MKCoordinateSpan(latitudeDelta: 4.0, longitudeDelta: 4.0)
+    )
+    
+    static var cameraBounds: MapCameraBounds {
+        MapCameraBounds(
+            centerCoordinateBounds: koreaRegion,
+            minimumDistance: 2000,
+            maximumDistance: 1700000
+        )
+    }
+    
 }

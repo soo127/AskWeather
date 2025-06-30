@@ -12,22 +12,43 @@ struct MapView: View {
 
     @StateObject private var viewModel = MapViewModel()
     @EnvironmentObject private var weatherStorage: WeatherStorage
+    @State private var cameraPosition: MapCameraPosition = .region(MapViewModel.koreaRegion)
 
     var body: some View {
         ZStack(alignment: .topTrailing) {
             Map(
-                initialPosition: .region(viewModel.koreaRegion),
-                bounds: viewModel.cameraBounds
+                position: $cameraPosition,
+                bounds: MapViewModel.cameraBounds
             ) {
                 currentMarker
                 favoriteMarkers
             }
             .overlay(alignment: .topTrailing) {
-                MapMenu(viewModel: viewModel)
+                VStack {
+                    MapMenu(viewModel: viewModel)
+                    locationButton
+                }
+                .padding(.top, 60)
+                .padding(.trailing, 5)
             }
             .overlay(alignment: .bottomTrailing) {
                 GradientView(menuType: viewModel.menuType)
             }
+        }
+    }
+    
+    private var locationButton: some View {
+        Button {
+            cameraPosition = .camera(
+                MapCamera(centerCoordinate: weatherStorage.currentWeather.coordinate, distance: 50000)
+            )
+        } label: {
+            Image(systemName: "paperplane")
+                .font(.title)
+                .foregroundStyle(.white)
+                .padding(5)
+                .background(.black.opacity(0.6))
+                .clipShape(RoundedRectangle(cornerRadius: 5))
         }
     }
 
