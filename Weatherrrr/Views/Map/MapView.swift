@@ -10,20 +10,23 @@ import MapKit
 
 struct MapView: View {
 
-    @StateObject private var mapViewModel = MapViewModel()
+    @StateObject private var viewModel = MapViewModel()
     @EnvironmentObject private var weatherStorage: WeatherStorage
 
     var body: some View {
         ZStack(alignment: .topTrailing) {
-            Map(initialPosition: .region(mapViewModel.koreaRegion)) {
+            Map(
+                initialPosition: .region(viewModel.koreaRegion),
+                bounds: viewModel.cameraBounds
+            ) {
                 currentMarker
                 favoriteMarkers
             }
             .overlay(alignment: .topTrailing) {
-                MapMenu(viewModel: mapViewModel)
+                MapMenu(viewModel: viewModel)
             }
             .overlay(alignment: .bottomTrailing) {
-                GradientView(menuType: mapViewModel.menuType)
+                GradientView(menuType: viewModel.menuType)
             }
         }
     }
@@ -32,7 +35,7 @@ struct MapView: View {
     private var currentMarker: some MapContent {
         let current = weatherStorage.currentWeather
         Annotation("현재 위치", coordinate: current.coordinate) {
-            MapMarker(viewModel: mapViewModel, weatherReport: current)
+            MapMarker(viewModel: viewModel, weatherReport: current)
         }
     }
 
@@ -41,7 +44,7 @@ struct MapView: View {
         ForEach(weatherStorage.favorites) { report in
             Annotation(report.address, coordinate: report.coordinate) {
                 MapMarker(
-                    viewModel: mapViewModel,
+                    viewModel: viewModel,
                     weatherReport: report
                 )
             }

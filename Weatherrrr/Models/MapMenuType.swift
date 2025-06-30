@@ -40,7 +40,7 @@ extension MapMenuType {
     var title: String {
         switch self {
         case .temperature:
-            return "온도 (°C)"
+            return "기온 (°C)"
         case .airPollution:
             return "미세먼지 (㎍/㎥)"
         case .uvIndex:

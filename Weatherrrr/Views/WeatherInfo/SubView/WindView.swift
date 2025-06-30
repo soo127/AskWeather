@@ -9,7 +9,7 @@ import SwiftUI
 
 struct WindView: View {
 
-    @EnvironmentObject private var weatherViewModel : WeatherViewModel
+    @EnvironmentObject private var weatherViewModel: WeatherViewModel
 
     var body: some View {
         VStack(alignment: .leading) {
@@ -31,6 +31,7 @@ struct WindView: View {
             arrow
             speed
         }
+        .padding(.leading, 8)
     }
 
     private var compass: some View {
@@ -78,4 +79,5 @@ struct WindView: View {
 
 #Preview {
     WindView()
+        .environmentObject( WeatherViewModel(report: .empty))
 }
