@@ -24,14 +24,12 @@ enum WeatherFormatter {
 
     static func airPollutionColor(_ airPollution: Int) -> Color {
         switch airPollution {
-        case ..<0:
+        case 0...30:
             return .blue
-        case 0..<10:
-            return .cyan
-        case 10..<20:
+        case 31...80:
             return .green
-        case 20..<30:
-            return .orange
+        case 81...150:
+            return .yellow
         default:
             return .red
         }
@@ -55,15 +53,15 @@ enum WeatherFormatter {
     static func uvColor(_ uvIndex: Int) -> Color {
         switch uvIndex {
         case 0...2:
-            return .blue
-        case 3...5:
-            return .cyan
-        case 6...7:
             return .green
-        case 8...10:
+        case 3...5:
+            return .yellow
+        case 6...7:
             return .orange
-        default:
+        case 8...10:
             return .red
+        default:
+            return .purple
         }
     }
 

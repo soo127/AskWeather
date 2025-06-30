@@ -19,7 +19,12 @@ struct MapView: View {
                 currentMarker
                 favoriteMarkers
             }
-            MapMenu(viewModel: mapViewModel)
+            .overlay(alignment: .topTrailing) {
+                MapMenu(viewModel: mapViewModel)
+            }
+            .overlay(alignment: .bottomTrailing) {
+                GradientView(menuType: mapViewModel.menuType)
+            }
         }
     }
 
