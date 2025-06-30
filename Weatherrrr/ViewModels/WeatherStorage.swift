@@ -7,6 +7,7 @@
 
 import SwiftUI
 import CoreLocation
+import WidgetKit
 
 class WeatherStorage: ObservableObject {
 
@@ -51,6 +52,7 @@ class WeatherStorage: ObservableObject {
         isEditMode.toggle()
         if !isEditMode {
             removeFavorites(ids: checkedFavorites)
+            checkedFavorites.removeAll()
         }
     }
 
@@ -145,6 +147,7 @@ extension WeatherStorage {
             let widgetData = try currentWeather.toWidgetModel()
             let data = try JSONEncoder().encode(widgetData)
             try data.write(to: SharedFile.widgetWeatherURL)
+            WidgetCenter.shared.reloadTimelines(ofKind: "AskWeatherWidget")
         } catch {
             print("위젯용 저장 실패: \(error)")
         }
