@@ -9,16 +9,16 @@ import SwiftUI
 
 struct UltraVioletView: View {
 
-    @EnvironmentObject private var weatherViewModel : WeatherViewModel
+    @EnvironmentObject private var viewModel : WeatherViewModel
 
     var body: some View {
-
         VStack(alignment: .leading) {
             title
             uvLevel
+            Spacer()
+            uvAdvice
         }
         .padding()
-
     }
 
     private let gradient = Gradient(colors: [
@@ -33,9 +33,9 @@ struct UltraVioletView: View {
 
     private var uvLevel: some View {
         Group {
-            Text("\(weatherViewModel.uvIndex)")
+            Text("\(viewModel.uvIndex)")
                 .font(.title)
-            Text(weatherViewModel.uvLevel)
+            Text(viewModel.uvLevel)
                 .font(.title2)
             Capsule()
                 .frame(width: 150, height: 5)
@@ -47,6 +47,12 @@ struct UltraVioletView: View {
                     )
                 )
         }
+    }
+    
+    private var uvAdvice: some View {
+        Text(WeatherFormatter.uvAdvice(for: viewModel.uvIndex))
+            .font(.system(size: 13))
+            .foregroundStyle(.black.opacity(0.7))
     }
 
 }

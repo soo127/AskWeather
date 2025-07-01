@@ -35,7 +35,6 @@ struct WeatherView: View {
         ScrollView {
             TitleView()
                 .foregroundStyle(.white)
-            Text("\(viewModel.weatherReport.updatedAt)")
             HourlyForecastContainer()
             DailyForecastContainer()
             cardView

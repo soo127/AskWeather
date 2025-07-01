@@ -9,7 +9,7 @@ import SwiftUI
 
 struct DailyForecastContainer: View {
 
-    @EnvironmentObject private var weatherViewModel : WeatherViewModel
+    @EnvironmentObject private var viewModel : WeatherViewModel
 
     var body: some View {
         VStack(alignment: .leading) {
@@ -35,9 +35,9 @@ struct DailyForecastContainer: View {
             ForEach(0...3, id: \.self) { day in
                 DailyForecastCell(
                     afterDays: day,
-                    skyIcon: weatherViewModel.dailySkyIcon(after: day),
-                    high: weatherViewModel.dailyHighTemp(after: day),
-                    low: weatherViewModel.dailyLowTemp(after: day)
+                    skyIcon: viewModel.dailySkyIcon(after: day),
+                    high: viewModel.dailyHighTemp(after: day),
+                    low: viewModel.dailyLowTemp(after: day)
                 )
             }
             .padding(.vertical, 5)

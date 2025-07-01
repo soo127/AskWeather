@@ -32,11 +32,11 @@ class MapViewModel: ObservableObject {
     func color(value: Int) -> Color {
         switch menuType {
         case .temperature:
-            return WeatherFormatter.temperatureColor(value)
+            return WeatherFormatter.temperatureColor(for: value)
         case .airPollution:
-            return WeatherFormatter.airPollutionColor(value)
+            return WeatherFormatter.airPollutionColor(for: value)
         case .uvIndex:
-            return WeatherFormatter.uvColor(value)
+            return WeatherFormatter.uvColor(for: value)
         }
     }
 

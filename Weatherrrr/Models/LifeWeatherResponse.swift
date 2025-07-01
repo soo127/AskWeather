@@ -33,8 +33,8 @@ extension LifeWeatherIndexAPI {
 
         init(from decoder: Decoder) throws {
             let container = try decoder.container(keyedBy: CodingKeys.self)
-            self.current = try? DecodingHelper.decodeToInt(from: container, forKey: .current)
-            self.after3Hours = try? DecodingHelper.decodeToInt(from: container, forKey: .after3Hours)
+            self.current = try? DecodingHelper.toInt(from: container, forKey: .current)
+            self.after3Hours = try? DecodingHelper.toInt(from: container, forKey: .after3Hours)
         }
     }
     

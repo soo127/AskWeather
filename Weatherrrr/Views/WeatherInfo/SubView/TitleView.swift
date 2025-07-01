@@ -9,7 +9,7 @@ import SwiftUI
 
 struct TitleView: View {
 
-    @EnvironmentObject private var weatherViewModel : WeatherViewModel
+    @EnvironmentObject private var viewModel : WeatherViewModel
 
     var body: some View {
         VStack(spacing: 5) {
@@ -21,19 +21,19 @@ struct TitleView: View {
     }
 
     private var address: some View {
-        Text(weatherViewModel.address)
+        Text(viewModel.address)
             .font(.title2)
     }
 
     private var temperature: some View {
-        Text("\(weatherViewModel.temperature)°")
+        Text("\(viewModel.temperature)°")
             .font(.largeTitle)
     }
 
     private var dailyTemp: some View {
         HStack {
-            Text("최고: \(weatherViewModel.dailyHighTemp(after: 0), specifier: "%.0f")° ")
-            Text("최저: \(weatherViewModel.dailyLowTemp(after: 0), specifier: "%.0f")° ")
+            Text("최고: \(viewModel.dailyHighTemp(after: 0), specifier: "%.0f")° ")
+            Text("최저: \(viewModel.dailyLowTemp(after: 0), specifier: "%.0f")° ")
         }
     }
 

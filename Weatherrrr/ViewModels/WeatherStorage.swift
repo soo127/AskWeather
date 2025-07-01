@@ -85,7 +85,7 @@ extension WeatherStorage {
             return
         }
         let delay = nextHour.timeIntervalSince(now)
-        Timer.scheduledTimer(withTimeInterval: 5, repeats: false) { [weak self] _ in
+        Timer.scheduledTimer(withTimeInterval: delay, repeats: false) { [weak self] _ in
             guard let self else { return }
             Task {
                 await self.update(coordinate: coordinate)
@@ -96,7 +96,7 @@ extension WeatherStorage {
     }
     
     private func scheduleHourlyUpdate(coordinate: CLLocationCoordinate2D?) {
-        Timer.scheduledTimer(withTimeInterval: 10, repeats: true) { [weak self] _ in
+        Timer.scheduledTimer(withTimeInterval: 3600, repeats: true) { [weak self] _ in
             guard let self else { return }
             Task {
                 await self.update(coordinate: coordinate)

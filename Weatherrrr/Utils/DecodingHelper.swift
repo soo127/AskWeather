@@ -9,7 +9,7 @@ import Foundation
 
 enum DecodingHelper {
 
-    static func decodeToInt<K: CodingKey> (
+    static func toInt<K: CodingKey> (
         from container: KeyedDecodingContainer<K>,
         forKey key: K
     ) throws -> Int {

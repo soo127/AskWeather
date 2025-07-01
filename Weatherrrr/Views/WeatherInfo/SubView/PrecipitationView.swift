@@ -9,7 +9,7 @@ import SwiftUI
 
 struct PrecipitationView: View {
 
-    @EnvironmentObject private var weatherViewModel : WeatherViewModel
+    @EnvironmentObject private var viewModel : WeatherViewModel
 
     var body: some View {
         VStack(alignment: .leading) {
@@ -26,7 +26,7 @@ struct PrecipitationView: View {
     }
 
     private var precipitation: some View {
-        Text("\(weatherViewModel.averagePrecipitation, specifier: "%.1f")mm")
+        Text("\(viewModel.averagePrecipitation, specifier: "%.1f")mm")
             .font(.title2)
     }
 

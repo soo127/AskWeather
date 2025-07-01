@@ -9,7 +9,7 @@ import SwiftUI
 
 struct HourlyForecastContainer: View {
 
-    @EnvironmentObject private var weatherViewModel : WeatherViewModel
+    @EnvironmentObject private var viewModel : WeatherViewModel
 
     var body: some View {
         VStack(alignment: .leading) {
@@ -32,7 +32,7 @@ struct HourlyForecastContainer: View {
 
     private var hourlyForecasts: some View {
         ScrollView(.horizontal, showsIndicators: false){
-            let viewModels = weatherViewModel.todayHourlyViewModels()
+            let viewModels = viewModel.todayHourlyViewModels()
             HStack {
                 ForEach(viewModels) { viewModel in
                     HourlyForecastCell(viewModel: viewModel)

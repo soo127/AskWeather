@@ -9,12 +9,14 @@ import SwiftUI
 
 struct AirDiffusionView: View {
 
-    @EnvironmentObject private var weatherViewModel : WeatherViewModel
+    @EnvironmentObject private var viewModel : WeatherViewModel
 
     var body: some View {
         VStack(alignment: .leading) {
             title
             diffusionLevel
+            Spacer()
+            diffusionAdvice
         }
         .padding()
     }
@@ -31,9 +33,9 @@ struct AirDiffusionView: View {
 
     private var diffusionLevel: some View {
         Group {
-            Text("\(weatherViewModel.airDiffusionIndex)")
+            Text("\(viewModel.airDiffusionIndex)")
                 .font(.title)
-            Text(weatherViewModel.airDiffusionLevel)
+            Text(viewModel.airDiffusionLevel)
                 .font(.title2)
             Capsule()
                 .frame(width: 150, height: 5)
@@ -46,5 +48,13 @@ struct AirDiffusionView: View {
                 )
         }
     }
+    
+    private var diffusionAdvice: some View {
+        Text(WeatherFormatter.airDiffusionAdvice(for: viewModel.airDiffusionIndex))
+            .font(.system(size: 13))
+            .foregroundStyle(.black.opacity(0.7))
+    }
+
+    
 
 }

@@ -9,12 +9,14 @@ import SwiftUI
 
 struct AirPollutionView: View {
 
-    @EnvironmentObject private var weatherViewModel : WeatherViewModel
+    @EnvironmentObject private var viewModel : WeatherViewModel
 
     var body: some View {
         VStack(alignment: .leading) {
             title
-            dustLevel
+            pollutionLevel
+            Spacer()
+            pollutionAdvice
         }
         .padding()
     }
@@ -29,11 +31,11 @@ struct AirPollutionView: View {
             .foregroundStyle(.gray)
     }
 
-    private var dustLevel: some View {
+    private var pollutionLevel: some View {
         Group {
-            Text("\(weatherViewModel.airPollution)")
+            Text("\(viewModel.airPollution)")
                 .font(.title)
-            Text("\(weatherViewModel.pollutionLevel)")
+            Text("\(viewModel.pollutionLevel)")
                 .font(.title2)
             Capsule()
                 .frame(width: 150, height: 5)
@@ -45,6 +47,12 @@ struct AirPollutionView: View {
                     )
                 )
         }
+    }
+    
+    private var pollutionAdvice: some View {
+        Text(WeatherFormatter.pollutionAdvice(for: viewModel.airPollution))
+            .font(.system(size: 13))
+            .foregroundStyle(.black.opacity(0.7))
     }
 
 }

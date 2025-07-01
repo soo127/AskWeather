@@ -54,7 +54,9 @@ struct CityContainer: View {
                 Spacer()
             }
             .padding(7)
-            .background(Color.gray.opacity(0.1))
+            .background(RoundedRectangle(cornerRadius: 8)
+                .fill(Color.gray.opacity(0.1))
+            )
             .padding(.bottom, 7)
         }
         .buttonStyle(PlainButtonStyle())
