@@ -11,6 +11,7 @@ import CoreLocation
 struct ContentView: View {
 
     let coordinate: CLLocationCoordinate2D
+    @EnvironmentObject var weatherStorage: WeatherStorage
 
     var body: some View {
         TabView {
@@ -18,7 +19,7 @@ struct ContentView: View {
                 .tabItem {
                     Image(systemName: "map")
                 }
-            WeatherView(coordinate: coordinate)
+            WeatherView(viewModel: .from(weatherStorage.currentWeather))
                 .tabItem {
                     Image(systemName: "paperplane")
                 }

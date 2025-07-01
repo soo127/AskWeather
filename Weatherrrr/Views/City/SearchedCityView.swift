@@ -14,7 +14,7 @@ struct SearchedCityView: View {
 
     var body: some View {
         NavigationStack {
-            WeatherView(coordinate: viewModel.coordinate, address: viewModel.address)
+            WeatherView(viewModel: .from(viewModel))
                 .toolbar {
                     ToolbarItem(placement: .navigationBarLeading) {
                         Button("취소") {

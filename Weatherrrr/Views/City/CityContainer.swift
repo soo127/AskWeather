@@ -37,7 +37,8 @@ struct CityContainer: View {
     private var favoriteCities: some View {
         ForEach(weatherStorage.favorites) { weatherReport in
             NavigationLink {
-                WeatherView(report: weatherReport)
+                WeatherView(viewModel: .from(weatherReport))
+               
             } label: {
                 CityCard(report: weatherReport)
             }

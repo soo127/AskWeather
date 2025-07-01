@@ -12,7 +12,7 @@ struct KMAAPI {
 
     static func fetch(coordinate: CLLocationCoordinate2D) async throws -> [Item] {
         let (nx, ny) = GridConverter.toGrid(from: coordinate)
-        let fetched: WeatherResponse = try await APIHelper.fetch(url: Self.url(nx: nx, ny: ny))
+        let fetched: WeatherResponse = try await APIHelper.fetch(url: url(nx: nx, ny: ny))
         return fetched.response.body.items.item
     }
 
@@ -34,7 +34,7 @@ extension KMAAPI {
             "pageNo": 1,
             "numOfRows": 1000,
             "dataType": "JSON",
-            "base_date": Self.baseDate,
+            "base_date": baseDate,
             "base_time": 2300,
             "nx": nx,
             "ny": ny

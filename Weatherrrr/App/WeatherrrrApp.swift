@@ -19,7 +19,8 @@ struct WeatherrrrApp: App {
                 ContentView(coordinate: userLocation)
                     .environmentObject(weatherStorage)
                     .task {
-                        await weatherStorage.update(coordinate: userLocation)
+                        weatherStorage.scheduleUpdate(coordinate: userLocation)
+                        //await weatherStorage.update(coordinate: userLocation)
                     }
             } else {
                 ProgressView("현재 위치를 불러오는 중...")

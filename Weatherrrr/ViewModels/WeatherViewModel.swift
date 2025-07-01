@@ -16,16 +16,13 @@ class WeatherViewModel: ObservableObject {
 
     init(coordinate: CLLocationCoordinate2D?, address: String?) {
         load(coordinate: coordinate, address: address)
+        isLoading = false
     }
 
     /// using cache
     init(report: WeatherReport) {
-        if report.updatedAt.isSameHour(comparedTo: now) { // can use cache
-            self.weatherReport = report
-            isLoading = false
-            return
-        }
-        load(coordinate: report.coordinate)
+        weatherReport = report
+        isLoading = false
     }
 
     private func load(coordinate: CLLocationCoordinate2D?, address: String? = nil) {
@@ -35,10 +32,23 @@ class WeatherViewModel: ObservableObject {
             } catch {
                 print("날씨 로딩 실패: \(error)")
             }
-            isLoading = false
         }
     }
 
+}
+
+// MARK: - 객체 생성
+
+extension WeatherViewModel {
+    
+    static func from(_ report: WeatherReport) -> WeatherViewModel {
+        WeatherViewModel(report: report)
+    }
+    
+    static func from(_ vm: LocationSearchViewModel) -> WeatherViewModel {
+        WeatherViewModel(coordinate: vm.coordinate, address: vm.address)
+    }
+    
 }
 
 // MARK: - 편리한 접근

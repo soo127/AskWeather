@@ -10,7 +10,7 @@ import CoreLocation
 
 struct WeatherView: View {
 
-    @StateObject var viewModel: WeatherViewModel
+    @ObservedObject var viewModel: WeatherViewModel
 
     var body: some View {
         NavigationStack {
@@ -35,6 +35,7 @@ struct WeatherView: View {
         ScrollView {
             TitleView()
                 .foregroundStyle(.white)
+            Text("\(viewModel.weatherReport.updatedAt)")
             HourlyForecastContainer()
             DailyForecastContainer()
             cardView
@@ -65,17 +66,4 @@ struct WeatherView: View {
             .ignoresSafeArea()
     }
 
-}
-
-extension WeatherView {
-
-    init(coordinate: CLLocationCoordinate2D?, address: String? = nil) {
-        _viewModel = StateObject(wrappedValue: WeatherViewModel(coordinate: coordinate, address: address))
-    }
-
-    /// using cache
-    init(report: WeatherReport) {
-        _viewModel = StateObject(wrappedValue: WeatherViewModel(report: report))
-    }
-    
 }

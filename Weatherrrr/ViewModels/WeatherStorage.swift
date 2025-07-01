@@ -19,6 +19,9 @@ class WeatherStorage: ObservableObject {
     }
     @Published var isEditMode = false
     @Published var checkedFavorites: Set<UUID> = []
+    var now: Date {
+        Date()
+    }
 
     init() {
         loadFromDisk()
@@ -70,50 +73,98 @@ class WeatherStorage: ObservableObject {
 
 }
 
-//MARK: - 초기 설정
+//MARK: - Update 관련
 
 extension WeatherStorage {
 
+    
+ 
+    func scheduleUpdate(coordinate: CLLocationCoordinate2D?) {
+        Task {
+            await update(coordinate: coordinate)
+        }
+        guard let nextHour = nextHour() else {
+            return
+        }
+        let delay = nextHour.timeIntervalSince(now)
+        Timer.scheduledTimer(withTimeInterval: delay, repeats: false) { [weak self] _ in
+            guard let self else { return }
+            Task {
+                await self.update(coordinate: coordinate)
+                print("scheduleUpdate")
+            }
+            scheduleHourlyUpdate(coordinate: coordinate)
+        }
+    }
+    
+    private func nextHour() -> Date? {
+        let calendar = Calendar.current
+        return calendar.date(
+            bySettingHour: calendar.component(.hour, from: now) + 1,
+            minute: 0,
+            second: 0,
+            of: now
+        )
+    }
+    
+    private func scheduleHourlyUpdate(coordinate: CLLocationCoordinate2D?) {
+        Timer.scheduledTimer(withTimeInterval: 3600, repeats: true) { [weak self] _ in
+            guard let self else { return }
+            Task {
+                await self.update(coordinate: coordinate)
+                print("scheduleHourlyUpdate")
+            }
+        }
+    }
+    
     @MainActor
     func update(coordinate: CLLocationCoordinate2D?) async {
         async let current: () = updateCurrentWeather(coordinate: coordinate)
-        async let refresh: () = updateFavorites(favorites)
+        async let refresh: () = updateFavorites()
         _ = await (current, refresh)
+        updateWidget()
     }
 
     @MainActor
-    func updateCurrentWeather(coordinate: CLLocationCoordinate2D?) async {
+    private func updateCurrentWeather(coordinate: CLLocationCoordinate2D?) async {
         do {
             currentWeather = try await WeatherLoader.load(coordinate: coordinate)
-            storeForWidget()
         } catch {
-            print("weatherstorage error: \(error)")
+            print("weatherstorage error2: \(error)")
         }
     }
 
     @MainActor
-    private func updateFavorites(_ reports: [WeatherReport]) async {
+    private func updateFavorites() async {
         var updated: [WeatherReport] = []
-        let now = Date()
-
-        for report in reports {
-            guard !report.updatedAt.isSameHour(comparedTo: now) else { // can use cache
-                updated.append(report)
-                continue
-            }
+        for favorite in favorites {
             do {
-                let coordinate = CLLocationCoordinate2D(latitude: report.latitude, longitude: report.longitude)
-                let newReport = try await WeatherLoader.load(coordinate: coordinate, displayAddress: report.address)
+                let lat = favorite.latitude
+                let lon = favorite.longitude
+                let coordinate = CLLocationCoordinate2D(latitude: lat, longitude: lon)
+                
+                let newReport = try await WeatherLoader.load(coordinate: coordinate, displayAddress: favorite.address)
                 updated.append(newReport)
             } catch {
-                print("weatherStorage error: \(error)")
+                print("weatherStorage error3: \(error)")
             }
         }
         favorites = updated
     }
+    
+    ///위젯 전용
+    private func updateWidget() {
+        do {
+            let widgetData = try currentWeather.toWidgetModel()
+            let data = try JSONEncoder().encode(widgetData)
+            try data.write(to: SharedFile.widgetWeatherURL)
+            WidgetCenter.shared.reloadTimelines(ofKind: "AskWeatherWidget")
+        } catch {
+            print("위젯용 저장 실패: \(error)")
+        }
+    }
 
 }
-
 
 //MARK: - load/store
 
@@ -138,18 +189,6 @@ extension WeatherStorage {
             try data.write(to: fileURL())
         } catch {
             print("저장 실패: \(error)")
-        }
-    }
-
-    ///위젯 전용
-    func storeForWidget() {
-        do {
-            let widgetData = try currentWeather.toWidgetModel()
-            let data = try JSONEncoder().encode(widgetData)
-            try data.write(to: SharedFile.widgetWeatherURL)
-            WidgetCenter.shared.reloadTimelines(ofKind: "AskWeatherWidget")
-        } catch {
-            print("위젯용 저장 실패: \(error)")
         }
     }
 
