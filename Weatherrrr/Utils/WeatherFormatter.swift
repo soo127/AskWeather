@@ -7,8 +7,12 @@
 
 import SwiftUI
 
-enum WeatherFormatter {
+enum WeatherFormatter { }
 
+//MARK: - airPollution
+
+extension WeatherFormatter {
+    
     static func pollutionLevel(for value: Int) -> String {
         switch value {
         case 0...30:
@@ -47,7 +51,13 @@ enum WeatherFormatter {
             return .red
         }
     }
+    
+}
 
+//MARK: - uv
+
+extension WeatherFormatter {
+    
     static func uvLevel(for value: Int) -> String {
         switch value {
         case 0...2:
@@ -77,7 +87,7 @@ enum WeatherFormatter {
             return "자외선이 위험 수준입니다. 외출을 삼가는 것이 좋습니다."
         }
     }
-
+    
     static func uvColor(for value: Int) -> Color {
         switch value {
         case 0...2:
@@ -92,7 +102,13 @@ enum WeatherFormatter {
             return .purple
         }
     }
+    
+}
 
+//MARK: - airDiffusion
+
+extension WeatherFormatter {
+    
     static func airDiffusionLevel(for value: Int) -> String {
         switch value {
         case 0...25:
@@ -105,7 +121,26 @@ enum WeatherFormatter {
             return "매우 높음"
         }
     }
+    
+    static func airDiffusionAdvice(for value: Int) -> String {
+        switch value {
+        case 25:
+            return "대기 흐름이 원활하지 않아요."
+        case 50:
+            return "대기 흐름이 무난해요."
+        case 75:
+            return "대기 흐름이 활발한 편입니다."
+        default:
+            return "대기가 매우 활발히 순환합니다."
+        }
+    }
+    
+}
 
+//MARK: - temperature/ humidity
+
+extension WeatherFormatter {
+    
     static func temperatureColor(for value: Int) -> Color {
         switch value {
         case ..<0:
@@ -134,17 +169,4 @@ enum WeatherFormatter {
         }
     }
     
-    static func airDiffusionAdvice(for value: Int) -> String {
-        switch value {
-        case 25:
-            return "대기 흐름이 원활하지 않아요."
-        case 50:
-            return "대기 흐름이 무난해요."
-        case 75:
-            return "대기 흐름이 활발한 편입니다."
-        default:
-            return "대기가 매우 활발히 순환합니다."
-        }
-    }
-
 }
