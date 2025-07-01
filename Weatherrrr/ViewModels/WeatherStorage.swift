@@ -76,18 +76,16 @@ class WeatherStorage: ObservableObject {
 //MARK: - Update 관련
 
 extension WeatherStorage {
-
-    
  
     func scheduleUpdate(coordinate: CLLocationCoordinate2D?) {
         Task {
             await update(coordinate: coordinate)
         }
-        guard let nextHour = nextHour() else {
+        guard let nextHour = now.nextHour() else {
             return
         }
         let delay = nextHour.timeIntervalSince(now)
-        Timer.scheduledTimer(withTimeInterval: delay, repeats: false) { [weak self] _ in
+        Timer.scheduledTimer(withTimeInterval: 5, repeats: false) { [weak self] _ in
             guard let self else { return }
             Task {
                 await self.update(coordinate: coordinate)
@@ -97,28 +95,18 @@ extension WeatherStorage {
         }
     }
     
-    private func nextHour() -> Date? {
-        let calendar = Calendar.current
-        return calendar.date(
-            bySettingHour: calendar.component(.hour, from: now) + 1,
-            minute: 0,
-            second: 0,
-            of: now
-        )
-    }
-    
     private func scheduleHourlyUpdate(coordinate: CLLocationCoordinate2D?) {
-        Timer.scheduledTimer(withTimeInterval: 3600, repeats: true) { [weak self] _ in
+        Timer.scheduledTimer(withTimeInterval: 10, repeats: true) { [weak self] _ in
             guard let self else { return }
             Task {
                 await self.update(coordinate: coordinate)
-                print("scheduleHourlyUpdate")
+                print("HourlyUp")
             }
         }
     }
     
     @MainActor
-    func update(coordinate: CLLocationCoordinate2D?) async {
+    private func update(coordinate: CLLocationCoordinate2D?) async {
         async let current: () = updateCurrentWeather(coordinate: coordinate)
         async let refresh: () = updateFavorites()
         _ = await (current, refresh)
