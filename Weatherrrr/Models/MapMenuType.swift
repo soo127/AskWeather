@@ -18,7 +18,7 @@ extension MapMenuType {
     var legendValues: [Int] {
         switch self {
         case .temperature:
-            return [0, 10, 20, 30, 40]
+            return [0, 10, 20, 30]
         case .airPollution:
             return [0, 30, 80, 150]
         case .uvIndex:

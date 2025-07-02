@@ -29,7 +29,7 @@ extension WeatherFormatter {
     static func pollutionAdvice(for value: Int) -> String {
         switch value {
         case 0...30:
-            return "대기 상태가 좋습니다. 야외 활동하기에 적합해요."
+            return "대기 상태가 좋습니다. 활동하기에 적합해요."
         case 31...80:
             return "대기 상태가 무난합니다. 일반적인 활동은 문제 없어요."
         case 81...150:
@@ -161,7 +161,7 @@ extension WeatherFormatter {
         case ..<30:
             return "건조한 날씨입니다. 피부와 호흡기 관리에 신경 쓰세요."
         case 30..<60:
-            return "쾌적한 습도입니다. 야외 활동하기 좋은 날씨예요."
+            return "쾌적한 습도입니다. 활동하기 좋은 날씨예요."
         case 60..<80:
             return "다소 습합니다. 실내 환기에 주의하세요."
         default:
