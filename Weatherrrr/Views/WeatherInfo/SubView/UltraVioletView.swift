@@ -21,10 +21,6 @@ struct UltraVioletView: View {
         .padding()
     }
 
-    private let gradient = Gradient(colors: [
-        .green, .yellow, .orange, .red, .purple
-    ])
-
     private var title: some View {
         Text("자외선 지수")
             .font(.caption)
@@ -37,15 +33,7 @@ struct UltraVioletView: View {
                 .font(.title)
             Text(viewModel.uvLevel)
                 .font(.title2)
-            Capsule()
-                .frame(width: 150, height: 5)
-                .overlay(
-                    LinearGradient(
-                        gradient: gradient,
-                        startPoint: .leading,
-                        endPoint: .trailing
-                    )
-                )
+            GaugeBar(value: viewModel.uvIndex, start: 0, end: 11)
         }
     }
     

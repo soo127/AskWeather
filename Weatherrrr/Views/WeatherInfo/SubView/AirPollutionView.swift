@@ -21,10 +21,6 @@ struct AirPollutionView: View {
         .padding()
     }
 
-    private let gradient = Gradient(colors: [
-        .blue, .green, .yellow, .orange, .red, .brown
-    ])
-
     private var title: some View {
         Text("미세먼지 농도 (㎍/㎥)")
             .font(.caption)
@@ -37,15 +33,7 @@ struct AirPollutionView: View {
                 .font(.title)
             Text("\(viewModel.pollutionLevel)")
                 .font(.title2)
-            Capsule()
-                .frame(width: 150, height: 5)
-                .overlay(
-                    LinearGradient(
-                        gradient: gradient,
-                        startPoint: .leading,
-                        endPoint: .trailing
-                    )
-                )
+            GaugeBar(value: viewModel.airPollution, start: 0, end: 150)
         }
     }
     

@@ -21,10 +21,6 @@ struct AirDiffusionView: View {
         .padding()
     }
 
-    private let gradient = Gradient(colors: [
-        .blue, .green, .yellow, .orange, .red, .brown
-    ])
-
     private var title: some View {
         Text("대기 정체 지수 (이후 3시간)")
             .font(.caption)
@@ -37,15 +33,7 @@ struct AirDiffusionView: View {
                 .font(.title)
             Text(viewModel.airDiffusionLevel)
                 .font(.title2)
-            Capsule()
-                .frame(width: 150, height: 5)
-                .overlay(
-                    LinearGradient(
-                        gradient: gradient,
-                        startPoint: .leading,
-                        endPoint: .trailing
-                    )
-                )
+            GaugeBar(value: viewModel.airDiffusionIndex, start: 0, end: 100)
         }
     }
     
