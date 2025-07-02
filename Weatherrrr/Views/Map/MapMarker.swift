@@ -22,9 +22,10 @@ struct MapMarker: View {
 
     private func textIcon(value: Int) -> some View {
         Text("\(value)")
-            .font(.system(size: 13))
+            .font(.system(size: 11))
             .foregroundColor(.white)
             .padding(5)
+            .frame(width: 23, height: 23)
             .background(viewModel.color(value: value))
             .clipShape(Circle())
     }
