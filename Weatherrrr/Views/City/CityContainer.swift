@@ -13,7 +13,7 @@ struct CityContainer: View {
 
     var body: some View {
         NavigationStack {
-            ScrollView {
+            List {
                 searchBar
                 favoriteCities
             }
@@ -23,6 +23,7 @@ struct CityContainer: View {
             .toolbar {
                 removeButton
             }
+            .listStyle(.plain)
         }
     }
 
@@ -36,30 +37,39 @@ struct CityContainer: View {
 
     private var favoriteCities: some View {
         ForEach(weatherStorage.favorites) { weatherReport in
-            NavigationLink {
-                WeatherView(viewModel: .from(weatherReport))
-               
-            } label: {
-                CityCard(report: weatherReport)
-            }
-            .buttonStyle(PlainButtonStyle())
+            CityCard(report: weatherReport)
+                .padding(.vertical, 5)
+                .listRowSeparator(.hidden)
+                .listRowInsets(EdgeInsets())
+                .listRowBackground(Color.clear)
+                .background(
+                    NavigationLink("", destination: WeatherView(viewModel: .from(weatherReport)))
+                        .opacity(0)
+                )
+        }
+        .onMove { indices, newOffset in
+            weatherStorage.favorites.move(fromOffsets: indices, toOffset: newOffset)
         }
     }
-
+    
     private var searchBar: some View {
-        NavigationLink(destination: CitySearchView()) {
-            HStack {
-                Label("도시 검색", systemImage: "magnifyingglass")
-                    .foregroundStyle(.gray)
-                Spacer()
-            }
-            .padding(7)
-            .background(RoundedRectangle(cornerRadius: 8)
-                .fill(Color.gray.opacity(0.1))
-            )
-            .padding(.bottom, 7)
+        HStack {
+            Label("도시 검색", systemImage: "magnifyingglass")
+                .foregroundStyle(.gray)
+            Spacer()
         }
-        .buttonStyle(PlainButtonStyle())
+        .padding(7)
+        .background(RoundedRectangle(cornerRadius: 8)
+            .fill(Color.gray.opacity(0.1))
+        )
+        .padding(.bottom)
+        .listRowSeparator(.hidden)
+        .listRowInsets(EdgeInsets())
+        .listRowBackground(Color.clear)
+        .background(
+            NavigationLink("", destination: CitySearchView())
+                .opacity(0)
+        )
     }
 
 }

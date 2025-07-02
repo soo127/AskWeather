@@ -12,7 +12,7 @@ import WidgetKit
 class WeatherStorage: ObservableObject {
 
     @Published private(set) var currentWeather: WeatherReport = .empty
-    @Published private(set) var favorites: [WeatherReport] = [] {
+    @Published var favorites: [WeatherReport] = [] {
         didSet {
             storeToDisk()
         }
@@ -81,18 +81,21 @@ extension WeatherStorage {
         Task {
             await update(coordinate: coordinate)
         }
-        guard let nextHour = now.nextHour() else {
+        guard let delay = delay() else {
             return
         }
-        let delay = nextHour.timeIntervalSince(now)
         Timer.scheduledTimer(withTimeInterval: delay, repeats: false) { [weak self] _ in
             guard let self else { return }
             Task {
+                print(delay)
                 await self.update(coordinate: coordinate)
-                print("scheduleUpdate")
             }
             scheduleHourlyUpdate(coordinate: coordinate)
         }
+    }
+    
+    private func delay() -> TimeInterval? {
+        return now.nextHour()?.timeIntervalSince(now)
     }
     
     private func scheduleHourlyUpdate(coordinate: CLLocationCoordinate2D?) {
@@ -100,7 +103,6 @@ extension WeatherStorage {
             guard let self else { return }
             Task {
                 await self.update(coordinate: coordinate)
-                print("HourlyUp")
             }
         }
     }
