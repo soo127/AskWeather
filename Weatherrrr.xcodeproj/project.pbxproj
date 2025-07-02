@@ -55,6 +55,7 @@
 		8D3E649F2E0FD9CE0028F4EA /* Exceptions for "Weatherrrr" folder in "AskWeatherWidgetExtension" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
+				"Extensions/Date+Extension.swift",
 				Models/WidgetWeather.swift,
 				Utils/SharedFile.swift,
 			);

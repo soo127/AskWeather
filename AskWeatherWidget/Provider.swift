@@ -7,17 +7,18 @@
 
 import WidgetKit
 
-struct Provider: AppIntentTimelineProvider {
-
+struct Provider: TimelineProvider {
+    
     func placeholder(in context: Context) -> WeatherEntry {
         WeatherEntry(date: Date(), weather: .empty)
     }
 
-    func snapshot(for configuration: ConfigurationAppIntent, in context: Context) async -> WeatherEntry {
-        WeatherEntry(date: Date(), weather: .empty)
+    func getSnapshot(in context: Context, completion: @escaping (WeatherEntry) -> Void) {
+        let entry = WeatherEntry(date: Date(), weather: .empty)
+        completion(entry)
     }
 
-    func timeline(for configuration: ConfigurationAppIntent, in context: Context) async -> Timeline<WeatherEntry> {
+    func getTimeline(in context: Context, completion: @escaping (Timeline<WeatherEntry>) -> Void) {
         let now = Date()
         let entry: WeatherEntry
         do {
@@ -26,20 +27,14 @@ struct Provider: AppIntentTimelineProvider {
             entry = WeatherEntry(date: now, weather: .empty)
         }
 
-        let nextExactHour = nextHour(from: now)
-        return Timeline(entries: [entry], policy: .after(nextExactHour))
+        let next = now.nextHour() ?? now.addingTimeInterval(3600)
+        completion(Timeline(entries: [entry], policy: .after(next)))
     }
 
-    func loadWidgetWeather() throws -> WidgetWeather {
+    private func loadWidgetWeather() throws -> WidgetWeather {
         let data = try Data(contentsOf: SharedFile.widgetWeatherURL)
         return try JSONDecoder().decode(WidgetWeather.self, from: data)
     }
 
-    func nextHour(from date: Date) -> Date {
-        let calendar = Calendar.current
-        let nextHour = calendar.date(byAdding: .hour, value: 1, to: date)!
-        let components = calendar.dateComponents([.year, .month, .day, .hour], from: nextHour)
-        return calendar.date(from: components)!
-    }
-
 }
+

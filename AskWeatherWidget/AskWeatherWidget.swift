@@ -64,26 +64,26 @@ struct AskWeatherWidgetEntryView : View {
             .font(.caption)
             .foregroundColor(.white.opacity(0.85))
     }
+    
 }
 
-
 struct AskWeatherWidget: Widget {
-
-    let kind: String = "AskWeatherWidget"
+    
     let background = LinearGradient(
         gradient: Gradient(colors: [Color.blue.opacity(0.8), Color.cyan]),
         startPoint: .top,
         endPoint: .bottom
     )
-
+    
     var body: some WidgetConfiguration {
-        AppIntentConfiguration(kind: kind, intent: ConfigurationAppIntent.self, provider: Provider()) { entry in
+        StaticConfiguration(kind: "AskWeatherWidget", provider: Provider()) { entry in
             AskWeatherWidgetEntryView(entry: entry)
                 .containerBackground(background, for: .widget)
         }
     }
-
+    
 }
+
 
 #Preview(as: .systemSmall) {
     AskWeatherWidget()
