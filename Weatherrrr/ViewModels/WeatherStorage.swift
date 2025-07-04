@@ -28,28 +28,12 @@ class WeatherStorage: ObservableObject {
         loadFromDisk()
     }
 
-    @MainActor
-    func addFavorite(coordinate: CLLocationCoordinate2D?, address: String?) {
-        Task {
-            do {
-                let report = try await WeatherLoader.load(coordinate: coordinate, displayAddress: address)
-                favorites.append(report)
-            } catch {
-                print("weatherstorage error: \(error)")
-            }
-        }
+    func addFavorite(report: WeatherReport) {
+        favorites.append(report)
     }
 
-    func hasFavorite(coordinate: CLLocationCoordinate2D?) -> Bool {
-        guard let target = coordinate else { return false }
-
-        return favorites.contains { report in
-            let c = report.coordinate
-            let delta = 0.0001
-
-            return abs(c.latitude - target.latitude) < delta &&
-            abs(c.longitude - target.longitude) < delta
-        }
+    func hasFavorite(report: WeatherReport) -> Bool {
+        return favorites.contains(where: { $0.address == report.address })
     }
 
     func handleRemove() {
@@ -83,6 +67,7 @@ class WeatherStorage: ObservableObject {
 extension WeatherStorage {
  
     func scheduleUpdate(coordinate: CLLocationCoordinate2D?) {
+        print(coordinate)
         guard let coordinate, let delay = delay() else {
             return
         }

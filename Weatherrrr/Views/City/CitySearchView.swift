@@ -11,6 +11,7 @@ struct CitySearchView: View {
 
     @StateObject var viewModel = LocationSearchViewModel()
     @EnvironmentObject private var weatherStorage: WeatherStorage
+    @State private var showWeather = false
 
     var body: some View {
         VStack {
@@ -18,8 +19,11 @@ struct CitySearchView: View {
             searchResults
         }
         .padding(.horizontal)
-        .fullScreenCover(isPresented: $viewModel.showWeather) {
-            SearchedCityView(viewModel: viewModel)
+        .fullScreenCover(isPresented: $showWeather) {
+            SearchedCityView(
+                viewModel: .from(coordinate: viewModel.coordinate, address: viewModel.address),
+                showWeather: $showWeather
+            )
         }
     }
 
@@ -38,15 +42,15 @@ struct CitySearchView: View {
         ScrollView {
             ForEach(viewModel.searchResults, id: \.self) { completion in
                 Button {
-                    Task {
+                    Task { @MainActor in
                         await viewModel.handleSearch(completion: completion)
+                        showWeather = true
                     }
                 } label: {
                     Text(completion.title)
                 }
                 .padding(.vertical, 5)
                 .buttonStyle(PlainButtonStyle())
-
             }
         }
     }

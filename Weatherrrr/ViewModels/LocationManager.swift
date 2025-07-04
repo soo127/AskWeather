@@ -11,6 +11,7 @@ class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
 
     @Published var userLocation: CLLocationCoordinate2D?
     @Published var authorizationStatus: CLAuthorizationStatus?
+    @Published var didFetch = false
     private let manager = CLLocationManager()
 
     override init() {
@@ -23,6 +24,7 @@ class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
             return
         }
         self.userLocation = location.coordinate
+        didFetch = true
     }
 
     func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {

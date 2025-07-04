@@ -40,11 +40,12 @@ struct CityContainer: View {
         .padding(.bottom)
         .listRowSeparator(.hidden)
         .listRowInsets(EdgeInsets())
+        // list에서 화살표 숨기기 위함
         .background(
             NavigationLink("", destination: CitySearchView())
                 .opacity(0)
-                .buttonStyle(.plain)
         )
+        .background(.background)
     }
     
     private var favoriteCities: some View {
@@ -56,7 +57,7 @@ struct CityContainer: View {
                     readingView(report: report)
                 }
             }
-            .padding(.vertical, 5)
+            .padding(.vertical, 4)
             .listRowSeparator(.hidden)
             .listRowInsets(EdgeInsets())
         }

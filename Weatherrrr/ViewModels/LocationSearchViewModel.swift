@@ -18,7 +18,6 @@ class LocationSearchViewModel: NSObject, ObservableObject {
     @Published private(set) var results = [MKLocalSearchCompletion]()
     @Published private(set) var coordinate: CLLocationCoordinate2D?
     @Published private var searchedAddress: String?
-    @Published var showWeather = false
     private let completer = MKLocalSearchCompleter()
 
     override init() {
@@ -32,7 +31,7 @@ class LocationSearchViewModel: NSObject, ObservableObject {
     }
     
     var searchResults: [MKLocalSearchCompletion]  {
-        self.results.filter { $0.title.hasPrefix("대한민국") }
+        results.filter { $0.title.hasPrefix("대한민국") }
     }
 
     var address: String? {
@@ -55,7 +54,6 @@ extension LocationSearchViewModel {
                 return
             }
             self.coordinate = coordinate
-            self.showWeather = true
         } catch {
             print("검색 실패: \(error)")
         }
@@ -74,7 +72,6 @@ extension LocationSearchViewModel: MKLocalSearchCompleterDelegate {
     }
 
     func completer(_ completer: MKLocalSearchCompleter, didFailWithError error: any Error) {
-        print("자동완성 실패: \(error.localizedDescription)")
     }
 
 }

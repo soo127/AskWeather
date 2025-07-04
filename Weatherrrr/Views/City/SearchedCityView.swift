@@ -8,27 +8,25 @@
 import SwiftUI
 
 struct SearchedCityView: View {
-
+    
     @EnvironmentObject private var weatherStorage: WeatherStorage
-    @ObservedObject var viewModel: LocationSearchViewModel
-
+    @ObservedObject var viewModel: WeatherViewModel
+    @Binding var showWeather: Bool
+    
     var body: some View {
         NavigationStack {
-            let coordinate = viewModel.coordinate
-            let address = viewModel.address
-            
-            WeatherView(viewModel: .from(coordinate: coordinate, address: address))
+            WeatherView(viewModel: viewModel)
                 .toolbar {
                     ToolbarItem(placement: .navigationBarLeading) {
                         Button("취소") {
-                            viewModel.showWeather = false
+                            showWeather = false
                         }
                     }
-                    if !weatherStorage.hasFavorite(coordinate: coordinate) {
+                    if !(viewModel.isLoading || weatherStorage.hasFavorite(report: viewModel.weatherReport)) {
                         ToolbarItem(placement: .navigationBarTrailing) {
                             Button("추가") {
-                                weatherStorage.addFavorite(coordinate: coordinate, address: address)
-                                viewModel.showWeather = false
+                                weatherStorage.addFavorite(report: viewModel.weatherReport)
+                                showWeather = false
                             }
                         }
                     }
