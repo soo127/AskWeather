@@ -15,14 +15,14 @@ struct WeatherrrrApp: App {
 
     var body: some Scene {
         WindowGroup {
-            if let userLocation = locationManager.userLocation {
-                ContentView(coordinate: userLocation)
+            if weatherStorage.isReady {
+                ContentView(report: weatherStorage.currentWeather)
                     .environmentObject(weatherStorage)
-                    .task {
-                        weatherStorage.scheduleUpdate(coordinate: userLocation)
-                    }  
             } else {
                 ProgressView("현재 위치를 불러오는 중...")
+                    .task {
+                        weatherStorage.scheduleUpdate(coordinate: locationManager.userLocation)
+                    }
             }
         }
     }

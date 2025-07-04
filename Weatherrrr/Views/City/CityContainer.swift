@@ -26,31 +26,6 @@ struct CityContainer: View {
             .listStyle(.plain)
         }
     }
-
-    private var removeButton: some View {
-        Button {
-            weatherStorage.handleRemove()
-        } label: {
-            Image(systemName: weatherStorage.isEditMode ? "checkmark" : "trash")
-        }
-    }
-
-    private var favoriteCities: some View {
-        ForEach(weatherStorage.favorites) { weatherReport in
-            CityCard(report: weatherReport)
-                .padding(.vertical, 5)
-                .listRowSeparator(.hidden)
-                .listRowInsets(EdgeInsets())
-                .listRowBackground(Color.clear)
-                .background(
-                    NavigationLink("", destination: WeatherView(viewModel: .from(weatherReport)))
-                        .opacity(0)
-                )
-        }
-        .onMove { indices, newOffset in
-            weatherStorage.favorites.move(fromOffsets: indices, toOffset: newOffset)
-        }
-    }
     
     private var searchBar: some View {
         HStack {
@@ -65,11 +40,58 @@ struct CityContainer: View {
         .padding(.bottom)
         .listRowSeparator(.hidden)
         .listRowInsets(EdgeInsets())
-        .listRowBackground(Color.clear)
         .background(
             NavigationLink("", destination: CitySearchView())
                 .opacity(0)
+                .buttonStyle(.plain)
         )
+    }
+    
+    private var favoriteCities: some View {
+        ForEach(weatherStorage.favorites) { report in
+            Group {
+                if weatherStorage.isEditMode {
+                    editingView(report: report)
+                } else {
+                    readingView(report: report)
+                }
+            }
+            .padding(.vertical, 5)
+            .listRowSeparator(.hidden)
+            .listRowInsets(EdgeInsets())
+        }
+        .onMove { indices, newOffset in
+            weatherStorage.favorites.move(fromOffsets: indices, toOffset: newOffset)
+        }
+    }
+    
+    private func editingView(report: WeatherReport) -> some View {
+        Button {
+            weatherStorage.toggleFavorite(report: report)
+        } label: {
+            HStack {
+                Image(systemName: weatherStorage.isSelected(report: report) ? "checkmark.circle" : "circle")
+                    .resizable()
+                    .frame(width: 25, height: 25)
+                CityCard(report: report)
+            }
+        }
+    }
+    
+    private func readingView(report: WeatherReport) -> some View {
+        CityCard(report: report)
+            .background(
+                NavigationLink("", destination: WeatherView(viewModel: .from(report)))
+                    .opacity(0)
+            )
+    }
+    
+    private var removeButton: some View {
+        Button {
+            weatherStorage.handleRemove()
+        } label: {
+            Image(systemName: weatherStorage.isEditMode ? "checkmark" : "trash")
+        }
     }
 
 }

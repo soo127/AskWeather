@@ -19,7 +19,6 @@ struct WeatherReport: Codable, Identifiable {
     let areaCode: String
     let latitude: Double
     let longitude: Double
-    let updatedAt: Date
 
     init(
         forecasts: [Forecast],
@@ -40,7 +39,6 @@ struct WeatherReport: Codable, Identifiable {
         self.areaCode = areaCode
         self.latitude = latitude
         self.longitude = longitude
-        self.updatedAt = Date()
     }
 
 }

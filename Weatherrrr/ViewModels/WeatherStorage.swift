@@ -19,6 +19,7 @@ class WeatherStorage: ObservableObject {
     }
     @Published var isEditMode = false
     @Published var checkedFavorites: Set<UUID> = []
+    @Published var isReady = false
     var now: Date {
         Date()
     }
@@ -52,19 +53,23 @@ class WeatherStorage: ObservableObject {
     }
 
     func handleRemove() {
-        isEditMode.toggle()
-        if !isEditMode {
+        if isEditMode {
             removeFavorites(ids: checkedFavorites)
             checkedFavorites.removeAll()
         }
+        isEditMode.toggle()
     }
 
     func toggleFavorite(report: WeatherReport) {
-        if checkedFavorites.contains(report.id) {
+        if isSelected(report: report) {
             checkedFavorites.remove(report.id)
         } else {
             checkedFavorites.insert(report.id)
         }
+    }
+    
+    func isSelected(report: WeatherReport) -> Bool {
+        checkedFavorites.contains(report.id)
     }
 
     private func removeFavorites(ids: Set<UUID>) {
@@ -78,16 +83,16 @@ class WeatherStorage: ObservableObject {
 extension WeatherStorage {
  
     func scheduleUpdate(coordinate: CLLocationCoordinate2D?) {
-        Task {
-            await update(coordinate: coordinate)
-        }
-        guard let delay = delay() else {
+        guard let coordinate, let delay = delay() else {
             return
+        }
+        Task { @MainActor in
+            await update(coordinate: coordinate)
+            isReady = true
         }
         Timer.scheduledTimer(withTimeInterval: delay, repeats: false) { [weak self] _ in
             guard let self else { return }
             Task {
-                print(delay)
                 await self.update(coordinate: coordinate)
             }
             scheduleHourlyUpdate(coordinate: coordinate)
@@ -194,5 +199,3 @@ extension WeatherStorage {
     }
 
 }
-
-
