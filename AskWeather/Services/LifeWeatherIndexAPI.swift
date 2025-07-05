@@ -62,8 +62,8 @@ extension LifeWeatherIndexAPI {
 
     fileprivate enum Constants {
         static let apiKey = "D6isDBPO8K02ZbuWvj5rekfrmgpuAujejX8OZpMaz0aEwWU070S8US0pordpKMnu0qlD1NS8r83w7FqLWLgGOg%3D%3D"
-        static let baseUVURL = "http://apis.data.go.kr/1360000/LivingWthrIdxServiceV4/getUVIdxV4"
-        static let baseAirURL = "http://apis.data.go.kr/1360000/LivingWthrIdxServiceV4/getAirDiffusionIdxV4"
+        static let baseUVURL = "https://apis.data.go.kr/1360000/LivingWthrIdxServiceV4/getUVIdxV4"
+        static let baseAirURL = "https://apis.data.go.kr/1360000/LivingWthrIdxServiceV4/getAirDiffusionIdxV4"
     }
 
 }

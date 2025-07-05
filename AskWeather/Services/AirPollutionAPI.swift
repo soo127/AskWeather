@@ -35,7 +35,7 @@ extension AirPollutionAPI {
         [
             "serviceKey": Constants.apiKey,
             "pageNo": 1,
-            "numOfRows": 1000,
+            "numOfRows": 1,
             "returnType": "json",
             "itemCode": "PM10",
             "dataGubun": "HOUR",
@@ -49,6 +49,6 @@ extension AirPollutionAPI {
 
     fileprivate enum Constants {
         static let apiKey = "D6isDBPO8K02ZbuWvj5rekfrmgpuAujejX8OZpMaz0aEwWU070S8US0pordpKMnu0qlD1NS8r83w7FqLWLgGOg%3D%3D"
-        static let baseURL = "http://apis.data.go.kr/B552584/ArpltnStatsSvc/getCtprvnMesureLIst"
+        static let baseURL = "https://apis.data.go.kr/B552584/ArpltnStatsSvc/getCtprvnMesureLIst"
     }
 }

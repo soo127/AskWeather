@@ -1,6 +1,6 @@
 //
-//  WeatherrrrApp.swift
-//  Weatherrrr
+//  AskWeatherApp.swift
+//  AskWeather
 //
 //  Created by 이상수 on 6/8/25.
 //
@@ -8,7 +8,7 @@
 import SwiftUI
 
 @main
-struct WeatherrrrApp: App {
+struct AskWeatherApp: App {
 
     @StateObject private var locationManager = LocationManager()
     @StateObject private var weatherStorage = WeatherStorage()
