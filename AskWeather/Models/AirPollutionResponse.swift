@@ -38,6 +38,7 @@ extension AirPollutionAPI {
         let jeju: Int?
         let sejong: Int?
 
+        // 기본 응답이 String, 아주 가끔 값이 없기도 하므로 미리 Int로 변환 (필요에 따라 Property wrapper로 리팩토링 가능)
         enum CodingKeys: String, CodingKey {
             case seoul, busan, daegu, incheon, gwangju, daejeon, ulsan
             case gyeonggi, gangwon, chungbuk, chungnam, jeonbuk, jeonnam

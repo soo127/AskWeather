@@ -11,9 +11,7 @@ struct AirPollutionAPI {
 
     static func fetch() async throws -> AirPollutionAPI.Item {
         let response: AirPollutionResponse = try await APIHelper.fetch(url: url())
-        print(url())
         guard let fetched = response.response.body.items.first else {
-            print("실패........")
             throw FetchError.noData
         }
         return fetched

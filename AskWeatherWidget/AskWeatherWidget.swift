@@ -84,7 +84,6 @@ struct AskWeatherWidget: Widget {
     
 }
 
-
 #Preview(as: .systemSmall) {
     AskWeatherWidget()
 } timeline: {

@@ -13,7 +13,6 @@ class MapViewModel: ObservableObject {
 
     @Published var menuType: MapMenuType = .temperature
 
-
     func select(type: MapMenuType) {
         menuType = type
     }

@@ -66,8 +66,8 @@ class WeatherStorage: ObservableObject {
 
 extension WeatherStorage {
  
+    // 실행 즉시 업데이트 후 시간 단위 업데이트 (4:35 실행 -> 5:00 -> 6:00 -> ...)
     func scheduleUpdate(coordinate: CLLocationCoordinate2D?) {
-        print(coordinate)
         guard let coordinate, let delay = delay() else {
             return
         }
@@ -110,7 +110,7 @@ extension WeatherStorage {
         do {
             currentWeather = try await WeatherLoader.load(coordinate: coordinate)
         } catch {
-            print("weatherstorage error2: \(error)")
+            print("updateCurrentWeather error: \(error)")
         }
     }
 
@@ -126,7 +126,7 @@ extension WeatherStorage {
                 let newReport = try await WeatherLoader.load(coordinate: coordinate, displayAddress: favorite.address)
                 updated.append(newReport)
             } catch {
-                print("weatherStorage error3: \(error)")
+                print("updateFavorites error: \(error)")
             }
         }
         favorites = updated
