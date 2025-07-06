@@ -108,7 +108,7 @@ extension WeatherStorage {
     @MainActor
     private func updateCurrentWeather(coordinate: CLLocationCoordinate2D?) async {
         do {
-            currentWeather = try await WeatherLoader.load(coordinate: coordinate)
+            currentWeather = try await WeatherLoader.loadWithRetry(coordinate: coordinate)
         } catch {
             print("updateCurrentWeather error: \(error)")
         }
@@ -123,7 +123,7 @@ extension WeatherStorage {
                 let lon = favorite.longitude
                 let coordinate = CLLocationCoordinate2D(latitude: lat, longitude: lon)
                 
-                let newReport = try await WeatherLoader.load(coordinate: coordinate, displayAddress: favorite.address)
+                let newReport = try await WeatherLoader.loadWithRetry(coordinate: coordinate, displayAddress: favorite.address)
                 updated.append(newReport)
             } catch {
                 print("updateFavorites error: \(error)")

@@ -30,14 +30,13 @@ extension Date {
         return hour < 6 || hour >= 18
     }
     
+    /// 5:35 -> 6:00
     func nextHour() -> Date? {
         let calendar = Calendar.current
-        return calendar.date(
-            bySettingHour: calendar.component(.hour, from: self) + 1,
-            minute: 0,
-            second: 0,
-            of: self
-        )
+        guard let next = calendar.date(byAdding: .hour, value: 1, to: self) else {
+            return nil
+        }
+        return calendar.date(bySettingHour: calendar.component(.hour, from: next), minute: 0, second: 0, of: next)
     }
 
 }

@@ -27,7 +27,7 @@ class WeatherViewModel: ObservableObject {
     private func load(coordinate: CLLocationCoordinate2D?, address: String? = nil) {
         Task { @MainActor in
             do {
-                weatherReport = try await WeatherLoader.load(coordinate: coordinate, displayAddress: address)
+                weatherReport = try await WeatherLoader.loadWithRetry(coordinate: coordinate, displayAddress: address)
                 isLoading = false
             } catch {
                 print("날씨 로딩 실패: \(error)")
@@ -124,6 +124,20 @@ extension WeatherViewModel {
 
     func dailySkyIcon(after: Int) -> Image {
         ForecastProcessor.dailySkyIcon(forecasts: forecasts, after: after)
+    }
+    
+    func weekdayLabel(after: Int) -> String {
+        let calendar = Calendar.current
+        if after == 0 {
+            return "오늘"
+        }
+        guard let targetDate = calendar.date(byAdding: .day, value: after, to: now) else {
+            return "\(after)일 뒤"
+        }
+        let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: "ko_KR")
+        formatter.dateFormat = "EEE"
+        return formatter.string(from: targetDate)
     }
 
 }

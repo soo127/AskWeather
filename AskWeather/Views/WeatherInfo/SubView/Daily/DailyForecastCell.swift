@@ -9,7 +9,7 @@ import SwiftUI
 
 struct DailyForecastCell: View {
 
-    let afterDays: Int
+    let dayOfWeek: String
     let skyIcon: Image
     let high: Double
     let low: Double
@@ -25,7 +25,7 @@ struct DailyForecastCell: View {
     }
 
     private var date: some View {
-        Text("\(afterDays == 0 ? "오늘" : "\(afterDays)일 뒤")")
+        Text("\(dayOfWeek)")
             .frame(width: 50, alignment: .leading)
     }
 

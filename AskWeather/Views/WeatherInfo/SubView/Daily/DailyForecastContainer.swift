@@ -34,7 +34,7 @@ struct DailyForecastContainer: View {
         Group {
             ForEach(0...3, id: \.self) { day in
                 DailyForecastCell(
-                    afterDays: day,
+                    dayOfWeek: viewModel.weekdayLabel(after: day),
                     skyIcon: viewModel.dailySkyIcon(after: day),
                     high: viewModel.dailyHighTemp(after: day),
                     low: viewModel.dailyLowTemp(after: day)

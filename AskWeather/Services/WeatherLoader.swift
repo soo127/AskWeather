@@ -38,27 +38,42 @@ enum WeatherLoader {
             longitude: coordinate.longitude
         )
     }
-
-   private static func makeForecasts(items: [KMAAPI.Item]) -> [Forecast] {
-        let itemsByDate: [Date: [KMAAPI.Item]] = items
-            .reduce(into: [:]) { partialResult, item in
-                let dateString = item.fcstDate + item.fcstTime
-                guard let date = dateString.date() else {
-                    return
-                }
-                let prevItems = partialResult[date] ?? []
-                return partialResult[date] = (prevItems + [item])
-            }
-
-        let forecasts = itemsByDate
-            .sorted { $0.key < $1.key }
-            .map { (date, items) in
-                var forecast = Forecast(date: date)
-                forecast.update(items: items)
-                return forecast
-            }
-
-        return forecasts
+    
+    /// (필요한 경우 사용) 공공 데이터 포털의 서버 문제 -> 일정 시간 후 재시도할 경우 대부분 해결
+    static func loadWithRetry(coordinate: CLLocationCoordinate2D?, displayAddress: String? = nil) async throws -> WeatherReport {
+        do {
+            return try await load(coordinate: coordinate, displayAddress: displayAddress)
+        } catch { // 필요에 따라 let urlError as URLError where urlError.code == .badServerResponse 등으로 구체화
+            print("서버 문제로 인해 10초 후 로드를 다시 시도합니다.")
+            try? await Task.sleep(nanoseconds: 10 * 1_000_000_000)
+            return try await load(coordinate: coordinate, displayAddress: displayAddress)
+        }
     }
+ 
+}
 
+extension WeatherLoader {
+    
+    private static func makeForecasts(items: [KMAAPI.Item]) -> [Forecast] {
+         let itemsByDate: [Date: [KMAAPI.Item]] = items
+             .reduce(into: [:]) { partialResult, item in
+                 let dateString = item.fcstDate + item.fcstTime
+                 guard let date = dateString.date() else {
+                     return
+                 }
+                 let prevItems = partialResult[date] ?? []
+                 return partialResult[date] = (prevItems + [item])
+             }
+
+         let forecasts = itemsByDate
+             .sorted { $0.key < $1.key }
+             .map { (date, items) in
+                 var forecast = Forecast(date: date)
+                 forecast.update(items: items)
+                 return forecast
+             }
+
+         return forecasts
+     }
+    
 }

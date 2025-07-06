@@ -14,6 +14,7 @@ enum APIHelper {
             throw URLError(.badURL)
         }
         let (data, _) = try await URLSession.shared.data(from: url)
+        try Self.checkServiceError(data: data)
         let decoded = try JSONDecoder().decode(T.self, from: data)
         return decoded
     }
@@ -27,4 +28,18 @@ enum APIHelper {
         return decoded
     }
 
+}
+
+extension APIHelper {
+    
+    // 공공데이터 포털 api 서버 문제 (HTTP ROUTING ERROR)
+    private static func checkServiceError(data: Data) throws {
+        guard let string = String(data: data, encoding: .utf8) else {
+            throw FetchError.noData
+        }
+        if string.contains("SERVICE ERROR") {
+            throw URLError(.badServerResponse)
+        }
+    }
+    
 }
