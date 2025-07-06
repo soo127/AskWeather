@@ -22,7 +22,7 @@ struct UltraVioletView: View {
     }
 
     private var title: some View {
-        Text("자외선 지수")
+        Text("자외선지수")
             .font(.caption)
             .foregroundStyle(.gray)
     }

@@ -22,7 +22,7 @@ struct AirDiffusionView: View {
     }
 
     private var title: some View {
-        Text("대기 정체 지수 (이후 3시간)")
+        Text("대기정체지수 (이후 3시간)")
             .font(.caption)
             .foregroundStyle(.gray)
     }

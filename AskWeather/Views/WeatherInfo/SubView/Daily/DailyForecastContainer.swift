@@ -25,7 +25,7 @@ struct DailyForecastContainer: View {
     }
 
     private var title: some View {
-        Text("일간 일기 예보")
+        Text("일간 일기예보")
             .font(.caption)
             .foregroundStyle(.gray)
     }
