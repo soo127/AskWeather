@@ -63,3 +63,8 @@ fastlane/test_output
 
 # API_KEY
 Secrets.xcconfig
+
+.DS_Store
+._.DS_Store
+**/.DS_Store
+**/._.DS_Store
