@@ -33,8 +33,10 @@ struct DailyForecastCell: View {
         Group {
             Text(String(format: "%.0f", low) + "°")
                 .foregroundStyle(.gray)
+                .frame(width: 30, alignment: .trailing)
             capsule
             Text(String(format: "%.0f", high) + "°")
+                .frame(width: 30, alignment: .trailing)
         }
     }
 

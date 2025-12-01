@@ -21,7 +21,6 @@ struct MapMenu: View {
         }
     }
 
-    @ViewBuilder
     private func menuButton(type: MapMenuType, title: String) -> some View {
         Button {
             viewModel.select(type: type)
