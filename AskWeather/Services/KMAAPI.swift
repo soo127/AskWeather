@@ -44,8 +44,8 @@ extension KMAAPI {
     private static var baseDate: String {
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyyMMdd"
-        let yesterday =  Calendar.current.date(byAdding: .day, value: -1, to: Date())!
-        return formatter.string(from: yesterday)
+        let yesterday =  Calendar.current.date(byAdding: .day, value: -1, to: Date())
+        return formatter.string(from: yesterday ?? Date())
     }
 
 }

@@ -98,7 +98,7 @@ extension WeatherViewModel {
     private var truncatedHour: Date {
         let calendar = Calendar.current
         let components = calendar.dateComponents([.year, .month, .day, .hour], from: now)
-        return calendar.date(from: components)!
+        return calendar.date(from: components) ?? Date()
     }
 
     private func todayForecasts(from startDate: Date) -> ArraySlice<Forecast> {

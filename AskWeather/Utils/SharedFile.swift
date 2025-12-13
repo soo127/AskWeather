@@ -12,7 +12,9 @@ enum SharedFile {
     private static let appGroupID = "group.com.soo127.Weather"
 
     static var widgetWeatherURL: URL {
-        let url = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: appGroupID)! // appGroupID가 적합하다면 crash X
+        guard let url = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: appGroupID) else {
+            fatalError("appGroupID이 적합하지 않습니다.")
+        }
         return url.appendingPathComponent("weather.json")
     }
 
