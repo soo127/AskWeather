@@ -1,6 +1,6 @@
 //
 //  LocationManager.swift
-//  Weatherrrr
+//  AskWeather
 //
 //  Created by 이상수 on 6/9/25.
 //

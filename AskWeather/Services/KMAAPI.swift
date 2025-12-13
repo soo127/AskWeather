@@ -1,6 +1,6 @@
 //
 //  KMAAPI.swift
-//  Weatherrrr
+//  AskWeather
 //
 //  Created by 이상수 on 6/8/25.
 //

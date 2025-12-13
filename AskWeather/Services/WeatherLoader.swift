@@ -1,6 +1,6 @@
 //
 //  WeatherLoader.swift
-//  Weatherrrr
+//  AskWeather
 //
 //  Created by 이상수 on 6/18/25.
 //
@@ -44,8 +44,8 @@ enum WeatherLoader {
         do {
             return try await load(coordinate: coordinate, displayAddress: displayAddress)
         } catch { // 필요에 따라 let urlError as URLError where urlError.code == .badServerResponse 등으로 구체화
-            print("서버 문제로 인해 10초 후 로드를 다시 시도합니다.")
-            try? await Task.sleep(nanoseconds: 10 * 1_000_000_000)
+            print("서버 문제로 인해 5초 후 로드를 다시 시도합니다.")
+            try? await Task.sleep(nanoseconds: 10 * 500_000_000)
             return try await load(coordinate: coordinate, displayAddress: displayAddress)
         }
     }

@@ -1,6 +1,6 @@
 //
 //  WeatherStorage.swift
-//  Weatherrrr
+//  AskWeather
 //
 //  Created by 이상수 on 6/17/25.
 //
@@ -116,20 +116,34 @@ extension WeatherStorage {
 
     @MainActor
     private func updateFavorites() async {
-        var updated: [WeatherReport] = []
-        for favorite in favorites {
-            do {
-                let lat = favorite.latitude
-                let lon = favorite.longitude
-                let coordinate = CLLocationCoordinate2D(latitude: lat, longitude: lon)
-                
-                let newReport = try await WeatherLoader.loadWithRetry(coordinate: coordinate, displayAddress: favorite.address)
-                updated.append(newReport)
-            } catch {
-                print("updateFavorites error: \(error)")
+        await withTaskGroup(of: (Int, WeatherReport).self) { group in
+            for (index, favorite) in favorites.enumerated() {
+                group.addTask {
+                    do {
+                        let coordinate = CLLocationCoordinate2D(
+                            latitude: favorite.latitude,
+                            longitude: favorite.longitude
+                        )
+                        let report = try await WeatherLoader.loadWithRetry(
+                            coordinate: coordinate,
+                            displayAddress: favorite.address
+                        )
+                        return (index, report)
+                    } catch {
+                        print("updateFavorites error: \(error)")
+                        return (index, favorite)
+                    }
+                }
             }
+            
+            var results: [(Int, WeatherReport)] = []
+            for await result in group {
+                results.append(result)
+            }
+            
+            results.sort { $0.0 < $1.0 }
+            favorites = results.map { $0.1 }
         }
-        favorites = updated
     }
     
     ///위젯 전용
