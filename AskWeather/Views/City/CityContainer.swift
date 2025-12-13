@@ -1,6 +1,6 @@
 //
 //  CityContainer.swift
-//  Weather
+//  AskWeather
 //
 //  Created by 이상수 on 5/29/25.
 //
@@ -49,7 +49,7 @@ struct CityContainer: View {
     }
     
     private var favoriteCities: some View {
-        ForEach(weatherStorage.favorites) { report in
+        ForEach(weatherStorage.favorites.values) { report in
             Group {
                 if weatherStorage.isEditMode {
                     editingView(report: report)
@@ -62,7 +62,7 @@ struct CityContainer: View {
             .listRowInsets(EdgeInsets())
         }
         .onMove { indices, newOffset in
-            weatherStorage.favorites.move(fromOffsets: indices, toOffset: newOffset)
+            weatherStorage.moveFavorites(fromOffsets: indices, toOffset: newOffset)
         }
     }
     

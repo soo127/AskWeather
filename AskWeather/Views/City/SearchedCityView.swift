@@ -22,7 +22,7 @@ struct SearchedCityView: View {
                             showWeather = false
                         }
                     }
-                    if !(viewModel.isLoading || weatherStorage.hasFavorite(report: viewModel.weatherReport)) {
+                    if !(viewModel.isLoading || weatherStorage.hasFavorite(id: viewModel.weatherReport.id)) {
                         ToolbarItem(placement: .navigationBarTrailing) {
                             Button("추가") {
                                 weatherStorage.addFavorite(report: viewModel.weatherReport)

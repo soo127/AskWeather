@@ -8,15 +8,19 @@
 import SwiftUI
 import CoreLocation
 import WidgetKit
+import OrderedCollections
 
+@MainActor
 class WeatherStorage: ObservableObject {
 
     @Published private(set) var currentWeather: WeatherReport = .empty
-    @Published var favorites: [WeatherReport] = [] {
+    @Published private(set) var favorites: OrderedDictionary<WeatherReport.ID, WeatherReport> = [:] {
         didSet {
             storeToDisk()
+            //print("#DEBUG \(favorites.map { "\($0.key): \($0.value.address)" })")
         }
     }
+    
     @Published var isEditMode = false
     @Published var checkedFavorites: Set<UUID> = []
     @Published var isReady = false
@@ -29,11 +33,11 @@ class WeatherStorage: ObservableObject {
     }
 
     func addFavorite(report: WeatherReport) {
-        favorites.append(report)
+        favorites[report.id] = report
     }
 
-    func hasFavorite(report: WeatherReport) -> Bool {
-        return favorites.contains(where: { $0.address == report.address })
+    func hasFavorite(id: WeatherReport.ID) -> Bool {
+        favorites[id] != nil
     }
 
     func handleRemove() {
@@ -45,19 +49,33 @@ class WeatherStorage: ObservableObject {
     }
 
     func toggleFavorite(report: WeatherReport) {
+        print(report.id)
         if isSelected(report: report) {
             checkedFavorites.remove(report.id)
         } else {
             checkedFavorites.insert(report.id)
         }
     }
-    
+
+    func moveFavorites(fromOffsets: IndexSet, toOffset: Int) {
+        /// id값은 고정, value만 offset에 따라 움직이는 이슈
+        favorites.values.move(fromOffsets: fromOffsets, toOffset: toOffset)
+        /// 다시 순회하면서 id를 세팅함
+        let newFavorites: OrderedDictionary<WeatherReport.ID, WeatherReport> = OrderedDictionary(
+            uniqueKeysWithValues: favorites.values.map { ($0.id, $0) }
+        )
+        favorites = newFavorites
+    }
+
     func isSelected(report: WeatherReport) -> Bool {
         checkedFavorites.contains(report.id)
     }
 
     private func removeFavorites(ids: Set<UUID>) {
-        favorites.removeAll { ids.contains($0.id) }
+        ids.forEach {
+            print($0)
+            favorites[$0] = nil
+        }
     }
 
 }
@@ -67,25 +85,23 @@ class WeatherStorage: ObservableObject {
 extension WeatherStorage {
  
     // 실행 즉시 업데이트 후 시간 단위 업데이트 (4:35 실행 -> 5:00 -> 6:00 -> ...)
-    func scheduleUpdate(coordinate: CLLocationCoordinate2D?) {
+    func scheduleUpdate(coordinate: CLLocationCoordinate2D?) async throws {
         guard let coordinate, let delay = delay() else {
             return
         }
-        Task { @MainActor in
-            await update(coordinate: coordinate)
-            isReady = true
-        }
-        Timer.scheduledTimer(withTimeInterval: delay, repeats: false) { [weak self] _ in
-            guard let self else { return }
-            Task {
-                await self.update(coordinate: coordinate)
-            }
-            scheduleHourlyUpdate(coordinate: coordinate)
-        }
+        await update(coordinate: coordinate)
+        isReady = true
+
+        try await Task.sleep(nanoseconds: delay)
+        await self.update(coordinate: coordinate)
+        self.scheduleHourlyUpdate(coordinate: coordinate)
     }
     
-    private func delay() -> TimeInterval? {
-        return now.nextHour()?.timeIntervalSince(now)
+    private func delay() -> UInt64? {
+        guard let interval = now.nextHour()?.timeIntervalSince(now) else {
+            return nil
+        }
+        return UInt64(interval)
     }
     
     private func scheduleHourlyUpdate(coordinate: CLLocationCoordinate2D?) {
@@ -97,7 +113,6 @@ extension WeatherStorage {
         }
     }
     
-    @MainActor
     private func update(coordinate: CLLocationCoordinate2D?) async {
         async let current: () = updateCurrentWeather(coordinate: coordinate)
         async let refresh: () = updateFavorites()
@@ -105,7 +120,6 @@ extension WeatherStorage {
         updateWidget()
     }
 
-    @MainActor
     private func updateCurrentWeather(coordinate: CLLocationCoordinate2D?) async {
         do {
             currentWeather = try await WeatherLoader.loadWithRetry(coordinate: coordinate)
@@ -114,10 +128,13 @@ extension WeatherStorage {
         }
     }
 
-    @MainActor
     private func updateFavorites() async {
-        await withTaskGroup(of: (Int, WeatherReport).self) { group in
-            for (index, favorite) in favorites.enumerated() {
+        let keys = Array(favorites.keys)
+        
+        await withTaskGroup(of: (WeatherReport.ID, WeatherReport).self) { group in
+            for key in keys {
+                guard let favorite = favorites[key] else { continue }
+                
                 group.addTask {
                     do {
                         let coordinate = CLLocationCoordinate2D(
@@ -128,21 +145,25 @@ extension WeatherStorage {
                             coordinate: coordinate,
                             displayAddress: favorite.address
                         )
-                        return (index, report)
+                        return (report.id, report)
                     } catch {
                         print("updateFavorites error: \(error)")
-                        return (index, favorite)
+                        return (key, favorite)
                     }
                 }
             }
             
-            var results: [(Int, WeatherReport)] = []
-            for await result in group {
-                results.append(result)
+            var updates: [WeatherReport.ID: WeatherReport] = [:]
+            for await (id, report) in group {
+                updates[id] = report
             }
             
-            results.sort { $0.0 < $1.0 }
-            favorites = results.map { $0.1 }
+            var updated: OrderedDictionary<WeatherReport.ID, WeatherReport> = [:]
+            for key in keys {
+                updated[key] = updates[key]
+            }
+            
+            favorites = updated
         }
     }
     
@@ -157,21 +178,26 @@ extension WeatherStorage {
             print("위젯용 저장 실패: \(error)")
         }
     }
-
+    
 }
 
 //MARK: - load/store
 
 extension WeatherStorage {
-
+    
+    private typealias CodableReports = [WeatherReport]
+    
     private func loadFromDisk() {
         guard FileManager.default.fileExists(atPath: fileURL().path) else {
             return
         }
         do {
             let data = try Data(contentsOf: fileURL())
-            let reports = try JSONDecoder().decode([WeatherReport].self, from: data)
-            favorites = reports
+            let reports = try JSONDecoder().decode(CodableReports.self, from: data)
+            let dict: OrderedDictionary<WeatherReport.ID, WeatherReport> = OrderedDictionary(
+                uniqueKeysWithValues: reports.map { ($0.id, $0) }
+            )
+            favorites = dict
         } catch {
             print("불러오기 실패: \(error)")
         }
@@ -179,7 +205,8 @@ extension WeatherStorage {
 
     private func storeToDisk() {
         do {
-            let data = try JSONEncoder().encode(favorites)
+            let reports: CodableReports = Array(favorites.values)
+            let data = try JSONEncoder().encode(reports)
             try data.write(to: fileURL())
         } catch {
             print("저장 실패: \(error)")

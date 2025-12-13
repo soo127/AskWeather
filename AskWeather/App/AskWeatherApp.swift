@@ -21,7 +21,9 @@ struct AskWeatherApp: App {
             } else {
                 ProgressView("현재 위치를 불러오는 중...")
                     .onChange(of: locationManager.didFetch) {
-                        weatherStorage.scheduleUpdate(coordinate: locationManager.userLocation)
+                        Task {
+                            try? await weatherStorage.scheduleUpdate(coordinate: locationManager.userLocation)
+                        }
                     }
             }
         }

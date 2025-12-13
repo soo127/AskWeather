@@ -10,6 +10,7 @@
 		8D3E647D2E0FC74F0028F4EA /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8D3E647C2E0FC74F0028F4EA /* WidgetKit.framework */; };
 		8D3E647F2E0FC74F0028F4EA /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8D3E647E2E0FC74F0028F4EA /* SwiftUI.framework */; };
 		8D3E64902E0FC7500028F4EA /* AskWeatherWidgetExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 8D3E647A2E0FC74F0028F4EA /* AskWeatherWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		8DB086602EEDD41900042BCA /* Collections in Frameworks */ = {isa = PBXBuildFile; productRef = 8DB0865F2EEDD41900042BCA /* Collections */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -104,6 +105,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8DB086602EEDD41900042BCA /* Collections in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -183,6 +185,7 @@
 			);
 			name = AskWeather;
 			packageProductDependencies = (
+				8DB0865F2EEDD41900042BCA /* Collections */,
 			);
 			productName = Weatherrrr;
 			productReference = 8DD8585D2DF5C342007094B8 /* AskWeather.app */;
@@ -215,6 +218,9 @@
 			);
 			mainGroup = 8DD858542DF5C342007094B8;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				8DB0865E2EEDD41900042BCA /* XCRemoteSwiftPackageReference "swift-collections" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 8DD8585E2DF5C342007094B8 /* Products */;
 			projectDirPath = "";
@@ -537,6 +543,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		8DB0865E2EEDD41900042BCA /* XCRemoteSwiftPackageReference "swift-collections" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/apple/swift-collections.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.3.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		8DB0865F2EEDD41900042BCA /* Collections */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 8DB0865E2EEDD41900042BCA /* XCRemoteSwiftPackageReference "swift-collections" */;
+			productName = Collections;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 8DD858552DF5C342007094B8 /* Project object */;
 }

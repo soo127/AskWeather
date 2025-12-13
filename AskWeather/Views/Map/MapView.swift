@@ -1,6 +1,6 @@
 //
 //  MapView.swift
-//  Weather
+//  AskWeather
 //
 //  Created by 이상수 on 5/29/25.
 //
@@ -62,7 +62,7 @@ struct MapView: View {
 
     @MapContentBuilder
     private var favoriteMarkers: some MapContent {
-        ForEach(weatherStorage.favorites) { report in
+        ForEach(weatherStorage.favorites.values) { report in
             Annotation(report.address, coordinate: report.coordinate) {
                 MapMarker(
                     viewModel: viewModel,

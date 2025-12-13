@@ -1,6 +1,6 @@
 //
 //  CityCard.swift
-//  Weather
+//  AskWeather
 //
 //  Created by 이상수 on 5/29/25.
 //
