@@ -17,7 +17,6 @@ class WeatherStorage: ObservableObject {
     @Published private(set) var favorites: OrderedDictionary<WeatherReport.ID, WeatherReport> = [:] {
         didSet {
             storeToDisk()
-            //print("#DEBUG \(favorites.map { "\($0.key): \($0.value.address)" })")
         }
     }
     
@@ -49,7 +48,6 @@ class WeatherStorage: ObservableObject {
     }
 
     func toggleFavorite(report: WeatherReport) {
-        print(report.id)
         if isSelected(report: report) {
             checkedFavorites.remove(report.id)
         } else {
@@ -72,10 +70,7 @@ class WeatherStorage: ObservableObject {
     }
 
     private func removeFavorites(ids: Set<UUID>) {
-        ids.forEach {
-            print($0)
-            favorites[$0] = nil
-        }
+        ids.forEach {  favorites[$0] = nil }
     }
 
 }
@@ -160,7 +155,11 @@ extension WeatherStorage {
             
             var updated: OrderedDictionary<WeatherReport.ID, WeatherReport> = [:]
             for key in keys {
-                updated[key] = updates[key]
+                if let report = updates[key] {
+                    updated[key] = report
+                } else {
+                    updated[key] = favorites[key]
+                }
             }
             
             favorites = updated
