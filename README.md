@@ -117,16 +117,15 @@ static func loadWithRetry(coordinate: CLLocationCoordinate2D?, displayAddress: S
         do {
             return try await load(coordinate: coordinate, displayAddress: displayAddress)
         } catch {
-            // 10초 후 재시도
-            try? await Task.sleep(nanoseconds: 10 * 1_000_000_000)
+            // 5초 후 재시도
+            try? await Task.sleep(nanoseconds: 5 * 1_000_000_000)
             return try await load(coordinate: coordinate, displayAddress: displayAddress)
         }
     }
 ```
-공공데이터 포털 API는, 잦은 호출이나 서버 내부 문제로 인한 실패 현상(약 20 ~ 30%)을 보였습니다.
-따라서, 최초 API 호출 실패 시 10초 후 자동 재시도하도록 내부 복원 로직을 추가했습니다.
-이를 통해 API 호출 실패를 10회 중 약 2 ~ 3회 → 약 0 ~ 1회로 안정화시켜 데이터 수신 안정성과 UX를 개선했습니다.
-
+공공데이터 포털 API는, 잦은 호출이나 서버 내부 문제로 인한 실패 현상(오후 시간대에 약 30%)을 보였습니다.
+따라서, 최초 API 호출 실패 시 5초 후 자동 재시도하도록 내부 복원 로직을 추가했습니다.
+재시도 로직 추가 후, API 호출에 실패한 경우를 커버할 수 있게 되어 데이터 수신 안정성과 UX를 개선했습니다.
 
 ### 다중 비동기 데이터 로딩의 성능 최적화
 
