@@ -84,3 +84,65 @@ AskWeather 앱은 크게 다음의 세 화면으로 구성됩니다.
 이 앱은 공공 데이터 포털, kakao developers API를 사용합니다.
 전자의 경우 서버 내부 문제로 인해 단시간에 많은 호출이 이루어지면, 가끔 HTTP ROUTING ERROR, REQUEST TIME OUT 등의 에러를 내뱉습니다.
 이를 대비하여 API 호출에 실패했을 경우 10초를 기다리고 자동으로 재시도합니다.
+
+---
+
+## 해결한 문제 / 핵심 기능
+
+### 캐싱 기반 데이터 로딩 구조 개선
+```swift
+class WeatherViewModel: ObservableObject {
+
+    init(coordinate: CLLocationCoordinate2D?, address: String?) {
+        load(coordinate: coordinate, address: address)
+    }
+
+    /// using cache
+    init(report: WeatherReport) {
+        weatherReport = report
+        isLoading = false
+    }
+
+}
+```
+사용자가 즐겨찾기한 지역은 날씨를 보는 빈도가 상대적으로 높습니다.
+만약 그 지역의 날씨를 보려고 할 때마다 위치를 기반으로 API를 호출하는 것은, 그 자체로 불필요한 호출이며 응답 대기 시간동안 사용자에게 로딩 화면을 제공해야 합니다.
+따라서 즐겨찾기한 지역의 위치를 볼 때는 두 번째 생성자를 사용하여, 즉시 날씨 데이터를 확인할 수 있도록 UX를 개선하였습니다.
+
+
+### API 불안정성 대응 및 복원력 확보 (재시도 로직)
+
+```swift
+static func loadWithRetry(coordinate: CLLocationCoordinate2D?, displayAddress: String? = nil) async throws -> WeatherReport {
+        do {
+            return try await load(coordinate: coordinate, displayAddress: displayAddress)
+        } catch {
+            // 10초 후 재시도
+            try? await Task.sleep(nanoseconds: 10 * 1_000_000_000)
+            return try await load(coordinate: coordinate, displayAddress: displayAddress)
+        }
+    }
+```
+공공데이터 포털 API는, 잦은 호출이나 서버 내부 문제로 인한 실패 현상(약 20 ~ 30%)을 보였습니다.
+따라서, 최초 API 호출 실패 시 10초 후 자동 재시도하도록 내부 복원 로직을 추가했습니다.
+이를 통해 API 호출 실패를 10회 중 약 2 ~ 3회 → 약 0 ~ 1회로 안정화시켜 데이터 수신 안정성과 UX를 개선했습니다.
+
+
+### 다중 비동기 데이터 로딩의 성능 최적화
+
+```swift
+async let nationalAir = AirPollutionAPI.fetch()
+async let uv = LifeWeatherIndexAPI.fetch(index: .uv, areaCode: areaCode)
+async let air = LifeWeatherIndexAPI.fetch(index: .airDiffusion, areaCode: areaCode)
+async let items = KMAAPI.fetch(coordinate: coordinate)
+
+guard let uv = try await uv.current,
+      let airDiffusion = try await air.after3Hours,
+      let airPollution = AirPollutionMapper.value(area: address, in: try await nationalAir) else {
+   throw FetchError.noData
+}
+```
+어떤 지역의 날씨 뷰를 표시하기 위해서는, 대기 오염 지수 / 자외선 / 기상청 예보 등 여러 독립적인 API로부터 데이터를 받아와야 합니다.
+이들을 순차적으로 처리할 경우 로딩 지연이 발생했고, UX 상으로 약간의 답답함을 주었습니다.
+따라서, 상호 독립적인 API 호출을 async let 구문을 통해 병렬로 처리하였습니다.
+이를 통해 이전 대비 로딩 시간을 체감상 30% 이상 단축하여, UX를 개선했습니다.
