@@ -87,7 +87,7 @@ extension WeatherStorage {
         await update(coordinate: coordinate)
         isReady = true
 
-        try await Task.sleep(nanoseconds: delay)
+        try await Task.sleep(nanoseconds: delay * 1_000_000_000)
         await self.update(coordinate: coordinate)
         self.scheduleHourlyUpdate(coordinate: coordinate)
     }
