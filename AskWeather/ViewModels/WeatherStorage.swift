@@ -140,7 +140,7 @@ extension WeatherStorage {
                             coordinate: coordinate,
                             displayAddress: favorite.address
                         )
-                        return (report.id, report)
+                        return (key, report)
                     } catch {
                         print("updateFavorites error: \(error)")
                         return (key, favorite)
@@ -155,11 +155,7 @@ extension WeatherStorage {
             
             var updated: OrderedDictionary<WeatherReport.ID, WeatherReport> = [:]
             for key in keys {
-                if let report = updates[key] {
-                    updated[key] = report
-                } else {
-                    updated[key] = favorites[key]
-                }
+                updated[key] =  updates[key]
             }
             
             favorites = updated
