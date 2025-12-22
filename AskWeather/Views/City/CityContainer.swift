@@ -68,10 +68,10 @@ struct CityContainer: View {
     
     private func editingView(report: WeatherReport) -> some View {
         Button {
-            weatherStorage.toggleFavorite(report: report)
+            weatherStorage.toggleFavorite(id: report.id)
         } label: {
             HStack {
-                Image(systemName: weatherStorage.isSelected(report: report) ? "checkmark.circle" : "circle")
+                Image(systemName: weatherStorage.isSelected(id: report.id) ? "checkmark.circle" : "circle")
                     .resizable()
                     .frame(width: 25, height: 25)
                 CityCard(report: report)

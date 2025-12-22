@@ -21,7 +21,7 @@ class WeatherStorage: ObservableObject {
     }
     
     @Published var isEditMode = false
-    @Published var checkedFavorites: Set<UUID> = []
+    @Published var checkedFavorites: Set<WeatherReport.ID> = []
     @Published var isReady = false
     var now: Date {
         Date()
@@ -47,11 +47,11 @@ class WeatherStorage: ObservableObject {
         isEditMode.toggle()
     }
 
-    func toggleFavorite(report: WeatherReport) {
-        if isSelected(report: report) {
-            checkedFavorites.remove(report.id)
+    func toggleFavorite(id: WeatherReport.ID) {
+        if isSelected(id: id) {
+            checkedFavorites.remove(id)
         } else {
-            checkedFavorites.insert(report.id)
+            checkedFavorites.insert(id)
         }
     }
 
@@ -65,8 +65,8 @@ class WeatherStorage: ObservableObject {
         favorites = newFavorites
     }
 
-    func isSelected(report: WeatherReport) -> Bool {
-        checkedFavorites.contains(report.id)
+    func isSelected(id: WeatherReport.ID) -> Bool {
+        checkedFavorites.contains(id)
     }
 
     private func removeFavorites(ids: Set<UUID>) {
