@@ -8,7 +8,7 @@
 import SwiftUI
 import CoreLocation
 
-struct AddressAPI {
+enum AddressAPI {
 
     static func fetch(from coordinate: CLLocationCoordinate2D) async throws -> (address: String, areaCode: String) {
         let response: AddressResponse = try await APIHelper.fetch(request: request(coordinate: coordinate))

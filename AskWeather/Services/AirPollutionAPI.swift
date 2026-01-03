@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct AirPollutionAPI {
+enum AirPollutionAPI {
 
     static func fetch() async throws -> AirPollutionAPI.Item {
         let response: AirPollutionResponse = try await APIHelper.fetch(url: url())

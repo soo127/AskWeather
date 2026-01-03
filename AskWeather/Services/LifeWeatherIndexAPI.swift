@@ -8,7 +8,7 @@
 import SwiftUI
 import CoreLocation
 
-struct LifeWeatherIndexAPI { //생활 기상 지수
+enum LifeWeatherIndexAPI { //생활 기상 지수
 
     static func fetch(index: LifeWeatherIndex, areaCode: String) async throws -> LifeWeatherIndexAPI.Item {
         let response: LifeWeatherResponse = try await APIHelper.fetch(url: url(index: index, areaCode: areaCode))

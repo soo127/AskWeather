@@ -8,7 +8,7 @@
 import SwiftUI
 import CoreLocation
 
-struct KMAAPI {
+enum KMAAPI {
 
     static func fetch(coordinate: CLLocationCoordinate2D) async throws -> [Item] {
         let (nx, ny) = GridConverter.toGrid(from: coordinate)
